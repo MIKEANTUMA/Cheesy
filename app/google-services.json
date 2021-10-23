@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1078055083517",
+    "project_id": "cheesy-465b6",
+    "storage_bucket": "cheesy-465b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1078055083517:android:1526d772bc29586f8f8d94",
+        "android_client_info": {
+          "package_name": "com.example.cheesybackend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1078055083517-knnt9csdjuss81ncs3ensl24h0iribho.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE7DcW-a3fLzyWvV-PDziHQf7DkXS4zTg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1078055083517-knnt9csdjuss81ncs3ensl24h0iribho.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
