@@ -21,7 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class Register extends AppCompatActivity implements View.OnClickListener {
     private EditText editFirstName,editLastName,editEmail,editDoB,editAddress,editZipCode,editUsername,editPassword;
     private Button btn;
     private FirebaseAuth mAuth;
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editDoB = findViewById(R.id.editTextDoB);
         editAddress = findViewById(R.id.editTextAddress);
         editZipCode = findViewById(R.id.editTextZipCode);
-        editUsername = findViewById(R.id.editTextUsername);
+        //editUsername = findViewById(R.id.editTextUsername);
         editPassword = findViewById(R.id.editTextPassword);
         btn = findViewById(R.id.button_register);
         progress = findViewById(R.id.progressCircle);
@@ -81,11 +81,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editEmail.requestFocus();
         return;
     }
-            if(editUsername.getText().toString().isEmpty()){
-        editUsername.setError("User Name is required");
-        editUsername.requestFocus();
-        return;
-    }
+//            if(editUsername.getText().toString().isEmpty()){
+//        editUsername.setError("User Name is required");
+//        editUsername.requestFocus();
+//        return;
+//    }
             if(editPassword.getText().toString().isEmpty()){
         editPassword.setError("Password is required");
         editPassword.requestFocus();
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editPassword.requestFocus();
         return;
     }
-        progress.setVisibility(View.VISIBLE);
+//        progress.setVisibility(View.VISIBLE);
 
 
 
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }else {
                             // If sign in fails, display a message to the user.
 
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                            Toast.makeText(Register.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
 
                         }
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(MainActivity.this, "User added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Register.this, "User added", Toast.LENGTH_SHORT).show();
                 }
             }
         });

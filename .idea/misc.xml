@@ -4,6 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/antuma/AndroidStudioProjects/CheesyBackend/app/src/main/res/layout/activity_main.xml" value="0.296195652173913" />
+        <entry key="..\:/Users/wayto/AndroidStudioProjects/CheesyBackend/app/src/main/res/drawable/btn_lgn_style.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/wayto/AndroidStudioProjects/CheesyBackend/app/src/main/res/drawable/et_style.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/wayto/AndroidStudioProjects/CheesyBackend/app/src/main/res/layout/activity_login.xml" value="0.1796875" />
+        <entry key="..\:/Users/wayto/AndroidStudioProjects/CheesyBackend/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Users/wayto/AndroidStudioProjects/CheesyBackend/app/src/main/res/layout/activity_register.xml" value="0.1" />
+        <entry key="..\:/Users/wayto/AndroidStudioProjects/CheesyBackend/app/src/main/res/layout/activity_splash.xml" value="0.1796875" />
+        <entry key="..\:/Users/wayto/AndroidStudioProjects/CheesyBackend/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.19583333333333333" />
       </map>
     </option>
   </component>

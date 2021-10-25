@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">CheesyBackend</string>
+    <string name="email_hint">Email</string>
+    <string name="login_txt">Login</string>
+    <string name="register_text">Register</string>
+
+    //registration page hints
+    <string name="f_name">First Name</string>
+    <string name="l_name">Last Name</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="address">Address</string>
+    <string name="zip">Zip Code</string>
+    <string name="password">Password</string>
+    <string name="create_btn">Create Account</string>
+
 </resources>
