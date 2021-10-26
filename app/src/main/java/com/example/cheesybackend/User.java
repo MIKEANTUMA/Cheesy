@@ -2,6 +2,8 @@ package com.example.cheesybackend;
 
 public class User {
 
+
+
     private String fname;
 
 

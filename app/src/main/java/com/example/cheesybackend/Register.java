@@ -16,12 +16,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class Register extends AppCompatActivity implements View.OnClickListener {
     private EditText editFirstName,editLastName,editEmail,editDoB,editAddress,editZipCode,editUsername,editPassword;
     private Button btn;
     private FirebaseAuth mAuth;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_register);
 
         editFirstName = findViewById(R.id.editTextFirstName);
         editLastName = findViewById(R.id.editTextLastName);
@@ -63,46 +64,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public void registerUser(){
+    public void registerUser() {
         email = editEmail.getText().toString().trim();
         password = editPassword.getText().toString().trim();
-    if(editFirstName.getText().toString().isEmpty()){
-        editFirstName.setError("First name is required");
-        editFirstName.requestFocus();
-        return;
-    }
-            if(editLastName.getText().toString().isEmpty()){
-        editLastName.setError("Last name is required");
-        editLastName.requestFocus();
-        return;
-    }
-            if(editEmail.getText().toString().isEmpty()){
-        editEmail.setError("Email is required");
-        editEmail.requestFocus();
-        return;
-    }
-            if(editUsername.getText().toString().isEmpty()){
-        editUsername.setError("User Name is required");
-        editUsername.requestFocus();
-        return;
-    }
-            if(editPassword.getText().toString().isEmpty()){
-        editPassword.setError("Password is required");
-        editPassword.requestFocus();
-        return;
-    }
-            if(!isValidEmail(editEmail.getText().toString())){
-        editEmail.setError("Enter a valid email");
-        editEmail.requestFocus();
-        return;
-    }
-            if(!isValidPassword(editPassword.getText().toString())){
-        editPassword.setError("Enter a valid password");
-        editPassword.requestFocus();
-        return;
-    }
+        if (editFirstName.getText().toString().isEmpty()) {
+            editFirstName.setError("First name is required");
+            editFirstName.requestFocus();
+            return;
+        }
+        if (editLastName.getText().toString().isEmpty()) {
+            editLastName.setError("Last name is required");
+            editLastName.requestFocus();
+            return;
+        }
+        if (editEmail.getText().toString().isEmpty()) {
+            editEmail.setError("Email is required");
+            editEmail.requestFocus();
+            return;
+        }
+        if (editUsername.getText().toString().isEmpty()) {
+            editUsername.setError("User Name is required");
+            editUsername.requestFocus();
+            return;
+        }
+        if (editPassword.getText().toString().isEmpty()) {
+            editPassword.setError("Password is required");
+            editPassword.requestFocus();
+            return;
+        }
+        if (!isValidEmail(editEmail.getText().toString())) {
+            editEmail.setError("Enter a valid email");
+            editEmail.requestFocus();
+            return;
+        }
+        if (!isValidPassword(editPassword.getText().toString())) {
+            editPassword.setError("Enter a valid password");
+            editPassword.requestFocus();
+            return;
+        }
         progress.setVisibility(View.VISIBLE);
-
 
 
         User user = new User(editFirstName.getText().toString(),
@@ -115,7 +115,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 editPassword.getText().toString());
 
 
-
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -123,25 +122,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         if (task.isSuccessful()) {
 
-                            FirebaseUser userr = mAuth.getCurrentUser();
 
-                        }else {
+                        } else {
                             // If sign in fails, display a message to the user.
 
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                            Toast.makeText(Register.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
 
                         }
                     }
                 });
-        FirebaseDatabase.getInstance().getReference("user").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(MainActivity.this, "User added", Toast.LENGTH_SHORT).show();
+
+        FirebaseUser userr = mAuth.getCurrentUser();
+        if (userr == null) {
+            String TAG = "Register";
+            Log.d(TAG,userr.getUid().trim());
+            FirebaseDatabase.getInstance().getReference("user")
+                    .child(userr.getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(Register.this, "User added", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
 
