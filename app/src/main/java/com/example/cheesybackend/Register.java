@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,7 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Register extends AppCompatActivity implements View.OnClickListener {
-    private EditText editFirstName,editLastName,editEmail,editDoB,editAddress,editZipCode,editUsername,editPassword;
+    private EditText editFirstName,editLastName,editEmail,editDoB,editAddress,editZipCode,editPassword;
     private Button btn;
     private FirebaseAuth mAuth;
     private ProgressBar progress;
@@ -41,9 +40,9 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         editDoB = findViewById(R.id.editTextDoB);
         editAddress = findViewById(R.id.editTextAddress);
         editZipCode = findViewById(R.id.editTextZipCode);
-        //editUsername = findViewById(R.id.editTextUsername);
+
         editPassword = findViewById(R.id.editTextPassword);
-        btn = findViewById(R.id.button_register);
+        btn = findViewById(R.id.create_account_btn);
         progress = findViewById(R.id.progressCircle);
         btn.setOnClickListener(this);
         mAuth = FirebaseAuth.getInstance();
@@ -57,7 +56,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.button_register:
+            case R.id.create_account_btn:
                 registerUser();
         }
     }
@@ -66,41 +65,37 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
     public void registerUser(){
         email = editEmail.getText().toString().trim();
         password = editPassword.getText().toString().trim();
-    if(editFirstName.getText().toString().isEmpty()){
-        editFirstName.setError("First name is required");
-        editFirstName.requestFocus();
-        return;
-    }
-            if(editLastName.getText().toString().isEmpty()){
-        editLastName.setError("Last name is required");
-        editLastName.requestFocus();
-        return;
-    }
-            if(editEmail.getText().toString().isEmpty()){
-        editEmail.setError("Email is required");
-        editEmail.requestFocus();
-        return;
-    }
-//            if(editUsername.getText().toString().isEmpty()){
-//        editUsername.setError("User Name is required");
-//        editUsername.requestFocus();
-//        return;
-//    }
-            if(editPassword.getText().toString().isEmpty()){
-        editPassword.setError("Password is required");
-        editPassword.requestFocus();
-        return;
-    }
-            if(!isValidEmail(editEmail.getText().toString())){
-        editEmail.setError("Enter a valid email");
-        editEmail.requestFocus();
-        return;
-    }
-            if(!isValidPassword(editPassword.getText().toString())){
-        editPassword.setError("Enter a valid password");
-        editPassword.requestFocus();
-        return;
-    }
+        if(editFirstName.getText().toString().isEmpty()){
+            editFirstName.setError("First name is required");
+            editFirstName.requestFocus();
+            return;
+        }
+        if(editLastName.getText().toString().isEmpty()){
+            editLastName.setError("Last name is required");
+            editLastName.requestFocus();
+            return;
+        }
+        if(editEmail.getText().toString().isEmpty()){
+            editEmail.setError("Email is required");
+            editEmail.requestFocus();
+            return;
+        }
+
+        if(editPassword.getText().toString().isEmpty()){
+            editPassword.setError("Password is required");
+            editPassword.requestFocus();
+            return;
+        }
+        if(!isValidEmail(editEmail.getText().toString())){
+            editEmail.setError("Enter a valid email");
+            editEmail.requestFocus();
+            return;
+        }
+        if(!isValidPassword(editPassword.getText().toString())){
+            editPassword.setError("Enter a valid password");
+            editPassword.requestFocus();
+            return;
+        }
 //        progress.setVisibility(View.VISIBLE);
 
 
@@ -111,7 +106,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                 editDoB.getText().toString(),
                 editAddress.getText().toString(),
                 editZipCode.getText().toString(),
-                editUsername.getText().toString(),
                 editPassword.getText().toString());
 
 
@@ -124,6 +118,14 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                         if (task.isSuccessful()) {
 
                             FirebaseUser userr = mAuth.getCurrentUser();
+                            FirebaseDatabase.getInstance().getReference("user").child(userr.getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        Toast.makeText(Register.this, "User added", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
 
                         }else {
                             // If sign in fails, display a message to the user.
@@ -134,14 +136,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                         }
                     }
                 });
-        FirebaseDatabase.getInstance().getReference("user").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(Register.this, "User added", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+
     }
 
 
@@ -172,6 +167,5 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         return matcher.matches();
 
     }
-
 
 }

@@ -22,20 +22,20 @@ public class User {
     private String zipcode;
 
 
-    private String username;
+
 
 
     private String password;
 
     public User(){}
-    public User(String fname, String lname, String email, String dob, String address, String zipcode, String username, String password) {
+    public User(String fname, String lname, String email, String dob, String address, String zipcode, String password) {
         this.fname = fname;
         this.lname = lname;
         this.email = email;
         this.dob = dob;
         this.address = address;
         this.zipcode = zipcode;
-        this.username = username;
+
         this.password = password;
     }
 
@@ -87,13 +87,6 @@ public class User {
         this.zipcode = zipcode;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public String getPassword() {
         return password;

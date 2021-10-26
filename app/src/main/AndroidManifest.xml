@@ -10,13 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CheesyBackend">
         <activity
-            android:name=".SplashActivity"
+            android:name=".Register"
             android:exported="true" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".Login"
             android:exported="true" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Splash"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
