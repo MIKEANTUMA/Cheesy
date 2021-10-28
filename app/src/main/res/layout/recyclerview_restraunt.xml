@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_margin="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        card_view:cardCornerRadius="20dp"
+        android:layout_marginBottom="3dp">
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:useDefaultMargins="true"
+            android:columnCount="2">
+
+
+
+            <TextView
+                android:id="@+id/txtRestName"
+                android:text="Restaurant Name"
+                android:textSize="24sp"
+                android:layout_column="0"/>
+
+            <ImageView
+                android:id="@+id/Image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_rowSpan="2"
+                android:background="@drawable/pizza" />
+            <TextView
+                android:id="@+id/txtPhoneNumber"
+                android:text="Phone Number"
+                android:layout_column="1"
+                android:textSize="18sp"/>
+
+            <RatingBar
+                android:id="@+id/Ratingbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:rating="3.7"
+                />
+            <TextView
+                android:id="@+id/txtAddress"
+                android:text="Address"
+                android:textSize="18sp"
+                android:layout_column="0"
+                android:layout_gravity="fill_horizontal"/>
+            <TextView
+                android:id="@+id/txtWebsite"
+                android:text="Website  Link"
+                android:layout_column="0"
+                android:layout_gravity="fill_horizontal"/>
+
+        </GridLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

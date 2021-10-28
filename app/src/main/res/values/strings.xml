@@ -12,5 +12,10 @@
     <string name="zip">Zip Code</string>
     <string name="password">Password</string>
     <string name="create_btn">Create Account</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_search">Search</string>
+    <string name="title_order">Orders</string>
+    <string name="title_account">Account</string>
 
 </resources>

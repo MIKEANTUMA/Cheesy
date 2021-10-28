@@ -7,15 +7,15 @@ public class Restaurant {
 
 
     private String name;
-    private Address location;
+    private String location;
     private Menu menu;
     private int rating;
     private String phoneNumber;
-
+    private String website;
 
     public Restaurant() { }
 
-    public Restaurant(String name, Address location, Menu menu, int rating, String phoneNumber, String website) {
+    public Restaurant(String name, String location, Menu menu, int rating, String phoneNumber, String website) {
         this.name = name;
         this.location = location;
         this.menu = menu;
@@ -32,11 +32,11 @@ public class Restaurant {
         this.name = name;
     }
 
-    public Address getLocation() {
+    public String getLocation() {
         return location;
     }
 
-    public void setLocation(Address location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 
@@ -72,7 +72,7 @@ public class Restaurant {
         this.website = website;
     }
 
-    private String website;
+
 
 
 
