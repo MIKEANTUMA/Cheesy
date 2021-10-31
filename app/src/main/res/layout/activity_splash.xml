@@ -15,20 +15,11 @@
         android:scaleType="fitXY"
         android:src="@drawable/splashscreen" />
 
-    <Button
-        android:id="@+id/login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="400dp"
-        android:layout_marginLeft="90dp"
-        android:text="Login"/>
-    <Button
-        android:id="@+id/register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="400dp"
-        android:layout_marginLeft="210dp"
-        android:text="Register"/>
-
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="370dp" />
 
 </FrameLayout>

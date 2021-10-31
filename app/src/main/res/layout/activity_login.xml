@@ -22,18 +22,21 @@
         android:background="@drawable/et_style"
         android:inputType="textEmailAddress"/>
     <TextView
+        android:id="@+id/viewpassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:textStyle="bold"
         android:textSize="20sp"
-        android:text="Password"/>
+        android:text="Password"
+        android:visibility="gone"/>
     <EditText
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/et_style"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/login"
