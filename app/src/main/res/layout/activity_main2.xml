@@ -31,7 +31,7 @@
       android:layout_gravity="center"
       android:background="@null"
       app:layoutManager="LinearLayoutManager"
-      tools:ignore="MissingClass" />
+      tools:ignore="MissingClass"/>
 
   <com.google.android.material.bottomnavigation.BottomNavigationView
       android:id="@+id/nav_view"

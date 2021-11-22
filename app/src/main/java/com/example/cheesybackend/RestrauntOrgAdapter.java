@@ -2,6 +2,7 @@ package com.example.cheesybackend;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,24 +37,30 @@ public class RestrauntOrgAdapter  extends FirebaseRecyclerAdapter<
 
     @Override
     protected void onBindViewHolder(@NonNull restaurantsViewholder holder, int position, @NonNull Restaurant model) {
-        // Add firstname from model class (here
-        // "person.class")to appropriate view in Card
-        // view (here "person.xml")
+        // Add restaurantName from model class (here
+        // "restaurant.class")to appropriate view in Card
+        // view (here "recylerview_restaurant.xml")
         holder.restaurantName.setText(model.getName());
 
-        // Add lastname from model class (here
-        // "person.class")to appropriate view in Card
+        // Add address from model class (here
+        // "restaurant.class")to appropriate view in Card
         // view (here "person.xml")
         holder.address.setText(model.getLocation());
 
-        // Add age from model class (here
-        // "person.class")to appropriate view in Card
-        // view (here "person.xml")
+        // Add WebsiteLink from model class (here
+        // "restaurant.class")to appropriate view in Card
+        // view (here "recylerview_restaurant.xml")
         holder.WebsiteLink.setText(model.getWebsite());
 
         holder.PhoneNumber.setText(model.getPhoneNumber());
         holder.ratingBar.setRating(model.getRating());
+        holder.restaurantName.setOnClickListener(v -> {
+            Log.d("PIZZZZAAAAA", "YOU CLICKED MY NAME");
 
+        });
+        holder.PhoneNumber.setOnClickListener(v -> {
+            Log.d("PIZZZZAAAAA", "YOU CLICKED MY PHONE NUMBER");
+        });
     }
 
     @NonNull
@@ -61,6 +68,7 @@ public class RestrauntOrgAdapter  extends FirebaseRecyclerAdapter<
     public restaurantsViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_restraunt, parent, false);
         return new RestrauntOrgAdapter.restaurantsViewholder(view);
+
     }
 
     class restaurantsViewholder extends RecyclerView.ViewHolder {
@@ -75,6 +83,12 @@ public class RestrauntOrgAdapter  extends FirebaseRecyclerAdapter<
             WebsiteLink = itemView.findViewById(R.id.txtWebsite);
             PhoneNumber = itemView.findViewById(R.id.txtPhoneNumber);
             ratingBar = itemView.findViewById(R.id.Ratingbar);
+        }
+
+
+
+        public void onClick() {
+            Log.d("PIZZZZAAAAA", "YOU CLICKED ME");
         }
     }
 }

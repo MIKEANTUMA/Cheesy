@@ -21,14 +21,14 @@ public class Splash extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         load = findViewById(R.id.progressbar);
 
-        LoadingScreen s = new LoadingScreen();
+        GrabRestaurantData s = new GrabRestaurantData();
         s.execute(1);
 
 
 
     }
 
-    class LoadingScreen extends AsyncTask<Integer, Integer, Integer> {
+    class GrabRestaurantData extends AsyncTask<Integer, Integer, Integer> {
 
         @Override
         protected void onPreExecute() {

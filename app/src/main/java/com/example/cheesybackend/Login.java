@@ -51,6 +51,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
 
         //addRestaurant();
 
+
+
     }
 
     @Override
@@ -106,6 +108,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                                 // Sign in success, update UI with the signed-in user's information
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 Toast.makeText(Login.this, "Login successful", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(Login.this, MainActivity2.class);
                                 startActivity(new Intent(Login.this, MainActivity2.class));
                             } else {
                                 // If sign in fails, display a message to the user.

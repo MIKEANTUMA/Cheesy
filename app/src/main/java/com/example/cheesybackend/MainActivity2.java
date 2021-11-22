@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -21,8 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class MainActivity2 extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    RestrauntOrgAdapter
-            adapter; // Create Object of the Adapter class
+    RestrauntOrgAdapter adapter; // Create Object of the Adapter class
     DatabaseReference mbase; // Create object of the
     // Firebase Realtime Database
 
@@ -55,14 +55,23 @@ public class MainActivity2 extends AppCompatActivity {
         // query in the database to fetch appropriate data
         FirebaseRecyclerOptions<Restaurant> options = new FirebaseRecyclerOptions.Builder<Restaurant>().setQuery(mbase, Restaurant.class).build();
         adapter = new RestrauntOrgAdapter(options);
+        Intent intent = (Intent) getIntent().getSerializableExtra("adapter");
         // Connecting Adapter class with the Recycler view*/
         recyclerView.setAdapter(adapter);
+
+
     }
 
     @Override protected void onStart()
     {
         super.onStart();
         adapter.startListening();
+        try {
+            Log.d("RESTARUANT", adapter.getItem(0).getName());
+        }catch(Exception e){
+            Log.d("KEY", e.getMessage());
+        }
+
     }
 
     // Function to tell the app to stop getting
@@ -73,4 +82,9 @@ public class MainActivity2 extends AppCompatActivity {
         adapter.stopListening();
     }
 
-}
+
+
+
+
+
+    }
