@@ -7,68 +7,74 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class RestrauntOrgAdapter  extends RecyclerView.Adapter<RestrauntOrgAdapter.TasksViewHolder> {
+public class RestrauntOrgAdapter  extends FirebaseRecyclerAdapter<
+        Restaurant, RestrauntOrgAdapter.restaurantsViewholder> {
 
-    private Context mCtx;
-    private List<Restaurant> taskList;
 
-    public RestrauntOrgAdapter(Context mCtx, List<Restaurant> rest) {
-        this.mCtx = mCtx;
-        this.taskList = rest;
+    /**
+     * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
+     * {@link FirebaseRecyclerOptions} for configuration options.
+     *
+     * @param options
+     */
+    public RestrauntOrgAdapter(@NonNull FirebaseRecyclerOptions<Restaurant> options) {
+        super(options);
     }
 
     @Override
-    public TasksViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mCtx).inflate(R.layout.recyclerview_restraunt, parent, false);
-        return new TasksViewHolder(view);
+    protected void onBindViewHolder(@NonNull restaurantsViewholder holder, int position, @NonNull Restaurant model) {
+        // Add firstname from model class (here
+        // "person.class")to appropriate view in Card
+        // view (here "person.xml")
+        holder.restaurantName.setText(model.getName());
+
+        // Add lastname from model class (here
+        // "person.class")to appropriate view in Card
+        // view (here "person.xml")
+        holder.address.setText(model.getLocation());
+
+        // Add age from model class (here
+        // "person.class")to appropriate view in Card
+        // view (here "person.xml")
+        holder.WebsiteLink.setText(model.getWebsite());
+
+        holder.PhoneNumber.setText(model.getPhoneNumber());
+        holder.ratingBar.setRating(model.getRating());
+
     }
 
+    @NonNull
     @Override
-    public void onBindViewHolder(TasksViewHolder holder, int position) {
-        Restaurant t = taskList.get(position);
-        holder.restName.setText(t.getName());
-        holder.address.setText(t.getLocation());
-        holder.phoneNumber.setText(t.getPhoneNumber());
-        holder.webLink.setText(t.getWebsite());
-        holder.rating.setRating(t.getRating());
+    public restaurantsViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_restraunt, parent, false);
+        return new RestrauntOrgAdapter.restaurantsViewholder(view);
     }
 
-    @Override
-    public int getItemCount() {
-        return taskList.size();
-    }
-
-    class TasksViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        TextView  restName, address, phoneNumber, webLink;
-        RatingBar rating;
-
-        public TasksViewHolder(View itemView) {
+    class restaurantsViewholder extends RecyclerView.ViewHolder {
+        TextView restaurantName, address, WebsiteLink,PhoneNumber;
+        RatingBar ratingBar;
+        public restaurantsViewholder(@NonNull View itemView)
+        {
             super(itemView);
 
-            restName = itemView.findViewById(R.id.txtRestName);
+            restaurantName = itemView.findViewById(R.id.txtRestName);
             address = itemView.findViewById(R.id.txtAddress);
-            phoneNumber = itemView.findViewById(R.id.txtPhoneNumber);
-            webLink = itemView.findViewById(R.id.txtWebsite);
-            rating = itemView.findViewById(R.id.Ratingbar);
-
-
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-//            NoteOrgRoom note = taskList.get(getBindingAdapterPosition());
-//
-//            Intent intent = new Intent(mCtx, UpdateNoteActivity.class);
-//            intent.putExtra("Note", note);
-//
-//            mCtx.startActivity(intent);
+            WebsiteLink = itemView.findViewById(R.id.txtWebsite);
+            PhoneNumber = itemView.findViewById(R.id.txtPhoneNumber);
+            ratingBar = itemView.findViewById(R.id.Ratingbar);
         }
     }
 }

@@ -11,7 +11,7 @@
     <EditText
         android:layout_width="270dp"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="256dp"
+        android:layout_marginVertical="150dp"
         android:layout_marginLeft="20dp"
         android:background="@drawable/et_style"
         android:hint="Search" />
@@ -20,18 +20,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="290dp"
-        android:layout_marginTop="244dp"
+        android:layout_marginTop="140dp"
         android:text="Search" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_tasks"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:layout_marginTop="320dp"
-        android:background="@color/white"
-        app:layoutManager="LinearLayoutManager"
-        tools:ignore="MissingClass" />
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/recyclerview_tasks"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="508dp"-->
+<!--        android:layout_alignParentStart="true"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:layout_marginStart="0dp"-->
+<!--        android:layout_marginTop="220dp"-->
+<!--        android:background="@color/white"-->
+<!--        app:layoutManager="LinearLayoutManager"-->
+<!--        tools:ignore="MissingClass" />-->
 
 </RelativeLayout>

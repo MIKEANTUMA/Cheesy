@@ -9,13 +9,13 @@ public class Restaurant {
     private String name;
     private String location;
     private Menu menu;
-    private int rating;
+    private float rating;
     private String phoneNumber;
     private String website;
 
     public Restaurant() { }
 
-    public Restaurant(String name, String location, Menu menu, int rating, String phoneNumber, String website) {
+    public Restaurant(String name, String location, Menu menu, float rating, String phoneNumber, String website) {
         this.name = name;
         this.location = location;
         this.menu = menu;
@@ -48,11 +48,11 @@ public class Restaurant {
         this.menu = menu;
     }
 
-    public int getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 

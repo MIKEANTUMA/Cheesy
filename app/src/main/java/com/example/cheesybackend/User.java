@@ -2,8 +2,6 @@ package com.example.cheesybackend;
 
 public class User {
 
-
-
     private String fname;
 
 
@@ -21,10 +19,6 @@ public class User {
 
     private String zipcode;
 
-
-
-
-
     private String password;
 
     public User(){}
@@ -35,10 +29,8 @@ public class User {
         this.dob = dob;
         this.address = address;
         this.zipcode = zipcode;
-
         this.password = password;
     }
-
     public String getFname() {
         return fname;
     }
@@ -86,7 +78,6 @@ public class User {
     public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
     }
-
 
     public String getPassword() {
         return password;
