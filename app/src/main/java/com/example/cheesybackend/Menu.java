@@ -1,8 +1,9 @@
 package com.example.cheesybackend;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Menu {
+public class Menu implements Serializable {
 
     private List<Entree> entree;
 
@@ -42,7 +43,7 @@ public class Menu {
         this.appetizer = appetizer;
     }
 
-    public static class Entree extends Menu{
+    public static class Entree extends Menu {
         private String name;
         private String description;
         private double price;
@@ -80,7 +81,7 @@ public class Menu {
         }
     }
 
-    public static class Drink extends Menu{
+    public static class Drink extends Menu {
         private String name;
 
         private double price;
@@ -110,7 +111,7 @@ public class Menu {
         }
     }
 
-    public static class Appetizer extends Menu{
+    public static class Appetizer extends Menu {
         private String name;
         private String description;
         private double price;

@@ -3,7 +3,9 @@ package com.example.cheesybackend;
 import android.location.Address;
 import android.media.Rating;
 
-public class Restaurant {
+import java.io.Serializable;
+
+public class Restaurant implements Serializable {
 
 
     private String name;
@@ -13,8 +15,17 @@ public class Restaurant {
     private String phoneNumber;
     private String website;
 
-    public Restaurant() { }
 
+    public Restaurant(){}
+
+    public Restaurant(Restaurant restaurant) {
+        this.name = restaurant.getName();
+        this.location = restaurant.getLocation();
+        this.menu = restaurant.getMenu();
+        this.rating = restaurant.getRating();
+        this.phoneNumber = restaurant.getPhoneNumber();
+        this.website = restaurant.getWebsite();
+    }
     public Restaurant(String name, String location, Menu menu, float rating, String phoneNumber, String website) {
         this.name = name;
         this.location = location;
@@ -23,6 +34,7 @@ public class Restaurant {
         this.phoneNumber = phoneNumber;
         this.website = website;
     }
+
 
     public String getName() {
         return name;

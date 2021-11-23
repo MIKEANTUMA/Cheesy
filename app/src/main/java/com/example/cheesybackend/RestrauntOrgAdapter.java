@@ -8,22 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import java.io.Serializable;
 
 public class RestrauntOrgAdapter  extends FirebaseRecyclerAdapter<
         Restaurant, RestrauntOrgAdapter.restaurantsViewholder> {
 
+    private Context mCtx;
 
     /**
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
@@ -31,8 +27,9 @@ public class RestrauntOrgAdapter  extends FirebaseRecyclerAdapter<
      *
      * @param options
      */
-    public RestrauntOrgAdapter(@NonNull FirebaseRecyclerOptions<Restaurant> options) {
+    public RestrauntOrgAdapter(Context mCtx, @NonNull FirebaseRecyclerOptions<Restaurant> options) {
         super(options);
+        this.mCtx = mCtx;
     }
 
     @Override
@@ -56,6 +53,10 @@ public class RestrauntOrgAdapter  extends FirebaseRecyclerAdapter<
         holder.ratingBar.setRating(model.getRating());
         holder.restaurantName.setOnClickListener(v -> {
             Log.d("PIZZZZAAAAA", "YOU CLICKED MY NAME");
+            Intent intent = new Intent(mCtx, RestaurantPage.class);
+            Restaurant restaurant = new Restaurant(model.getName(),model.getLocation(),model.getMenu(),model.getRating(),model.getPhoneNumber(),model.getWebsite());
+            intent.putExtra("Restaurant", (Serializable) restaurant);
+            mCtx.startActivity(intent);
 
         });
         holder.PhoneNumber.setOnClickListener(v -> {

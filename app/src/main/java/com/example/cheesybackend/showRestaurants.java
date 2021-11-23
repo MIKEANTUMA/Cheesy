@@ -5,13 +5,11 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -19,7 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 
-public class MainActivity2 extends AppCompatActivity {
+public class showRestaurants extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     RestrauntOrgAdapter adapter; // Create Object of the Adapter class
@@ -30,7 +28,7 @@ public class MainActivity2 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_show_restaurants);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
@@ -54,7 +52,7 @@ public class MainActivity2 extends AppCompatActivity {
         // It is a class provide by the FirebaseUI to make a
         // query in the database to fetch appropriate data
         FirebaseRecyclerOptions<Restaurant> options = new FirebaseRecyclerOptions.Builder<Restaurant>().setQuery(mbase, Restaurant.class).build();
-        adapter = new RestrauntOrgAdapter(options);
+        adapter = new RestrauntOrgAdapter(this,options);
         Intent intent = (Intent) getIntent().getSerializableExtra("adapter");
         // Connecting Adapter class with the Recycler view*/
         recyclerView.setAdapter(adapter);

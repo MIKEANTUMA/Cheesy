@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
-    tools:context=".MainActivity2"
+    tools:context=".showRestaurants"
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
