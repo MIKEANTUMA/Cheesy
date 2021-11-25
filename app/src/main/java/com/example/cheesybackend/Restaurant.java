@@ -3,19 +3,30 @@ package com.example.cheesybackend;
 import android.location.Address;
 import android.media.Rating;
 
-public class Restaurant {
+import java.io.Serializable;
+
+public class Restaurant implements Serializable {
 
 
     private String name;
     private String location;
     private Menu menu;
-    private int rating;
+    private float rating;
     private String phoneNumber;
     private String website;
 
-    public Restaurant() { }
 
-    public Restaurant(String name, String location, Menu menu, int rating, String phoneNumber, String website) {
+    public Restaurant(){}
+
+    public Restaurant(Restaurant restaurant) {
+        this.name = restaurant.getName();
+        this.location = restaurant.getLocation();
+        this.menu = restaurant.getMenu();
+        this.rating = restaurant.getRating();
+        this.phoneNumber = restaurant.getPhoneNumber();
+        this.website = restaurant.getWebsite();
+    }
+    public Restaurant(String name, String location, Menu menu, float rating, String phoneNumber, String website) {
         this.name = name;
         this.location = location;
         this.menu = menu;
@@ -23,6 +34,7 @@ public class Restaurant {
         this.phoneNumber = phoneNumber;
         this.website = website;
     }
+
 
     public String getName() {
         return name;
@@ -48,11 +60,11 @@ public class Restaurant {
         this.menu = menu;
     }
 
-    public int getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 

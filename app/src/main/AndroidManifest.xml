@@ -10,10 +10,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CheesyBackend">
         <activity
-            android:name=".Payment"
+            android:name=".EditAddress"
             android:exported="true" />
         <activity
-            android:name=".MainActivity2"
+            android:name=".EditInfo"
+            android:exported="true" />
+        <activity
+            android:name=".Account"
+            android:exported="true" />
+        <activity
+            android:name=".Orders"
+            android:exported="true" />
+        <activity
+            android:name=".SearchRestraunt"
+            android:exported="true" />
+        <activity
+            android:name=".Payment"
             android:exported="true" />
         <activity
             android:name=".Register"
