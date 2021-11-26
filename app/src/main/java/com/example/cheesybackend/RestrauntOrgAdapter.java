@@ -16,8 +16,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 
 import java.io.Serializable;
 
-public class RestrauntOrgAdapter  extends FirebaseRecyclerAdapter<
-        Restaurant, RestrauntOrgAdapter.restaurantsViewholder> {
+public class RestrauntOrgAdapter  extends FirebaseRecyclerAdapter<Restaurant, RestrauntOrgAdapter.restaurantsViewholder> {
 
     private Context mCtx;
 
@@ -38,7 +37,7 @@ public class RestrauntOrgAdapter  extends FirebaseRecyclerAdapter<
         // "restaurant.class")to appropriate view in Card
         // view (here "recylerview_restaurant.xml")
         holder.restaurantName.setText(model.getName());
-
+        Log.d("menu", model.getMenu().getAppetizer().toString());
         // Add address from model class (here
         // "restaurant.class")to appropriate view in Card
         // view (here "person.xml")
@@ -54,8 +53,8 @@ public class RestrauntOrgAdapter  extends FirebaseRecyclerAdapter<
         holder.restaurantName.setOnClickListener(v -> {
             Log.d("PIZZZZAAAAA", "YOU CLICKED MY NAME");
             Intent intent = new Intent(mCtx, RestaurantPage.class);
-            Restaurant restaurant = new Restaurant(model.getName(),model.getLocation(),model.getMenu(),model.getRating(),model.getPhoneNumber(),model.getWebsite());
-            intent.putExtra("Restaurant", (Serializable) restaurant);
+            Restaurant restaurant = new Restaurant(model.getName(),model.getLocation(),model.getMenu(),model.getRating(),model.getPhoneNumber(),model.getWebsite(),model.getDescription());
+            intent.putExtra("Restaurant", restaurant);
             mCtx.startActivity(intent);
 
         });

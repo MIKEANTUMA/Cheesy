@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RestaurantPage"
-    android:orientation="vertical"
-    android:background="@drawable/background_restaurant_page">
+    tools:context=".entreePage"
+    android:background="@drawable/background_restaurant_page"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv_name"
@@ -50,41 +50,11 @@
             android:backgroundTint="@color/white"/>
     </LinearLayout>
 
-    <RatingBar
-        android:isIndicator="true"
-        android:id="@+id/rb_rating"
-        android:layout_marginTop="10dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_gravity="center"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:id="@+id/recyclerview_items"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:rating="3.5" />
-    <TextView
-        android:id="@+id/tv_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:padding="10dp"
-        android:textColor="@color/black"
-        android:text="lorem loremloremloremloremloremlorem lorem lorem lorem loremloremlorem lorem loremloremloremloremloremlorem lorem lorem lorem loremloremlorem"/>
-
-    <TextView
-        android:id="@+id/tv_website"
-        android:autoLink="web"
-        android:textColorLink="@color/black"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:padding="10dp"
-        android:textColor="@color/black"
-        android:text="webiste: www.google.com"/>
-
-    <TextView
-        android:id="@+id/tv_phoneNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:textColor="@color/black"
-        android:padding="10dp"
-        android:text="PhoneNumber: 1234455666"/>
-
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>
