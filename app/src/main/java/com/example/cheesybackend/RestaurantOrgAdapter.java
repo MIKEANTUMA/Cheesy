@@ -15,9 +15,10 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
 import java.io.Serializable;
+
 //Used adapter Michael made
-public class RestrauntOrgAdapter  extends FirebaseRecyclerAdapter<
-        Restaurant, RestrauntOrgAdapter.restaurantsViewholder> {
+public class RestaurantOrgAdapter extends FirebaseRecyclerAdapter<
+        Restaurant, RestaurantOrgAdapter.restaurantsViewholder> {
 
     private Context mCtx;
 
@@ -27,7 +28,7 @@ public class RestrauntOrgAdapter  extends FirebaseRecyclerAdapter<
      *
      * @param options
      */
-    public RestrauntOrgAdapter(Context mCtx, @NonNull FirebaseRecyclerOptions<Restaurant> options) {
+    public RestaurantOrgAdapter(Context mCtx, @NonNull FirebaseRecyclerOptions<Restaurant> options) {
         super(options);
         this.mCtx = mCtx;
     }
@@ -53,10 +54,10 @@ public class RestrauntOrgAdapter  extends FirebaseRecyclerAdapter<
         holder.ratingBar.setRating(model.getRating());
         holder.restaurantName.setOnClickListener(v -> {
             Log.d("PIZZZZAAAAA", "YOU CLICKED MY NAME");
-//            Intent intent = new Intent(mCtx, RestaurantPage.class);
-//            Restaurant restaurant = new Restaurant(model.getName(),model.getLocation(),model.getMenu(),model.getRating(),model.getPhoneNumber(),model.getWebsite());
-//            intent.putExtra("Restaurant", (Serializable) restaurant);
-//            mCtx.startActivity(intent);
+            Intent intent = new Intent(mCtx, ViewRestaurant.class);
+            Restaurant restaurant = new Restaurant(model.getName(),model.getLocation(),model.getMenu(),model.getRating(),model.getPhoneNumber(),model.getWebsite());
+            intent.putExtra("Restaurant", (Serializable) restaurant);
+            mCtx.startActivity(intent);
 
         });
         holder.PhoneNumber.setOnClickListener(v -> {
@@ -67,8 +68,8 @@ public class RestrauntOrgAdapter  extends FirebaseRecyclerAdapter<
     @NonNull
     @Override
     public restaurantsViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_restraunt, parent, false);
-        return new RestrauntOrgAdapter.restaurantsViewholder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_restaurant, parent, false);
+        return new RestaurantOrgAdapter.restaurantsViewholder(view);
 
     }
 

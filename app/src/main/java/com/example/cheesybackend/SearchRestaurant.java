@@ -1,30 +1,23 @@
 package com.example.cheesybackend;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 
-public class SearchRestraunt extends AppCompatActivity {
+public class SearchRestaurant extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    RestrauntOrgAdapter adapter; // Create Object of the Adapter class
+    RestaurantOrgAdapter adapter; // Create Object of the Adapter class
     DatabaseReference mbase; // Create object of the
     // Firebase Realtime Database
 
@@ -33,7 +26,7 @@ public class SearchRestraunt extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_restraunt);
+        setContentView(R.layout.activity_search_restaurant);
         findViewById(R.id.SearchTab).setOnClickListener(this::switchTab);
         findViewById(R.id.AccountTab).setOnClickListener(this::switchTab);
         findViewById(R.id.OrderTab).setOnClickListener(this::switchTab);
@@ -46,7 +39,7 @@ public class SearchRestraunt extends AppCompatActivity {
         // It is a class provide by the FirebaseUI to make a
         // query in the database to fetch appropriate data
         FirebaseRecyclerOptions<Restaurant> options = new FirebaseRecyclerOptions.Builder<Restaurant>().setQuery(mbase, Restaurant.class).build();
-        adapter = new RestrauntOrgAdapter(this,options);
+        adapter = new RestaurantOrgAdapter(this,options);
         Intent intent = (Intent) getIntent().getSerializableExtra("adapter");
         // Connecting Adapter class with the Recycler view*/
         recyclerView.setAdapter(adapter);
@@ -78,7 +71,7 @@ public class SearchRestraunt extends AppCompatActivity {
     private void switchTab(View view) {
         switch (view.getId()){
             case R.id.SearchTab:
-                startActivity(new Intent(getApplicationContext(), SearchRestraunt.class));
+                startActivity(new Intent(getApplicationContext(), SearchRestaurant.class));
                 break;
             case R.id.OrderTab:
                 startActivity(new Intent(getApplicationContext(), Orders.class));
