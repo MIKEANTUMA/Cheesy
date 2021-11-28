@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CheesyBackend">
         <activity
+            android:name=".drinkPage"
+            android:exported="true" />
+        <activity
+            android:name=".appetizerPage"
+            android:exported="true" />
+        <activity
             android:name=".entreePage"
             android:exported="false" />
         <activity

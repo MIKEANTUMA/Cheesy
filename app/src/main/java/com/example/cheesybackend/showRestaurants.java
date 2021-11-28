@@ -15,6 +15,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 
 public class showRestaurants extends AppCompatActivity {
@@ -47,11 +48,29 @@ public class showRestaurants extends AppCompatActivity {
 
 
 
-        mbase = FirebaseDatabase.getInstance().getReference().child("restaurants");
+        //mbase = FirebaseDatabase.getInstance().getReference().child("restaurants");
         recyclerView = findViewById(R.id.recyclerview_tasks);
         // It is a class provide by the FirebaseUI to make a
         // query in the database to fetch appropriate data
-        FirebaseRecyclerOptions<Restaurant> options = new FirebaseRecyclerOptions.Builder<Restaurant>().setQuery(mbase, Restaurant.class).build();
+
+
+        Query query = FirebaseDatabase
+                .getInstance()
+                .getReference()
+                .child("restaurants")
+                .orderByChild("name")
+                .startAt("a");
+
+        FirebaseRecyclerOptions<Restaurant> options =
+                new FirebaseRecyclerOptions.Builder<Restaurant>()
+                        .setQuery(query, Restaurant.class)
+                        .build();
+
+
+
+
+
+
         adapter = new RestrauntOrgAdapter(this,options);
         Intent intent = (Intent) getIntent().getSerializableExtra("adapter");
         // Connecting Adapter class with the Recycler view*/

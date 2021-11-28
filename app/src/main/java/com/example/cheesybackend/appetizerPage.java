@@ -12,7 +12,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class entreePage extends AppCompatActivity implements View.OnClickListener {
+public class appetizerPage extends AppCompatActivity implements View.OnClickListener {
+
     Restaurant restaurant;
     private RecyclerView recyclerView;
     Button entree;
@@ -21,14 +22,14 @@ public class entreePage extends AppCompatActivity implements View.OnClickListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_entree_page);
+        setContentView(R.layout.activity_appetizer_page);
 
 
         restaurant = getIntent().getParcelableExtra("Restaurant");
         recyclerView = findViewById(R.id.recyclerview_items);
-        ArrayList<Entree> list = restaurant.getMenu().getEntree();
+        ArrayList<Appetizer> list = restaurant.getMenu().getAppetizer();
         Log.d("ENTREE", list.get(0).getName());
-        EntreeOrgAdapter adapter = new EntreeOrgAdapter(this,list);
+        AppetizerOrgAdapter adapter = new AppetizerOrgAdapter(this,list);
         recyclerView.setAdapter(adapter);
         entree = findViewById(R.id.btn_entree);
         appetizer = findViewById(R.id.btn_appetizer);
@@ -63,5 +64,4 @@ public class entreePage extends AppCompatActivity implements View.OnClickListene
                 break;
         }
     }
-
 }

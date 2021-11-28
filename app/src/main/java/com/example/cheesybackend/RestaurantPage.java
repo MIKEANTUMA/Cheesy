@@ -61,7 +61,10 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
                 Toast.makeText(this, "entree", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_appetizer:
-                // go to appetizer intent
+                Intent intent1 = new Intent(this, appetizerPage.class);
+                intent1.putExtra("Restaurant", restaurant);
+                startActivity(intent1);
+                Toast.makeText(this, "appetizer", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_drink:
                 //go to drink intent

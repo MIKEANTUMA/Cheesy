@@ -8,11 +8,20 @@ class Drink implements Parcelable {
 
     private double price;
 
+    private String description;
     public Drink(){}
 
-    public Drink(String name, double price) {
-        this.name = name;
+    public String getDescription() {
+        return description;
+    }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Drink(String name, double price, String description) {
+        this.name = name;
+        this.description = description;
         this.price = price;
     }
 

@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class MenuOrgAdapter extends RecyclerView.Adapter<MenuOrgAdapter.TaskViewHolder>{
+public class AppetizerOrgAdapter extends RecyclerView.Adapter<AppetizerOrgAdapter.TaskViewHolder> {
 
-    private ArrayList<Entree> taskList;
+    private ArrayList<Appetizer> taskList;
     private Context mCtx;
 
 
-    public MenuOrgAdapter(Context mCtx, ArrayList<Entree> taskList) {
+    public AppetizerOrgAdapter(Context mCtx, ArrayList<Appetizer> taskList) {
         this.mCtx = mCtx;
         this.taskList = taskList;
     }
@@ -29,8 +29,8 @@ public class MenuOrgAdapter extends RecyclerView.Adapter<MenuOrgAdapter.TaskView
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MenuOrgAdapter.TaskViewHolder holder, int position) {
-        Entree e = taskList.get(position);
+    public void onBindViewHolder(@NonNull AppetizerOrgAdapter.TaskViewHolder holder, int position) {
+        Appetizer e = taskList.get(position);
         holder.itemName.setText(e.getName());
         holder.itemDescription.setText(e.getDescription());
         holder.itemPrice.setText(String.valueOf(e.getPrice()));
