@@ -1,10 +1,14 @@
 package com.example.cheesybackend;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,7 +19,7 @@ public class DrinkOrgAdapter extends RecyclerView.Adapter<DrinkOrgAdapter.TaskVi
 
     private ArrayList<Drink> taskList;
     private Context mCtx;
-
+    private Cart cart = Cart.getInstance();
 
     public DrinkOrgAdapter(Context mCtx, ArrayList<Drink> taskList) {
         this.mCtx = mCtx;
@@ -50,12 +54,24 @@ public class DrinkOrgAdapter extends RecyclerView.Adapter<DrinkOrgAdapter.TaskVi
             itemName = itemView.findViewById(R.id.txtmenuItemName);
             itemDescription = itemView.findViewById(R.id.tv_description);
             itemPrice = itemView.findViewById(R.id.tv_price);
-
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             //add to cart logic here
+            AlertDialog.Builder builder = new AlertDialog.Builder(mCtx);
+            builder.setMessage("Would you like to add to cart?").setTitle("Order");
+            builder.setPositiveButton("Ok", (V,A) -> {
+                    Drink d = taskList.get(getAdapterPosition());
+                    Log.d("DRINK", taskList.get(getAdapterPosition()).toString());
+                    Toast.makeText(mCtx, "Added to cart", Toast.LENGTH_SHORT).show();
+                cart.addToCart(d);
+            });
+            builder.setNegativeButton("No", (V,A) ->{
+                //cancelled the dialog
+            });
+            builder.create().show();
         }
     }
 }

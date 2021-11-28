@@ -61,6 +61,7 @@ public class entreePage extends AppCompatActivity implements View.OnClickListene
                 startActivity(intent2);
                 Toast.makeText(this, "drink", Toast.LENGTH_SHORT).show();
                 break;
+
         }
     }
 

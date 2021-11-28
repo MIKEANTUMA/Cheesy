@@ -1,10 +1,13 @@
 package com.example.cheesybackend;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,12 +53,24 @@ public class AppetizerOrgAdapter extends RecyclerView.Adapter<AppetizerOrgAdapte
             itemName = itemView.findViewById(R.id.txtmenuItemName);
             itemDescription = itemView.findViewById(R.id.tv_description);
             itemPrice = itemView.findViewById(R.id.tv_price);
-
+            itemView.setOnClickListener(this);
         }
-
         @Override
         public void onClick(View v) {
             //add to cart logic here
+            AlertDialog.Builder builder = new AlertDialog.Builder(mCtx);
+            builder.setMessage("Would you like to add to cart?").setTitle("Order");
+            builder.setPositiveButton("Ok", (V,A) -> {
+                Appetizer a = taskList.get(getAdapterPosition());
+                Log.d("APPETIZER", taskList.get(getAdapterPosition()).toString());
+                Toast.makeText(mCtx, "Added to cart", Toast.LENGTH_SHORT).show();
+                //addToCart(d);
+            });
+            builder.setNegativeButton("No", (V,A) ->{
+                //cancelled the dialog
+            });
+            builder.create().show();
         }
     }
-}
+    }
+

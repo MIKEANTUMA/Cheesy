@@ -1,14 +1,15 @@
 package com.example.cheesybackend;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -20,6 +21,7 @@ public class drinkPage extends AppCompatActivity implements View.OnClickListener
     Button entree;
     Button drink;
     Button appetizer;
+    TextView name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +65,8 @@ public class drinkPage extends AppCompatActivity implements View.OnClickListener
                 startActivity(intent2);
                 Toast.makeText(this, "drink", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.btn_checkout:
+                //Checkout(this);
         }
     }
 }
