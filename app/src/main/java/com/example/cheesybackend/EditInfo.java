@@ -24,11 +24,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class EditInfo extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference currentUser;
     EditText Fname, Lname, Email, DOB;
-    Button changeBtn;
+    Button changeBtn, resetBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,7 @@ public class EditInfo extends AppCompatActivity {
         Email = findViewById(R.id.changeEmail);
         DOB = findViewById(R.id.changeDOB);
         changeBtn = findViewById(R.id.infoChangeButton);
+        resetBtn = findViewById(R.id.passwordResetBtn);
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         currentUser = FirebaseDatabase.getInstance().getReference().child("user").child(user.getUid());
@@ -63,26 +67,57 @@ public class EditInfo extends AppCompatActivity {
         findViewById(R.id.AccountTab).setOnClickListener(this::switchTab);
         findViewById(R.id.OrderTab).setOnClickListener(this::switchTab);
         changeBtn.setOnClickListener(this::makeChanges);
+        resetBtn.setOnClickListener(this::PasswordReset);
+
+    }
+
+
+    private void PasswordReset(View view) {
+        startActivity(new Intent(getApplicationContext(), AccountPasswordReset.class));
     }
 
     private void makeChanges(View view) {
+       if (!isValidEmail(Email.getText().toString())){
+           Email.setError("Enter a valid email");
+           Email.requestFocus();
+           return;
+        }
+
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         currentUser = FirebaseDatabase.getInstance().getReference().child("user").child(user.getUid());
-        currentUser.child("fname").setValue(Fname.getText().toString());
-        currentUser.child("lname").setValue(Lname.getText().toString());
-        currentUser.child("email").setValue(Email.getText().toString());
-        currentUser.child("dob").setValue(DOB.getText().toString());
-        user.updateEmail(Email.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+        currentUser.child("fname").setValue(Fname.getText().toString().trim());
+        currentUser.child("lname").setValue(Lname.getText().toString().trim());
+        currentUser.child("dob").setValue(DOB.getText().toString().trim());
+        user.updateEmail(Email.getText().toString().trim()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
+                    currentUser.child("email").setValue(Email.getText().toString().trim());
                     Log.d(TAG, "User email address updated.");
+                    Toast.makeText(EditInfo.this, "User Info updated",
+                            Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(EditInfo.this,"Email not updated",Toast.LENGTH_LONG).show();
                 }
             }
         });
-    }
 
+    }
+    public boolean isValidEmail(final String email) {
+
+        Pattern pattern;
+        Matcher matcher;
+
+        final String EMAIL_PATTERN = "^([a-z0-9]+(?:[._-][a-z0-9]+)*)@([a-z0-9]+(?:[.-][a-z0-9]+)*\\.[a-z]{2,})$";
+
+        pattern = Pattern.compile(EMAIL_PATTERN);
+        matcher = pattern.matcher(email);
+
+        return matcher.matches();
+
+    }
 
     private void switchTab(View view) {
         switch (view.getId()){

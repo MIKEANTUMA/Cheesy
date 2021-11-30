@@ -2,10 +2,12 @@ package com.example.cheesybackend;
 
 import android.location.Address;
 import android.media.Rating;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.io.Serializable;
 
-public class Restaurant implements Serializable {
+public class Restaurant implements Parcelable {
 
 
     private String name;
@@ -35,6 +37,28 @@ public class Restaurant implements Serializable {
         this.website = website;
     }
 
+
+    protected Restaurant(Parcel in) {
+        name = in.readString();
+        location = in.readString();
+        rating = in.readFloat();
+        phoneNumber = in.readString();
+        website = in.readString();
+        menu = (Menu) in.readParcelable(menu.getClass().getClassLoader());
+
+    }
+
+    public static final Creator<Restaurant> CREATOR = new Creator<Restaurant>() {
+        @Override
+        public Restaurant createFromParcel(Parcel in) {
+            return new Restaurant(in);
+        }
+
+        @Override
+        public Restaurant[] newArray(int size) {
+            return new Restaurant[size];
+        }
+    };
 
     public String getName() {
         return name;
@@ -85,8 +109,17 @@ public class Restaurant implements Serializable {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
-
-
-
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(name);
+        parcel.writeString(location);
+        parcel.writeString(website);
+        parcel.writeString(phoneNumber);
+        parcel.writeParcelable(menu, i);
+    }
 }

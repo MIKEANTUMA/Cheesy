@@ -109,4 +109,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                     });
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        //Does nothing so you can't go back to splash screen
+        //without restarting app
+    }
 }

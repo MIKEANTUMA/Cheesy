@@ -98,11 +98,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/et_style"
+        app:layout_constraintVertical_bias="0.3"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/changeDOB"
         app:layout_constraintBottom_toTopOf="@id/Tabs"
         android:text="Save Changes"/>
+
+    <Button
+        android:id="@+id/passwordResetBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/et_style"
+        android:text="Reset Password"
+        app:layout_constraintBottom_toTopOf="@id/Tabs"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/infoChangeButton"/>
 
     <LinearLayout
         android:id="@+id/Tabs"
@@ -137,7 +149,7 @@
             android:layout_height="60dp"
             android:contentDescription="@string/title_account"
             android:src="@drawable/account_icon"
-            android:background="@color/btn_red"
+            android:background="@color/green"
             />
     </LinearLayout>
 

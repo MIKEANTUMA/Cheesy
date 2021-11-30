@@ -23,7 +23,6 @@ public class ViewRestaurant extends AppCompatActivity {
         Restaurant restaurant = (Restaurant) getIntent().getSerializableExtra("Restaurant");
         Log.d("SERIALIZABLEeeeeeeeee", restaurant.getClass().toString());
         Menu menu = restaurant.getMenu();
-        List<Menu.Appetizer> app = menu.getAppetizer();
 //        Log.d("Appitizer", app.get(0).getName());
         Toast.makeText(ViewRestaurant.this, "This is " + menu.getAppetizer().get(0).getName(),
                 Toast.LENGTH_LONG).show();

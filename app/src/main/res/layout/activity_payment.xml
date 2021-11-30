@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
+    android:orientation="vertical"
     tools:context=".Payment">
 
     <LinearLayout
@@ -39,7 +40,7 @@
             android:layout_height="60dp"
             android:contentDescription="@string/title_account"
             android:src="@drawable/account_icon"
-            android:background="@color/btn_red"
+            android:background="@color/green"
             />
 
     </LinearLayout>

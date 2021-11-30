@@ -58,7 +58,7 @@
             android:layout_height="60dp"
             android:contentDescription="@string/title_search"
             android:src="@drawable/search_icon"
-            android:background="@color/btn_red"
+            android:background="@color/green"
             />
         <ImageButton
             android:id="@+id/OrderTab"

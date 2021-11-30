@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
+    android:orientation="vertical"
     tools:context=".Orders">
 
     <LinearLayout
@@ -30,7 +31,7 @@
             android:layout_height="60dp"
             android:contentDescription="@string/title_order"
             android:src="@drawable/order_icon"
-            android:background="@color/btn_red"
+            android:background="@color/green"
             />
         <ImageButton
             android:id="@+id/AccountTab"
