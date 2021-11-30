@@ -20,6 +20,7 @@ public class RestrauntOrgAdapter  extends FirebaseRecyclerAdapter<Restaurant, Re
 
     private Context mCtx;
 
+
     /**
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
      * {@link FirebaseRecyclerOptions} for configuration options.
@@ -29,6 +30,14 @@ public class RestrauntOrgAdapter  extends FirebaseRecyclerAdapter<Restaurant, Re
     public RestrauntOrgAdapter(Context mCtx, @NonNull FirebaseRecyclerOptions<Restaurant> options) {
         super(options);
         this.mCtx = mCtx;
+
+    }
+
+
+
+    @Override
+    public void updateOptions(@NonNull FirebaseRecyclerOptions<Restaurant> options) {
+        super.updateOptions(options);
     }
 
     @Override
@@ -70,6 +79,8 @@ public class RestrauntOrgAdapter  extends FirebaseRecyclerAdapter<Restaurant, Re
         return new RestrauntOrgAdapter.restaurantsViewholder(view);
 
     }
+
+
 
     class restaurantsViewholder extends RecyclerView.ViewHolder {
         TextView restaurantName, address, WebsiteLink,PhoneNumber;
