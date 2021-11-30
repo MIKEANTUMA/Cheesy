@@ -64,7 +64,7 @@ public class PaymentsUtil {
         return new JSONObject() {{
             put("type", "PAYMENT_GATEWAY");
             put("parameters", new JSONObject() {{
-                put("gateway", "example");
+                put("gateway", "Cheesy");
                 put("gatewayMerchantId", "exampleGatewayMerchantId");
             }});
         }};
