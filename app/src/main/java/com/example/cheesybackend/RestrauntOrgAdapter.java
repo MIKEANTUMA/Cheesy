@@ -11,10 +11,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-
-import java.io.Serializable;
 
 public class RestrauntOrgAdapter  extends FirebaseRecyclerAdapter<Restaurant, RestrauntOrgAdapter.restaurantsViewholder> {
 
@@ -102,4 +101,5 @@ public class RestrauntOrgAdapter  extends FirebaseRecyclerAdapter<Restaurant, Re
             Log.d("PIZZZZAAAAA", "YOU CLICKED ME");
         }
     }
+
 }

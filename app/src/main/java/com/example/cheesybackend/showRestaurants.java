@@ -25,7 +25,6 @@ public class showRestaurants extends AppCompatActivity {
     EditText search;
     ImageButton buttonSearch;
     FirebaseRecyclerOptions<Restaurant> options;
-    FirebaseRecyclerOptions<Restaurant> options1;
     String s ="";
 
     @Override
@@ -36,54 +35,44 @@ public class showRestaurants extends AppCompatActivity {
         buttonSearch = findViewById(R.id.img_btn_search);
 
 
+
         mbase = FirebaseDatabase.getInstance().getReference().child("restaurants");
         recyclerView = findViewById(R.id.recyclerview_tasks);
         // It is a class provide by the FirebaseUI to make a
         // query in the database to fetch appropriate data
-
-         options = new FirebaseRecyclerOptions.Builder<Restaurant>()
-                    .setQuery(mbase, Restaurant.class)
-                    .build();
-
+        options = new FirebaseRecyclerOptions.Builder<Restaurant>().setQuery(mbase, Restaurant.class).build();
         adapter = new RestrauntOrgAdapter(this,options);
+        Intent intent = (Intent) getIntent().getSerializableExtra("adapter");
+        // Connecting Adapter class with the Recycler view*/
         recyclerView.setAdapter(adapter);
 
-
-//        s = "a";
-//        Log.d("S", s);
-//        Query query = FirebaseDatabase
-//                .getInstance()
-//                .getReference()
-//                .child("restaurants")
-//                .orderByChild("name")
-//                .startAt(s);
-//
-//        options = new FirebaseRecyclerOptions.Builder<Restaurant>()
-//                .setQuery(query, Restaurant.class)
-//                .build();
-       // adapter.notifyDataSetChanged();
-
         buttonSearch.setOnClickListener(v -> {
-            s = search.getText().toString();
-            Log.d("S", s);
-            Query query = FirebaseDatabase
-                    .getInstance()
-                    .getReference()
-                    .child("restaurants")
-                    .orderByChild("name")
-                    .startAt(s);
-            options1 = new FirebaseRecyclerOptions.Builder<Restaurant>()
-                    .setQuery(mbase, Restaurant.class)
-                    .build();
-            adapter.updateOptions(options1);
+            if (search.getText().toString().isEmpty()){
+                options = new FirebaseRecyclerOptions.Builder<Restaurant>().setQuery(mbase, Restaurant.class).build();
+                adapter.updateOptions(options);
+
+            }
+            else {
+                String s = search.getText().toString();
+                Log.d("S", s);
+                Query query = FirebaseDatabase
+                        .getInstance()
+                        .getReference()
+                        .child("restaurants")
+                        .orderByChild("name")
+                        .startAt(s);
+
+                options = new FirebaseRecyclerOptions.Builder<Restaurant>()
+                        .setQuery(query, Restaurant.class)
+                        .build();
+                adapter.updateOptions(options);
+            }
         });
 
 
 
 
 
-        Intent intent = (Intent) getIntent().getSerializableExtra("adapter");
-        // Connecting Adapter class with the Recycler view*/
 
 
 
@@ -116,5 +105,4 @@ public class showRestaurants extends AppCompatActivity {
 
 
 
-
-    }
+}

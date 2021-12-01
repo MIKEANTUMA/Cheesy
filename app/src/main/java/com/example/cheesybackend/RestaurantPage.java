@@ -1,19 +1,14 @@
 package com.example.cheesybackend;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RatingBar;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class RestaurantPage extends AppCompatActivity implements View.OnClickListener {
 
@@ -49,6 +44,7 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
         description.setText(restaurant.getDescription());
         website.setText("website: "+restaurant.getWebsite());
         phoneNumber.setText("PhoneNumber: "+restaurant.getPhoneNumber());
+
     }
 
     @Override
@@ -71,4 +67,6 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
                 break;
         }
     }
+
+
 }
