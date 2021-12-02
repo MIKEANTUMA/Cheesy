@@ -18,6 +18,7 @@ public class AppetizerOrgAdapter extends RecyclerView.Adapter<AppetizerOrgAdapte
 
     private ArrayList<Appetizer> taskList;
     private Context mCtx;
+    private Cart cart = Cart.getInstance();
 
 
     public AppetizerOrgAdapter(Context mCtx, ArrayList<Appetizer> taskList) {
@@ -64,7 +65,7 @@ public class AppetizerOrgAdapter extends RecyclerView.Adapter<AppetizerOrgAdapte
                 Appetizer a = taskList.get(getAdapterPosition());
                 Log.d("APPETIZER", taskList.get(getAdapterPosition()).toString());
                 Toast.makeText(mCtx, "Added to cart", Toast.LENGTH_SHORT).show();
-                //addToCart(d);
+                cart.addToCart(a);
             });
             builder.setNegativeButton("No", (V,A) ->{
                 //cancelled the dialog

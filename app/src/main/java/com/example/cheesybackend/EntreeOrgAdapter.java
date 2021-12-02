@@ -18,7 +18,7 @@ public class EntreeOrgAdapter extends RecyclerView.Adapter<EntreeOrgAdapter.Task
 
     private ArrayList<Entree> taskList;
     private Context mCtx;
-
+    private Cart cart = Cart.getInstance();
 
     public EntreeOrgAdapter(Context mCtx, ArrayList<Entree> taskList) {
         this.mCtx = mCtx;
@@ -66,7 +66,7 @@ public class EntreeOrgAdapter extends RecyclerView.Adapter<EntreeOrgAdapter.Task
                 Entree e = taskList.get(getAdapterPosition());
                 Log.d("ENTREE", taskList.get(getAdapterPosition()).toString());
                 Toast.makeText(mCtx, "Added to cart", Toast.LENGTH_SHORT).show();
-                //addToCart(d);
+                cart.addToCart(e);
             });
             builder.setNegativeButton("No", (V,A) ->{
                 //cancelled the dialog

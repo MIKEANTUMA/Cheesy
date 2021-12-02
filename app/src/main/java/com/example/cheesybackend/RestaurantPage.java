@@ -21,6 +21,7 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
     TextView website;
     TextView phoneNumber;
     Restaurant restaurant;
+    Button btnreturn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +38,8 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
         entree.setOnClickListener(this);
         appetizer.setOnClickListener(this);
         drink.setOnClickListener(this);
-
+        btnreturn=findViewById(R.id.btn_return);
+        btnreturn.setOnClickListener(this);
         restaurant = getIntent().getParcelableExtra("Restaurant");
         name.setText(restaurant.getName());
         ratingbar.setRating(restaurant.getRating());
@@ -63,7 +65,14 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
                 Toast.makeText(this, "appetizer", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_drink:
-                //go to drink intent
+                Intent intent2 = new Intent(this, drinkPage.class);
+                intent2.putExtra("Restaurant", restaurant);
+                startActivity(intent2);
+                break;
+            case R.id.btn_return:
+                Intent intent3 = new Intent(this, showRestaurants.class);
+                intent3.putExtra("Restaurant", restaurant);
+                startActivity(intent3);
                 break;
         }
     }

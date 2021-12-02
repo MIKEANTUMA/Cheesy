@@ -1,14 +1,15 @@
 package com.example.cheesybackend;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -18,13 +19,17 @@ public class entreePage extends AppCompatActivity implements View.OnClickListene
     Button entree;
     Button drink;
     Button appetizer;
+    Button btnreturn;
+    TextView name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entree_page);
 
+        name = findViewById(R.id.tv_name);
 
         restaurant = getIntent().getParcelableExtra("Restaurant");
+        name.setText(restaurant.getName());
         recyclerView = findViewById(R.id.recyclerview_items);
         ArrayList<Entree> list = restaurant.getMenu().getEntree();
         Log.d("ENTREE", list.get(0).getName());
@@ -36,6 +41,8 @@ public class entreePage extends AppCompatActivity implements View.OnClickListene
         entree.setOnClickListener(this);
         appetizer.setOnClickListener(this);
         drink.setOnClickListener(this);
+        btnreturn=findViewById(R.id.btn_return);
+        btnreturn.setOnClickListener(this);
 
         Log.d("MENUORGADAPTER", String.valueOf(adapter.getItemCount()));
     }
@@ -60,6 +67,14 @@ public class entreePage extends AppCompatActivity implements View.OnClickListene
                 intent2.putExtra("Restaurant", restaurant);
                 startActivity(intent2);
                 Toast.makeText(this, "drink", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btn_checkout:
+                //Checkout(this);
+                break;
+            case R.id.btn_return:
+                Intent intent3 = new Intent(this, showRestaurants.class);
+                intent3.putExtra("Restaurant", restaurant);
+                startActivity(intent3);
                 break;
 
         }

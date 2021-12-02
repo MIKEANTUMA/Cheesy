@@ -11,6 +11,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
 public class drinkPage extends AppCompatActivity implements View.OnClickListener {
@@ -22,13 +24,18 @@ public class drinkPage extends AppCompatActivity implements View.OnClickListener
     Button drink;
     Button appetizer;
     TextView name;
+    Button btnreturn;
+    Button checkout;
+    Cart cart = Cart.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appetizer_page);
 
+        name = findViewById(R.id.tv_name);
 
         restaurant = getIntent().getParcelableExtra("Restaurant");
+        name.setText(restaurant.getName());
         recyclerView = findViewById(R.id.recyclerview_items);
         ArrayList<Drink> list = restaurant.getMenu().getDrinks();
         Log.d("DRINK", list.get(0).getName());
@@ -40,7 +47,10 @@ public class drinkPage extends AppCompatActivity implements View.OnClickListener
         entree.setOnClickListener(this);
         appetizer.setOnClickListener(this);
         drink.setOnClickListener(this);
-
+        btnreturn=findViewById(R.id.btn_return);
+        btnreturn.setOnClickListener(this);
+        checkout = findViewById(R.id.btn_checkout);
+        checkout.setOnClickListener(this);
         Log.d("MENUORGADAPTER", String.valueOf(adapter.getItemCount()));
     }
 
@@ -66,7 +76,19 @@ public class drinkPage extends AppCompatActivity implements View.OnClickListener
                 Toast.makeText(this, "drink", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_checkout:
-                //Checkout(this);
+                try {
+                    Log.d("DRINKPAGE CHECKOUT", "checkout");
+                    cart.checkOut(this,restaurant);
+                } catch (JSONException e) {
+                    Log.d("DRINKPAGE CHECKOUT", "sad face :(");
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.btn_return:
+                Intent intent3 = new Intent(this, showRestaurants.class);
+                intent3.putExtra("Restaurant", restaurant);
+                startActivity(intent3);
+                break;
         }
     }
 }
