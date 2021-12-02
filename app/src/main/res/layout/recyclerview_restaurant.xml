@@ -15,6 +15,7 @@
         android:useDefaultMargins="true">
 
         <TextView
+            android:ellipsize="end"
             android:id="@+id/txtRestName"
             android:layout_column="0"
             android:text="Restaurant Name"

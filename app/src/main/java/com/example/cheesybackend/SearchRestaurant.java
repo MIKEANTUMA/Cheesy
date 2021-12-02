@@ -7,11 +7,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 
 public class SearchRestaurant extends AppCompatActivity {
@@ -20,8 +23,11 @@ public class SearchRestaurant extends AppCompatActivity {
     RestaurantOrgAdapter adapter; // Create Object of the Adapter class
     DatabaseReference mbase; // Create object of the
     // Firebase Realtime Database
+    EditText search;
+    Button searchBtn;
 
     private ImageButton m1, m2, m3;
+    FirebaseRecyclerOptions<Restaurant> options;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +44,35 @@ public class SearchRestaurant extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerview_tasks);
         // It is a class provide by the FirebaseUI to make a
         // query in the database to fetch appropriate data
-        FirebaseRecyclerOptions<Restaurant> options = new FirebaseRecyclerOptions.Builder<Restaurant>().setQuery(mbase, Restaurant.class).build();
+        options = new FirebaseRecyclerOptions.Builder<Restaurant>().setQuery(mbase, Restaurant.class).build();
         adapter = new RestaurantOrgAdapter(this,options);
         Intent intent = (Intent) getIntent().getSerializableExtra("adapter");
         // Connecting Adapter class with the Recycler view*/
         recyclerView.setAdapter(adapter);
+        search = findViewById(R.id.searchbar);
+        searchBtn = findViewById(R.id.SearchButton);
+        searchBtn.setOnClickListener(v -> {
+            if (search.getText().toString().isEmpty()){
+                options = new FirebaseRecyclerOptions.Builder<Restaurant>().setQuery(mbase, Restaurant.class).build();
+                adapter.updateOptions(options);
 
+            }
+            else {
+                String s = search.getText().toString();
+                Log.d("S", s);
+                Query query = FirebaseDatabase
+                        .getInstance()
+                        .getReference()
+                        .child("restaurants")
+                        .orderByChild("name")
+                        .equalTo(s);
 
+                options = new FirebaseRecyclerOptions.Builder<Restaurant>()
+                        .setQuery(query, Restaurant.class)
+                        .build();
+                adapter.updateOptions(options);
+            }
+        });
     }
 
     @Override protected void onStart()
