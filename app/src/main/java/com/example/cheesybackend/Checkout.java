@@ -157,7 +157,7 @@ public class Checkout extends AppCompatActivity {
         task.addOnCompleteListener(this, new OnCompleteListener<Boolean>() {
             @Override
             public void onComplete(@NonNull Task<Boolean> task) {
-
+                showGooglePlayButton(task.isComplete());
                 Log.d("KEY", "ready to pay");
             }
         });
