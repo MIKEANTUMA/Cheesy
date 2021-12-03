@@ -2,7 +2,10 @@ package com.example.cheesybackend;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -83,11 +86,13 @@ public class Cart {
     private void CalculateTip(){
         Log.d("KEY","in calculate tip");
         this.tip = this.total*0.18;
+        this.total+=this.tip;
     }
 
     private void CalculateTax(){
         Log.d("KEY","in calculate tax");
         this.tax = this.total*0.08;
+        this.total+=this.tax;
     }
 
     private void CalculateTotal(){
@@ -162,6 +167,7 @@ public class Cart {
 //       // return itemList;
 //    }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void checkOut(Context mCtx, Restaurant restaurant) throws JSONException {
         if(taskList.size() == 0){
             return;
@@ -171,6 +177,7 @@ public class Cart {
         this.createReceipt(mCtx,restaurant);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void createReceipt(Context mCtx, Restaurant restaurant) throws JSONException {
         Log.d("KEY","in create receipt");
         JSONObject jsonObject = new JSONObject();

@@ -34,10 +34,7 @@ public class RestrauntOrgAdapter  extends FirebaseRecyclerAdapter<Restaurant, Re
 
 
 
-    @Override
-    public void updateOptions(@NonNull FirebaseRecyclerOptions<Restaurant> options) {
-        super.updateOptions(options);
-    }
+
 
     @Override
     protected void onBindViewHolder(@NonNull restaurantsViewholder holder, int position, @NonNull Restaurant model) {
