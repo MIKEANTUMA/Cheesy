@@ -11,6 +11,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
 public class entreePage extends AppCompatActivity implements View.OnClickListener {
@@ -21,6 +23,8 @@ public class entreePage extends AppCompatActivity implements View.OnClickListene
     Button appetizer;
     Button btnreturn;
     TextView name;
+    Button checkout;
+    Cart cart = Cart.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +47,8 @@ public class entreePage extends AppCompatActivity implements View.OnClickListene
         drink.setOnClickListener(this);
         btnreturn=findViewById(R.id.btn_return);
         btnreturn.setOnClickListener(this);
-
+        checkout = findViewById(R.id.btn_checkout);
+        checkout.setOnClickListener(this);
         Log.d("MENUORGADAPTER", String.valueOf(adapter.getItemCount()));
     }
 
@@ -69,8 +74,13 @@ public class entreePage extends AppCompatActivity implements View.OnClickListene
                 Toast.makeText(this, "drink", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_checkout:
-                //Checkout(this);
-                break;
+                try {
+                    Log.d("entreepage CHECKOUT", "checkout");
+                    cart.checkOut(this,restaurant);
+                } catch (JSONException e) {
+                    Log.d("entreepage CHECKOUT", "sad face :(");
+                    e.printStackTrace();
+                }                break;
             case R.id.btn_return:
                 Intent intent3 = new Intent(this, showRestaurants.class);
                 intent3.putExtra("Restaurant", restaurant);

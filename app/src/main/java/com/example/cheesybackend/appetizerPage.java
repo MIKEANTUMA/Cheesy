@@ -23,6 +23,7 @@ public class appetizerPage extends AppCompatActivity implements View.OnClickList
     Button drink;
     Button appetizer;
     TextView name;
+    Button checkout;
     Button btnreturn;
     private Cart cart = Cart.getInstance();
     @Override
@@ -47,6 +48,8 @@ public class appetizerPage extends AppCompatActivity implements View.OnClickList
         drink.setOnClickListener(this);
         btnreturn=findViewById(R.id.btn_return);
         btnreturn.setOnClickListener(this);
+        checkout = findViewById(R.id.btn_checkout);
+        checkout.setOnClickListener(this);
         Log.d("MENUORGADAPTER", String.valueOf(adapter.getItemCount()));
     }
 
@@ -73,8 +76,10 @@ public class appetizerPage extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.btn_checkout:
                 try {
-                    cart.checkOut(this, restaurant);
+                    Log.d("appetizer CHECKOUT", "checkout");
+                    cart.checkOut(this,restaurant);
                 } catch (JSONException e) {
+                    Log.d("appetizer CHECKOUT", "sad face :(");
                     e.printStackTrace();
                 }
                 break;

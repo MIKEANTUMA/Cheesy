@@ -1,35 +1,34 @@
 package com.example.cheesybackend;
 
-import static com.example.cheesybackend.PaymentsUtil.getCardPaymentMethod;
-import static com.example.cheesybackend.PaymentsUtil.getIsReadyToPayRequest;
-
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.cheesybackend.databinding.GooglepayButtonBinding;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wallet.AutoResolveHelper;
 import com.google.android.gms.wallet.IsReadyToPayRequest;
+import com.google.android.gms.wallet.PaymentData;
 import com.google.android.gms.wallet.PaymentDataRequest;
 import com.google.android.gms.wallet.PaymentsClient;
 import com.google.android.gms.wallet.Wallet;
-import com.google.android.gms.wallet.Wallet.WalletOptions;
 import com.google.android.gms.wallet.WalletConstants;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class Checkout extends AppCompatActivity {
 
@@ -50,8 +49,11 @@ public class Checkout extends AppCompatActivity {
     TextView tv_total;
     Button pay;
     private static final int LOAD_PAYMENT_DATA_REQUEST_CODE = 991;
-    JSONObject paymentRequestJson = null;
+
     private PaymentsClient paymentsClient;
+    private static final long SHIPPING_COST_CENTS = 90 * PaymentsUtil.CENTS_IN_A_UNIT.longValue();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +93,8 @@ public class Checkout extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
     }
 
     public void populateReceipt() throws JSONException {
@@ -126,65 +130,174 @@ public class Checkout extends AppCompatActivity {
         ll.addView(tv_totalItem);
         ll.addView(tv_total);
         isReadyToPay();
-        pay.setOnClickListener(view -> {
 
-            try {
-                paymentRequestJson = baseConfigurationJson();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            try {
-                paymentRequestJson
-                        .put("totalPrice", jObj.get("totalPrice"))
-                        .put("totalPriceStatus", "FINAL")
-                        .put("currencyCode", "USD");
-                paymentRequestJson
-                        .put("merchantInfo", new JSONObject()
-                                .put("merchantId", "01234567890123456789")
-                                .put("merchantName",jObj.getString("name")));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            loadPaymentData();
-
-        });
     }
 
-    private void isReadyToPay() throws JSONException {
-        IsReadyToPayRequest readyToPayRequest = IsReadyToPayRequest.fromJson(baseConfigurationJson().toString());
+    private void isReadyToPay() {
+        final Optional<JSONObject> isReadyToPayJson = PaymentsUtil.getIsReadyToPayRequest();
+        IsReadyToPayRequest readyToPayRequest = IsReadyToPayRequest.fromJson(isReadyToPayJson.get().toString());
 
         Task<Boolean> task = paymentsClient.isReadyToPay(readyToPayRequest);
         task.addOnCompleteListener(this, new OnCompleteListener<Boolean>() {
             @Override
             public void onComplete(@NonNull Task<Boolean> task) {
+                Log.d("key", "show button");
                 showGooglePlayButton(task.isComplete());
                 Log.d("KEY", "ready to pay");
             }
         });
+        task.addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("KEYERRRRROOOOOOOR", e.toString());
+            }
+        });
     }
 
-    private static JSONObject baseConfigurationJson() throws JSONException {
-        return new JSONObject()
-                .put("apiVersion", 2)
-                .put("apiVersionMinor", 0)
-                .put("allowedPaymentMethods", new JSONArray().put(getCardPaymentMethod()));
-    }
+
 
     private void showGooglePlayButton(boolean userIsReadyToPay){
+        Log.d("key", "in show button");
         if(userIsReadyToPay){
+            Log.d("key", "user is ready");
             pay = new Button(this);
             pay.setBackground(getDrawable(R.drawable.buy_with_googlepay_button_content));
-        }
-        else{
-
+            ll.addView(pay);
+            pay.setOnClickListener(view -> {
+                try {
+                    loadPaymentData();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
 
-    private void loadPaymentData(){
-        final PaymentDataRequest request = PaymentDataRequest.fromJson(paymentRequestJson.toString());
-        AutoResolveHelper.resolveTask(
-                paymentsClient.loadPaymentData(request),
-                this, LOAD_PAYMENT_DATA_REQUEST_CODE);
+    private void loadPaymentData() throws JSONException {
+
+        try{
+            double Price = (double) jObj.get("totalPrice");
+            long PriceCents = Math.round(Price * PaymentsUtil.CENTS_IN_A_UNIT.longValue());
+            long totalpriceCents = PriceCents + SHIPPING_COST_CENTS;
+
+            Optional<JSONObject> paymentDataRequestJson = PaymentsUtil.getPaymentDataRequest(totalpriceCents);
+
+            if (!paymentDataRequestJson.isPresent()) {
+                return;
+            }
+
+            PaymentDataRequest request =
+                    PaymentDataRequest.fromJson(paymentDataRequestJson.get().toString());
+            Log.d("REQUEST",request.toJson());
+
+            if (request != null) {
+                AutoResolveHelper.resolveTask(
+                        paymentsClient.loadPaymentData(request),
+                        this, LOAD_PAYMENT_DATA_REQUEST_CODE);
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("The price cannot be deserialized from the JSON object.");
+        }
+
     }
+
+
+
+    private void handlePaymentSuccess(PaymentData paymentData) {
+
+        // Token will be null if PaymentDataRequest was not constructed using fromJson(String).
+        final String paymentInfo = paymentData.toJson();
+        if (paymentInfo == null) {
+            return;
+        }
+
+        try {
+            JSONObject paymentMethodData = new JSONObject(paymentInfo).getJSONObject("paymentMethodData");
+            // If the gateway is set to "example", no payment information is returned - instead, the
+            // token will only consist of "examplePaymentMethodToken".
+
+            final JSONObject tokenizationData = paymentMethodData.getJSONObject("tokenizationData");
+            final String token = tokenizationData.getString("token");
+            final JSONObject info = paymentMethodData.getJSONObject("info");
+            final String billingName = info.getJSONObject("billingAddress").getString("name");
+            Toast.makeText(
+                    this, billingName,
+                    Toast.LENGTH_LONG).show();
+
+            // Logging token string.
+            Log.d("Google Pay token: ", token);
+
+
+        } catch (JSONException e) {
+            throw new RuntimeException("The selected garment cannot be parsed from the list of elements");
+        }
+    }
+
+    private void handleError(int statusCode) {
+        Log.e("loadPaymentData failed", String.format("Error code: %d", statusCode));
+    }
+
+
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            // value passed in AutoResolveHelper
+            case LOAD_PAYMENT_DATA_REQUEST_CODE:
+                switch (resultCode) {
+
+                    case Activity.RESULT_OK:
+                        PaymentData paymentData = PaymentData.getFromIntent(data);
+                        handlePaymentSuccess(paymentData);
+                        break;
+
+                    case Activity.RESULT_CANCELED:
+                        // The user cancelled the payment attempt
+                        break;
+
+                    case AutoResolveHelper.RESULT_ERROR:
+                        Status status = AutoResolveHelper.getStatusFromIntent(data);
+                        handleError(status.getStatusCode());
+                        break;
+                }
+
+                // Re-enables the Google Pay payment button.
+                //googlePayButton.setClickable(true);
+        }
+    }
+
+
+
+
+
+
+
+
+
 
 }
+
+//
+//    private static JSONObject baseConfigurationJson() throws JSONException {
+//        return new JSONObject()
+//                .put("apiVersion", 2)
+//                .put("apiVersionMinor", 0)
+//                .put("allowedPaymentMethods", new JSONArray().put(getCardPaymentMethod()));
+//    }
+
+//                try {
+//                    paymentRequestJson
+//                            .put("totalPrice", jObj.get("totalPrice"))
+//                            .put("totalPriceStatus", "FINAL")
+//                            .put("currencyCode", "USD");
+//                    paymentRequestJson
+//                            .put("merchantInfo", new JSONObject()
+//                                    .put("merchantId", "01234567890123456789")
+//                                    .put("merchantName",jObj.getString("name")));
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
