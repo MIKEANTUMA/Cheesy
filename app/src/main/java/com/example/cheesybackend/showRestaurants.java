@@ -35,7 +35,6 @@ public class showRestaurants extends AppCompatActivity {
         buttonSearch = findViewById(R.id.img_btn_search);
 
 
-
         mbase = FirebaseDatabase.getInstance().getReference().child("restaurants");
         recyclerView = findViewById(R.id.recyclerview_tasks);
         // It is a class provide by the FirebaseUI to make a

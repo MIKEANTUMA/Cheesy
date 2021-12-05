@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.CheesyBackend" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/btn_red</item>
-        <item name="colorPrimaryVariant">@color/btn_red</item>
+        <item name="colorPrimary">@color/primary_dark</item>
+        <item name="colorPrimaryVariant">@color/primary</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>

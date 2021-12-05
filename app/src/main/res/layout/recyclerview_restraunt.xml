@@ -14,11 +14,19 @@
         android:columnCount="2"
         android:useDefaultMargins="true">
 
+        <!-- Updated the restaurant name to wrap
+             or be short if too long. -->
         <TextView
             android:id="@+id/txtRestName"
             android:layout_column="0"
             android:text="Restaurant Name"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:ellipsize="end"
+            />
 
         <ImageView
             android:id="@+id/Image"
