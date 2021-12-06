@@ -1,16 +1,27 @@
 package com.example.cheesybackend;
 
+import static android.view.Gravity.CENTER_HORIZONTAL;
+import static android.view.Gravity.END;
+import static android.view.Gravity.FILL_HORIZONTAL;
+import static android.view.Gravity.START;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,11 +43,12 @@ import java.util.Optional;
 
 public class Checkout extends AppCompatActivity {
 
-    LinearLayout.LayoutParams etParas;
+
+    LinearLayout.LayoutParams etParas, etParam2;
     JSONObject jObj;
     int itemAmount;
     ArrayList<TextView> views;
-    LinearLayout ll;
+    LinearLayout ll, ll2;
     TextView name;
     TextView phoneNumber;
     TextView website;
@@ -59,6 +71,7 @@ public class Checkout extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
         ll=findViewById(R.id.myMainLayout);
+//        ll2=findViewById(R.id.secondLayout);
         name = findViewById(R.id.tv_name);
         phoneNumber = findViewById(R.id.tv_phoneNumber);
         website = findViewById(R.id.tv_website);
@@ -84,10 +97,19 @@ public class Checkout extends AppCompatActivity {
             e.printStackTrace();
         }
         etParas=new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.HORIZONTAL
+
+        );
+
+        etParam2=new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.HORIZONTAL
         );
+
+
         try {
             populateReceipt();
         } catch (JSONException e) {
@@ -103,33 +125,47 @@ public class Checkout extends AppCompatActivity {
         website.setText( jObj.getString("website"));
         dateTime.setText(jObj.getString("dateTime"));
 
+
+
+
         for(int i = 0; i<itemAmount;i++){
             Log.d("KEY",jObj.getString(String.valueOf(i)));
 
+//            ll2 = new LinearLayout(this);
+//            ll2.setLayoutParams(etParam2);
             tv_itemName= new TextView(this);
             tv_itemPrice = new TextView(this);
+            tv_itemName.setTextSize(20);
+            tv_itemPrice.setTextSize(20);
+            tv_itemPrice.setGravity(START);
             tv_itemName.setText(jObj.getString("item"+String.valueOf(i)));
             tv_itemPrice.setText(jObj.getString(String.valueOf(i)));
+            tv_itemPrice.setGravity(END);
             views.add(tv_itemName);
             views.add(tv_itemPrice);
-            ll.addView(tv_itemName);
-            ll.addView(tv_itemPrice);
+            ll2.addView(tv_itemName);
+            ll2.addView(tv_itemPrice);
 
         }
-        tv_tax = new TextView(this);
-        tv_tip = new TextView(this);
-        tv_total = new TextView(this);
-        tv_totalItem = new TextView(this);
-        tv_total = new TextView(this);
-        tv_tax.setText("Tax "+jObj.get("tax"));
-        tv_tip.setText("Tip "+jObj.get("tip"));
-        tv_totalItem.setText("Total Items: "+itemAmount);
-        tv_total.setText("Total "+ jObj.get("totalPrice"));
-        ll.addView(tv_tax);
-        ll.addView(tv_tip);
-        ll.addView(tv_totalItem);
-        ll.addView(tv_total);
-        isReadyToPay();
+
+//        tv_tax = new TextView(this);
+//        tv_tip = new TextView(this);
+//        tv_total = new TextView(this);
+//        tv_totalItem = new TextView(this);
+//        tv_total = new TextView(this);
+//        tv_totalItem.setText("Total Items: "+itemAmount);
+//        tv_tax.setTop(25);
+//        tv_tax.setGravity(END);
+//        tv_tip.setGravity(END);
+//        tv_total.setGravity(END);
+//        tv_tax.setText("Tax "+String.format("%.2f", jObj.get("tax")));
+//        tv_tip.setText("Tip "+String.format("%.2f", jObj.get("tip")));
+//        tv_total.setText("Total "+ String.format("%.2f",jObj.get("totalPrice")));
+//        ll.addView(tv_totalItem);
+//        ll.addView(tv_tax);
+//        ll.addView(tv_tip);
+//        ll.addView(tv_total);
+//        isReadyToPay();
 
     }
 
@@ -162,7 +198,7 @@ public class Checkout extends AppCompatActivity {
             Log.d("key", "user is ready");
             pay = new Button(this);
             pay.setBackground(getDrawable(R.drawable.buy_with_googlepay_button_content));
-            ll.addView(pay);
+//            ll.addView(pay);
             pay.setOnClickListener(view -> {
                 try {
                     loadPaymentData();

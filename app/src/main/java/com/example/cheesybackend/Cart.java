@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class Cart {
+
     private static Cart single_instance = null;
     private ArrayList<Object> taskList = new ArrayList<>();
     private double total = 0;
@@ -83,20 +84,22 @@ public class Cart {
         return total;
     }
 
+    //calculates the tip for the order
     private void CalculateTip(){
-        Log.d("KEY","in calculate tip");
         this.tip = this.total*0.18;
         this.total+=this.tip;
     }
 
+    //calculates tax for the bill
+    //the tax rate is that of suffolk
+    //county
     private void CalculateTax(){
-        Log.d("KEY","in calculate tax");
         this.tax = this.total*0.08;
         this.total+=this.tax;
     }
 
+    //calculates the total of the order
     private void CalculateTotal(){
-        Log.d("KEY","in calculate total");
         this.taskList.forEach((menuItem)-> {
 
             if (menuItem instanceof Drink) {
@@ -136,50 +139,25 @@ public class Cart {
         this.tax = tax;
     }
 
+    //adds item to cart
     public void addToCart(Object o){
         taskList.add(o);
-        Log.d("CART", "added to cart");
-
-
     }
 
-//    public JSONArray JSONcreateJsonArray(){
-//
-//        JSONArray itemList;
-//        for(int i = 0; i < taskList.size(); i++){
-//
-//            if(taskList.get(i).equals(Drink.class))
-//            {
-//
-//            }
-//            else if(taskList.get(i).equals(Entree.class))
-//            {
-//
-//            }
-//            else if(taskList.get(i).equals(Appetizer.class))
-//            {
-//
-//            }
-//            else{
-//                Log.d("ERROR CHECK OUT", "not valid object");
-//            }
-//        }
-//       // return itemList;
-//    }
-
+    //checks to see if items where added to cart
+    //calls calculate total and creates receipt
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void checkOut(Context mCtx, Restaurant restaurant) throws JSONException {
         if(taskList.size() == 0){
             return;
         }
-        Log.d("KEY","in checkout");
         this.CalculateTotal();
         this.createReceipt(mCtx,restaurant);
     }
 
+    //creates a receipt as a json item
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void createReceipt(Context mCtx, Restaurant restaurant) throws JSONException {
-        Log.d("KEY","in create receipt");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("Thank you","Thank you for your Order");
         jsonObject.put("name", restaurant.getName());
@@ -192,7 +170,6 @@ public class Cart {
             if(menuItem instanceof Drink)
             {
                 Drink d = (Drink) menuItem;
-                Log.d("KEY",d.getName());
                 try {
                     jsonObject.put("item"+String.valueOf(counter), d.getName());
                     jsonObject.put(String.valueOf(counter), d.getPrice());
@@ -203,7 +180,6 @@ public class Cart {
             else if(menuItem instanceof Entree)
             {
                 Entree e = (Entree) menuItem;
-                Log.d("KEY",e.getName());
                 try {
                     jsonObject.put("item"+String.valueOf(counter), e.getName());
                     jsonObject.put(String.valueOf(counter), e.getPrice());
@@ -214,7 +190,6 @@ public class Cart {
             else if(menuItem instanceof Appetizer)
             {
                 Appetizer a = (Appetizer) menuItem;
-                Log.d("KEY",a.getName());
                 try {
                     jsonObject.put("item"+String.valueOf(counter), a.getName());
                     jsonObject.put(String.valueOf(counter), a.getPrice());
@@ -234,7 +209,6 @@ public class Cart {
 
         Intent intent = new Intent(mCtx, Checkout.class);
         String jobj = jsonObject.toString();
-        Log.d("KEY", jobj);
         intent.putExtra("receipt",jobj);
         intent.putExtra("itemAmount", counter);
         mCtx.startActivity(intent);

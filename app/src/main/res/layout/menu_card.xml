@@ -17,7 +17,12 @@
             android:id="@+id/txtmenuItemName"
             android:layout_column="0"
             android:text="Menu Item Name"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+
+            android:layout_width="225dp"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:ellipsize="end"/>
 
         <ImageView
             android:id="@+id/Image"
@@ -31,7 +36,12 @@
             android:id="@+id/tv_description"
             android:layout_column="0"
             android:text="Description"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+
+            android:layout_width="225dp"
+            android:layout_height="wrap_content"
+            android:maxLines="3"
+            />
 
         <TextView
             android:ellipsize="end"

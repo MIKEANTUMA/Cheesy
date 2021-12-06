@@ -26,6 +26,7 @@ public class appetizerPage extends AppCompatActivity implements View.OnClickList
     Button checkout;
     Button btnreturn;
     private Cart cart = Cart.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +38,6 @@ public class appetizerPage extends AppCompatActivity implements View.OnClickList
         name.setText(restaurant.getName());
         recyclerView = findViewById(R.id.recyclerview_items);
         ArrayList<Appetizer> list = restaurant.getMenu().getAppetizer();
-        Log.d("ENTREE", list.get(0).getName());
         AppetizerOrgAdapter adapter = new AppetizerOrgAdapter(this,list);
         recyclerView.setAdapter(adapter);
         entree = findViewById(R.id.btn_entree);
@@ -50,8 +50,8 @@ public class appetizerPage extends AppCompatActivity implements View.OnClickList
         btnreturn.setOnClickListener(this);
         checkout = findViewById(R.id.btn_checkout);
         checkout.setOnClickListener(this);
-        Log.d("MENUORGADAPTER", String.valueOf(adapter.getItemCount()));
     }
+
 
     @Override
     public void onClick(View v) {

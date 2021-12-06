@@ -36,11 +36,13 @@ public class Splash extends AppCompatActivity {
             load.setProgress(0);
         }
 
+
+        //reset to 5000 before final submission
         @Override
         protected Integer doInBackground(Integer... start) {
             int a=0;
             try {
-                Thread.sleep(5000);
+                Thread.sleep(1000);
             }
             catch (InterruptedException e){
                 e.printStackTrace();

@@ -58,12 +58,11 @@ public class AppetizerOrgAdapter extends RecyclerView.Adapter<AppetizerOrgAdapte
         }
         @Override
         public void onClick(View v) {
-            //add to cart logic here
+            //cart notification to add item
             AlertDialog.Builder builder = new AlertDialog.Builder(mCtx);
             builder.setMessage("Would you like to add to cart?").setTitle("Order");
             builder.setPositiveButton("Ok", (V,A) -> {
                 Appetizer a = taskList.get(getAdapterPosition());
-                Log.d("APPETIZER", taskList.get(getAdapterPosition()).toString());
                 Toast.makeText(mCtx, "Added to cart", Toast.LENGTH_SHORT).show();
                 cart.addToCart(a);
             });

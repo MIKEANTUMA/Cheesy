@@ -22,6 +22,7 @@ class Appetizer  implements Parcelable {
         price = in.readDouble();
     }
 
+    //
     public static final Creator<Appetizer> CREATOR = new Creator<Appetizer>() {
         @Override
         public Appetizer createFromParcel(Parcel in) {
@@ -34,6 +35,7 @@ class Appetizer  implements Parcelable {
         }
     };
 
+    //getter and setter methods
     public String getName() {
         return name;
     }
