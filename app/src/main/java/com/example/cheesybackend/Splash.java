@@ -42,7 +42,7 @@ public class Splash extends AppCompatActivity {
         protected Integer doInBackground(Integer... start) {
             int a=0;
             try {
-                Thread.sleep(1000);
+                Thread.sleep(500);
             }
             catch (InterruptedException e){
                 e.printStackTrace();

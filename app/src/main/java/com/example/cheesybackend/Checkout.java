@@ -1,27 +1,19 @@
 package com.example.cheesybackend;
 
-import static android.view.Gravity.CENTER_HORIZONTAL;
-import static android.view.Gravity.END;
-import static android.view.Gravity.FILL_HORIZONTAL;
-import static android.view.Gravity.START;
-
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.Gravity;
 import android.widget.Button;
-import android.widget.GridLayout;
-import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,12 +35,15 @@ import java.util.Optional;
 
 public class Checkout extends AppCompatActivity {
 
+   RelativeLayout relativeLayout;
+   RelativeLayout.LayoutParams layoutParams;
 
-    LinearLayout.LayoutParams etParas, etParam2;
+
+    LinearLayout.LayoutParams etParas;
     JSONObject jObj;
     int itemAmount;
     ArrayList<TextView> views;
-    LinearLayout ll, ll2;
+    LinearLayout ll;
     TextView name;
     TextView phoneNumber;
     TextView website;
@@ -71,7 +66,6 @@ public class Checkout extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
         ll=findViewById(R.id.myMainLayout);
-//        ll2=findViewById(R.id.secondLayout);
         name = findViewById(R.id.tv_name);
         phoneNumber = findViewById(R.id.tv_phoneNumber);
         website = findViewById(R.id.tv_website);
@@ -98,74 +92,82 @@ public class Checkout extends AppCompatActivity {
         }
         etParas=new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.HORIZONTAL
-
+                LinearLayout.LayoutParams.WRAP_CONTENT
         );
-
-        etParam2=new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.HORIZONTAL
+        layoutParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
         );
-
 
         try {
             populateReceipt();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
     }
 
+
+    //Dynamically creates the receipt
     public void populateReceipt() throws JSONException {
         name.setText( jObj.getString("name"));
         phoneNumber.setText( jObj.getString("phoneNumber"));
         website.setText( jObj.getString("website"));
         dateTime.setText(jObj.getString("dateTime"));
 
-
-
+        etParas.setMargins(0, 25,0,0);
 
         for(int i = 0; i<itemAmount;i++){
             Log.d("KEY",jObj.getString(String.valueOf(i)));
 
-//            ll2 = new LinearLayout(this);
-//            ll2.setLayoutParams(etParam2);
+            //initializes relative layout
+            relativeLayout = new RelativeLayout(this);
+            relativeLayout.setLayoutParams(layoutParams);
+
+
+
             tv_itemName= new TextView(this);
             tv_itemPrice = new TextView(this);
             tv_itemName.setTextSize(20);
             tv_itemPrice.setTextSize(20);
-            tv_itemPrice.setGravity(START);
+
             tv_itemName.setText(jObj.getString("item"+String.valueOf(i)));
-            tv_itemPrice.setText(jObj.getString(String.valueOf(i)));
-            tv_itemPrice.setGravity(END);
+            tv_itemName.setId(R.id.hybrid);
+            tv_itemPrice.setText(String.format("%40s", jObj.getString(String.valueOf(i))));
+
+
+            //layout param to align textViews
+            layoutParams.addRule(RelativeLayout.RIGHT_OF, tv_itemName.getId());
             views.add(tv_itemName);
             views.add(tv_itemPrice);
-            ll2.addView(tv_itemName);
-            ll2.addView(tv_itemPrice);
-
+            relativeLayout.addView(tv_itemName);
+            relativeLayout.addView(tv_itemPrice, layoutParams);
+            ll.addView(relativeLayout);
         }
+        tv_tax = new TextView(this);
+        tv_tip = new TextView(this);
+        tv_total = new TextView(this);
+        tv_totalItem = new TextView(this);
+        tv_total = new TextView(this);
 
-//        tv_tax = new TextView(this);
-//        tv_tip = new TextView(this);
-//        tv_total = new TextView(this);
-//        tv_totalItem = new TextView(this);
-//        tv_total = new TextView(this);
-//        tv_totalItem.setText("Total Items: "+itemAmount);
-//        tv_tax.setTop(25);
-//        tv_tax.setGravity(END);
-//        tv_tip.setGravity(END);
-//        tv_total.setGravity(END);
-//        tv_tax.setText("Tax "+String.format("%.2f", jObj.get("tax")));
-//        tv_tip.setText("Tip "+String.format("%.2f", jObj.get("tip")));
-//        tv_total.setText("Total "+ String.format("%.2f",jObj.get("totalPrice")));
-//        ll.addView(tv_totalItem);
-//        ll.addView(tv_tax);
-//        ll.addView(tv_tip);
-//        ll.addView(tv_total);
-//        isReadyToPay();
+        tv_totalItem.setTextSize(20);
+        tv_tax.setTextSize(20);
+        tv_tip.setTextSize(20);
+        tv_total.setTextSize(20);
+
+        tv_totalItem.setText("Total Items:   "+itemAmount);
+        tv_tax.setText("Tax: " + String.format("%.2f", jObj.get("tax")));
+        tv_tip.setText("Tip: " + String.format("%.2f", jObj.get("tip")));
+        tv_total.setText("Total: " + String.format("%.2f", jObj.get("totalPrice")));
+
+        tv_tax.setGravity(Gravity.RIGHT);
+        tv_tip.setGravity(Gravity.RIGHT);
+        tv_total.setGravity(Gravity.RIGHT);
+
+        ll.addView(tv_totalItem);
+        ll.addView(tv_tax);
+        ll.addView(tv_tip);
+        ll.addView(tv_total);
+        isReadyToPay();
 
     }
 
@@ -197,8 +199,10 @@ public class Checkout extends AppCompatActivity {
         if(userIsReadyToPay){
             Log.d("key", "user is ready");
             pay = new Button(this);
+            pay.setLayoutParams(etParas);
+
             pay.setBackground(getDrawable(R.drawable.buy_with_googlepay_button_content));
-//            ll.addView(pay);
+            ll.addView(pay);
             pay.setOnClickListener(view -> {
                 try {
                     loadPaymentData();
