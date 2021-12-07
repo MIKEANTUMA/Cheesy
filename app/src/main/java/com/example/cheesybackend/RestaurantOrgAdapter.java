@@ -2,6 +2,8 @@ package com.example.cheesybackend;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,13 +15,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.location.GeofencingClient;
+import com.google.android.gms.location.LocationServices;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 //Used adapter Michael made
 public class RestaurantOrgAdapter extends FirebaseRecyclerAdapter<
         Restaurant, RestaurantOrgAdapter.restaurantsViewholder> {
 
+    private GeofencingClient geofencingClient;
     private Context mCtx;
 
     /**
@@ -43,7 +49,17 @@ public class RestaurantOrgAdapter extends FirebaseRecyclerAdapter<
         // Add address from model class (here
         // "restaurant.class")to appropriate view in Card
         // view (here "person.xml")
+        geofencingClient = LocationServices.getGeofencingClient(mCtx);
         holder.address.setText(model.getLocation());
+
+        Geocoder geocoder=new Geocoder(mCtx);
+        Address address;
+        try {
+            address=geocoder.getFromLocationName(model.getLocation(),1).get(0);
+            Log.d("Restraunt Address", "" +address.getLatitude() + " " + address.getLongitude());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // Add WebsiteLink from model class (here
         // "restaurant.class")to appropriate view in Card
@@ -70,7 +86,6 @@ public class RestaurantOrgAdapter extends FirebaseRecyclerAdapter<
     public restaurantsViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_restaurant, parent, false);
         return new RestaurantOrgAdapter.restaurantsViewholder(view);
-
     }
 
     class restaurantsViewholder extends RecyclerView.ViewHolder {
