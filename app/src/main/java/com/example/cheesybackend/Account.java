@@ -1,6 +1,7 @@
 package com.example.cheesybackend;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -8,19 +9,35 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-public class Account extends AppCompatActivity {
+import java.io.IOException;
+
+public class Account extends AppCompatActivity  {
     private FirebaseAuth mAuth;
     private final String TAG = "MainActivity";
     private final int REQUEST_LOCATION_PERMISSIONS = 0;
@@ -36,7 +53,7 @@ public class Account extends AppCompatActivity {
         findViewById(R.id.PaymentBtn).setOnClickListener(this::switchTab);
         findViewById(R.id.AddressBtn).setOnClickListener(this::switchTab);
         findViewById(R.id.personalInfoBtn).setOnClickListener(this::switchTab);
-        findViewById(R.id.LocateSwitch).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.LocateBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (hasLocationPermission())
@@ -47,13 +64,13 @@ public class Account extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                AlertDialog.Builder alert= new AlertDialog.Builder(Account.this);
+                AlertDialog.Builder alert = new AlertDialog.Builder(Account.this);
                 alert.setMessage("This app is our semester project for BCS 421. "
-                + "It's a pizza ordering app, something similar to doordash or Grubhub, "
-                + "but more focused on pizza places. You can create a user account, "
-                + "search restaurants, click on them and view their menu, make an order, "
-                                + "and the order receipts");
-                alert.setPositiveButton("Continue", (v,a)->{
+                        + "It's a pizza ordering app, something similar to doordash or Grubhub, "
+                        + "but more focused on pizza places. You can create a user account, "
+                        + "search restaurants, click on them and view their menu, make an order, "
+                        + "and the order receipts");
+                alert.setPositiveButton("Continue", (v, a) -> {
 
                 });
                 alert.create().show();
@@ -71,7 +88,7 @@ public class Account extends AppCompatActivity {
     }
 
     private void switchTab(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.SearchTab:
                 startActivity(new Intent(getApplicationContext(), SearchRestaurant.class));
                 break;
@@ -99,7 +116,6 @@ public class Account extends AppCompatActivity {
         client.getLastLocation()
                 .addOnSuccessListener(this, location -> Log.d(TAG, "location = " + location));
     }
-
     private boolean hasLocationPermission() {
             // Request fine location permission if not already granted
             if (ContextCompat.checkSelfPermission(this,
@@ -109,11 +125,8 @@ public class Account extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this,
                         new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
                         REQUEST_LOCATION_PERMISSIONS);
-
-
                 return false;
             }
-
             return true;
         }
 

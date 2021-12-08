@@ -2,12 +2,16 @@ package com.example.cheesybackend;
 
 import android.location.Address;
 import android.media.Rating;
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.RequiresApi;
+
 import java.io.Serializable;
 
-public class Restaurant implements Parcelable {
+
+public class Restaurant  implements Parcelable {
 
 
     private String name;
@@ -16,9 +20,12 @@ public class Restaurant implements Parcelable {
     private float rating;
     private String phoneNumber;
     private String website;
+    private String description;
 
 
     public Restaurant(){}
+
+
 
     public Restaurant(Restaurant restaurant) {
         this.name = restaurant.getName();
@@ -27,14 +34,25 @@ public class Restaurant implements Parcelable {
         this.rating = restaurant.getRating();
         this.phoneNumber = restaurant.getPhoneNumber();
         this.website = restaurant.getWebsite();
+        this.description = restaurant.getDescription();
     }
-    public Restaurant(String name, String location, Menu menu, float rating, String phoneNumber, String website) {
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description){
+        this.description = description;
+    }
+
+    public Restaurant(String name, String location, Menu menu, float rating, String phoneNumber, String website, String description) {
         this.name = name;
         this.location = location;
         this.menu = menu;
         this.rating = rating;
         this.phoneNumber = phoneNumber;
         this.website = website;
+        this.description = description;
     }
 
 
@@ -42,10 +60,10 @@ public class Restaurant implements Parcelable {
         name = in.readString();
         location = in.readString();
         rating = in.readFloat();
+        menu = in.readParcelable(Menu.class.getClassLoader());
         phoneNumber = in.readString();
         website = in.readString();
-        menu = (Menu) in.readParcelable(menu.getClass().getClassLoader());
-
+        description = in.readString();
     }
 
     public static final Creator<Restaurant> CREATOR = new Creator<Restaurant>() {
@@ -114,12 +132,17 @@ public class Restaurant implements Parcelable {
         return 0;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(name);
-        parcel.writeString(location);
-        parcel.writeString(website);
-        parcel.writeString(phoneNumber);
-        parcel.writeParcelable(menu, i);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(location);
+        dest.writeFloat(rating);
+        dest.writeParcelable(menu, flags);
+        dest.writeString(phoneNumber);
+        dest.writeString(website);
+        dest.writeString(description);
     }
+
+
 }

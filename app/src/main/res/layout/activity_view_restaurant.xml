@@ -6,4 +6,48 @@
     android:layout_height="match_parent"
     tools:context=".ViewRestaurant">
 
+    <!--GoogleMap fragment-->
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        app:layout_constraintBottom_toTopOf="@id/Tabs"/>
+    <LinearLayout
+        android:id="@+id/Tabs"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="bottom">
+        <ImageButton
+            android:id="@+id/SearchTab"
+            android:layout_width="match_parent"
+            android:layout_weight="4"
+            android:layout_height="60dp"
+            android:contentDescription="@string/title_search"
+            android:src="@drawable/search_icon"
+            android:background="@color/green"
+            />
+        <ImageButton
+            android:id="@+id/OrderTab"
+            android:layout_width="match_parent"
+            android:layout_weight="4"
+            android:layout_height="60dp"
+            android:contentDescription="@string/title_order"
+            android:src="@drawable/order_icon"
+            android:background="@color/btn_red"
+            />
+        <ImageButton
+            android:id="@+id/AccountTab"
+            android:layout_width="match_parent"
+            android:layout_weight="4"
+            android:layout_height="60dp"
+            android:contentDescription="@string/title_account"
+            android:src="@drawable/account_icon"
+            android:background="@color/btn_red"
+            />
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

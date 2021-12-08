@@ -47,32 +47,16 @@
         android:background="@drawable/et_style"
         android:text="About"
         android:gravity="center_horizontal" />
-
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/NotificationSwitch"
+    <Button
+        android:id="@+id/LocateBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/AboutBtn"
-        android:layout_marginVertical="25dp"
         android:layout_marginHorizontal="30dp"
-        android:text="Notifications"
-        android:background="@drawable/btn_style"
-        android:textColor="@color/green"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/LocateSwitch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/NotificationSwitch"
         android:layout_marginVertical="25dp"
-        android:layout_marginHorizontal="30dp"
         android:background="@drawable/btn_style"
-        android:text="Location Permission"
-        android:textColor="@color/green"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        />
+        android:text="Turn On Location"
+        app:layout_constraintTop_toBottomOf="@+id/AboutBtn"
+        tools:layout_editor_absoluteX="30dp"/>
 
     <Button
         android:id="@+id/SignOutBtn"
@@ -84,7 +68,7 @@
         android:layout_marginVertical="25dp"
         android:layout_marginHorizontal="30dp"
         android:background="@drawable/et_style"
-        app:layout_constraintTop_toBottomOf="@id/LocateSwitch"/>
+        app:layout_constraintTop_toBottomOf="@id/LocateBtn"/>
 
     <LinearLayout
         android:layout_width="match_parent"
