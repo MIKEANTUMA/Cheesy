@@ -11,7 +11,7 @@
         android:theme="@style/Theme.CheesyBackend">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBMexIOnYzNSrtAfbVlW775Bazl94LnTJQ"/>
+            android:value="API KEY GO HERE"/>
         <activity
             android:name=".AccountPasswordReset"
             android:exported="true"
