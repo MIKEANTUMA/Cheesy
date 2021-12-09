@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +20,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.SignInMethodQueryResult;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class Login extends AppCompatActivity implements View.OnClickListener{
@@ -28,7 +28,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     private EditText editTextemail, editTextpassword;
     private TextView pass;
     Button login;
-
+    private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
 
     @Override
@@ -43,6 +43,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         editTextpassword = findViewById(R.id.password);
         pass = findViewById(R.id.viewpassword);
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
     }
 
     @Override
@@ -98,7 +100,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                                 // Sign in success, update UI with the signed-in user's information
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 Toast.makeText(Login.this, "Login successful", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(Login.this, SearchRestaurant.class));
+                                Intent intent = new Intent(Login.this, showRestaurants.class);
+                                startActivity(new Intent(Login.this, showRestaurants.class));
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(message, "sign in fail", task.getException());

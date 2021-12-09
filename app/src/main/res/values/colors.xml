@@ -10,4 +10,8 @@
     <color name="btn_red">#F91C1C</color>
     <color name="cheese_yellow">#F9CC1C</color>
     <color name="green">#34C511</color>
+
+    <color name="primary">#F44336</color>
+    <color name="primary_dark">#D32F2F</color>
+
 </resources>

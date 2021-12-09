@@ -4,18 +4,13 @@ public class User {
 
     private String fname;
 
-
     private String lname;
-
 
     private String email;
 
-
     private String dob;
 
-
     private String address;
-
 
     private String zipcode;
 

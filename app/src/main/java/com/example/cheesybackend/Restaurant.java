@@ -1,5 +1,7 @@
 package com.example.cheesybackend;
 
+import static java.lang.System.out;
+
 import android.location.Address;
 import android.media.Rating;
 import android.os.Build;
@@ -7,9 +9,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.RequiresApi;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.Serializable;
-
 
 public class Restaurant  implements Parcelable {
 

@@ -21,14 +21,14 @@ public class Splash extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         load = findViewById(R.id.progressbar);
 
-        LoadingScreen s = new LoadingScreen();
+        GrabRestaurantData s = new GrabRestaurantData();
         s.execute(1);
 
 
 
     }
 
-    class LoadingScreen extends AsyncTask<Integer, Integer, Integer> {
+    class GrabRestaurantData extends AsyncTask<Integer, Integer, Integer> {
 
         @Override
         protected void onPreExecute() {
@@ -36,11 +36,13 @@ public class Splash extends AppCompatActivity {
             load.setProgress(0);
         }
 
+
+        //reset to 5000 before final submission
         @Override
         protected Integer doInBackground(Integer... start) {
             int a=0;
             try {
-                Thread.sleep(3000);
+                Thread.sleep(500);
             }
             catch (InterruptedException e){
                 e.printStackTrace();
