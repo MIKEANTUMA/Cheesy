@@ -49,6 +49,8 @@ public class showRestaurants extends AppCompatActivity {
         Intent intent = (Intent) getIntent().getSerializableExtra("adapter");
         // Connecting Adapter class with the Recycler view*/
         recyclerView.setAdapter(adapter);
+
+        //
         findViewById(R.id.SearchTab).setOnClickListener(this::switchTab);
         findViewById(R.id.AccountTab).setOnClickListener(this::switchTab);
         findViewById(R.id.OrderTab).setOnClickListener(this::switchTab);

@@ -81,6 +81,7 @@ public class EditInfo extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), AccountPasswordReset.class));
     }
 
+    //TODO: when change btn press return to account class
     private void makeChanges(View view) {
        if (!isValidEmail(Email.getText().toString())){
            Email.setError("Enter a valid email");

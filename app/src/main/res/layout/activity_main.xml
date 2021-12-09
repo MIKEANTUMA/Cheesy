@@ -6,13 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Register">
-
-    <ImageView
-        android:src="@drawable/background"
-        android:scaleType="centerCrop"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    tools:context=".Register"
+    android:background="@drawable/pizzabackground">
 
     <EditText
         android:id="@+id/editTextFirstName"

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".Login"
     android:orientation="vertical"
-    android:background="@drawable/background"
+    android:background="@drawable/pizzabackground"
     android:padding="20dp">
 
     <TextView

@@ -62,7 +62,7 @@
     <RatingBar
         android:isIndicator="true"
         android:id="@+id/rb_rating"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:rating="3.5" />
@@ -71,7 +71,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20dp"
-        android:padding="10dp"
+        android:padding="5dp"
         android:textColor="@color/black"
         android:text="lorem loremloremloremloremloremlorem lorem lorem lorem loremloremlorem lorem loremloremloremloremloremlorem lorem lorem lorem loremloremlorem"/>
 
@@ -82,7 +82,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20dp"
-        android:padding="10dp"
+        android:padding="8dp"
         android:textColor="@color/black"
         android:text="webiste: www.google.com"/>
 
@@ -92,13 +92,14 @@
         android:layout_height="wrap_content"
         android:textSize="20dp"
         android:textColor="@color/black"
-        android:padding="10dp"
+        android:padding="8dp"
         android:text="PhoneNumber: 1234455666"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="20dp">
+        >
+
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             android:name="com.google.android.gms.maps.MapFragment"
             android:id="@+id/map"
@@ -109,6 +110,8 @@
             android:id="@+id/floatingBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
             app:fabCustomSize="70dp"
             android:src="@drawable/backarrowbtn"
             android:backgroundTint="@color/primary_dark"

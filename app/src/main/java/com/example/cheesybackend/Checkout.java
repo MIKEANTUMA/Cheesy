@@ -242,9 +242,8 @@ public class Checkout extends AppCompatActivity {
             //Creating textView to put behind button
             TextView back = new TextView(this);
 
-
             //sets the TextView to black
-            back.setBackgroundColor(Color.BLACK);
+            back.setBackgroundResource(R.drawable.btn_style_black);
 
             //sets the pay background
             pay.setBackground(getDrawable(R.drawable.buy_with_googlepay_button_content));

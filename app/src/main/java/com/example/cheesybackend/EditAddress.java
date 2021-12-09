@@ -63,6 +63,8 @@ public class EditAddress extends AppCompatActivity {
         });
         changeBtn.setOnClickListener(this::makeChanges);
     }
+
+    //TODO: when change btn pressed return to account class
     private void makeChanges(View view) {
 
         FirebaseUser user = mAuth.getCurrentUser();
