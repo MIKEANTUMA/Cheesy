@@ -23,6 +23,9 @@ import com.google.firebase.auth.SignInMethodQueryResult;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Login extends AppCompatActivity implements View.OnClickListener{
 
     private EditText editTextemail, editTextpassword;
@@ -35,6 +38,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        try {
+            this.getSupportActionBar().hide();
+        }
+        catch (NullPointerException e) {}
 
         login = findViewById(R.id.login);
         login.setOnClickListener(this);
@@ -61,6 +68,18 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
 
         String email = editTextemail.getText().toString().trim();
         String password = editTextpassword.getText().toString().trim();
+        if (email.isEmpty()) {
+            editTextemail.setError("Email is required");
+            editTextemail.requestFocus();
+            return;
+        }
+
+        if(!isValidEmail(editTextemail.getText().toString())){
+            editTextemail.setError("Enter a valid email");
+            editTextemail.requestFocus();
+            return;
+        }
+
         if(editTextpassword.getVisibility()==View.GONE){
             mAuth.fetchSignInMethodsForEmail(email)
                     .addOnCompleteListener(this,new OnCompleteListener<SignInMethodQueryResult>() {
@@ -79,16 +98,17 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                     });
         }
         else {
-
-            if (email.isEmpty()) {
-                editTextemail.setError("Email is required");
-                editTextemail.requestFocus();
-                return;
-            }
             if (password.isEmpty()) {
                 editTextpassword.setError("password is required");
                 editTextpassword.requestFocus();
             }
+
+            if(!isValidPassword(editTextpassword.getText().toString())){
+                editTextpassword.setError("Enter a valid password");
+                editTextpassword.requestFocus();
+                return;
+            }
+
             String message = "";
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -100,7 +120,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                                 // Sign in success, update UI with the signed-in user's information
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 Toast.makeText(Login.this, "Login successful", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(Login.this, showRestaurants.class);
                                 startActivity(new Intent(Login.this, showRestaurants.class));
                             } else {
                                 // If sign in fails, display a message to the user.
@@ -111,6 +130,32 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                         }
                     });
         }
+    }
+    public boolean isValidEmail(final String email) {
+
+        Pattern pattern;
+        Matcher matcher;
+
+        final String EMAIL_PATTERN = "^([a-z0-9]+(?:[._-][a-z0-9]+)*)@([a-z0-9]+(?:[.-][a-z0-9]+)*\\.[a-z]{2,})$";
+
+        pattern = Pattern.compile(EMAIL_PATTERN);
+        matcher = pattern.matcher(email);
+
+        return matcher.matches();
+
+    }
+    public boolean isValidPassword(final String password) {
+
+        Pattern pattern;
+        Matcher matcher;
+
+        final String PASSWORD_PATTERN = "^(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\\w\\d\\s:])([^\\s]){8,16}$";
+
+        pattern = Pattern.compile(PASSWORD_PATTERN);
+        matcher = pattern.matcher(password);
+
+        return matcher.matches();
+
     }
 
     @Override

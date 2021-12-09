@@ -36,6 +36,11 @@ public class AccountPasswordReset extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_password_reset);
+        try {
+            this.getSupportActionBar().hide();
+        }
+        catch (NullPointerException e) {}
+
         email = findViewById(R.id.email);
         oldPassword = findViewById(R.id.oldPassword);
         newPassword = findViewById(R.id.newPassword);
@@ -62,6 +67,7 @@ public class AccountPasswordReset extends AppCompatActivity {
         String e = email.getText().toString().trim();
         String o = oldPassword.getText().toString().trim();
         String n = newPassword.getText().toString().trim();
+
 
         if (!isValidPassword(n)){
             newPassword.setError("Enter a valid password");

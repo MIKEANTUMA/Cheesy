@@ -13,12 +13,13 @@
         android:theme="@style/Theme.CheesyBackend">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="API KEY GO HERE"/>
+            android:value="Enter API Key"/>
         <activity
             android:name=".Checkout"
             android:exported="false"
             android:label="check out"
-            android:parentActivityName=".showRestaurants"/>
+            android:parentActivityName=".showRestaurants"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.google.android.gms.wallet.api.enabled"
@@ -26,26 +27,27 @@
 
         <activity
             android:name=".drinkPage"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".appetizerPage"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".entreePage"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".RestaurantPage"
             android:exported="false"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".AccountPasswordReset"
             android:exported="true"
-            android:screenOrientation="portrait"
-            />
-        <activity
-            android:name=".ViewRestaurant"
+            android:screenOrientation="portrait" />
+        <activity android:name=".showRestaurants"
             android:exported="true"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".EditAddress"
             android:exported="true"
@@ -62,16 +64,6 @@
             android:name=".Orders"
             android:exported="true"
             android:screenOrientation="portrait"/>
-        <activity
-            android:name=".SearchRestaurant"
-            android:exported="true"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".Payment"
-            android:exported="true"
-            android:screenOrientation="portrait"/>
-            android:name=".showRestaurants"
-            android:exported="true" />
         <activity
             android:name=".Register"
             android:exported="true"

@@ -33,6 +33,10 @@ public class EditAddress extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_address);
+        try {
+            this.getSupportActionBar().hide();
+        }
+        catch (NullPointerException e) {}
         Address = findViewById(R.id.changeAddress);
         Zipcode = findViewById(R.id.changeZipcode);
         changeBtn = findViewById(R.id.infoChangeButton);
@@ -71,7 +75,7 @@ public class EditAddress extends AppCompatActivity {
     private void switchTab(View view) {
         switch (view.getId()){
             case R.id.SearchTab:
-                startActivity(new Intent(getApplicationContext(), SearchRestaurant.class));
+                startActivity(new Intent(getApplicationContext(), showRestaurants.class));
                 break;
             case R.id.OrderTab:
                 startActivity(new Intent(getApplicationContext(), Orders.class));

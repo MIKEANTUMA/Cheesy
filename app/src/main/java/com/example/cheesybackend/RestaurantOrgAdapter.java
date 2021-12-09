@@ -2,8 +2,6 @@ package com.example.cheesybackend;
 
 import android.content.Context;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,17 +11,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 
-import java.io.IOException;
-import java.io.Serializable;
-
-//Used adapter Michael made
-public class RestaurantOrgAdapter extends FirebaseRecyclerAdapter<
-        Restaurant, RestaurantOrgAdapter.restaurantsViewholder> {
+public class RestaurantOrgAdapter extends FirebaseRecyclerAdapter<Restaurant, RestaurantOrgAdapter.restaurantsViewholder> {
 
     private Context mCtx;
+
 
     /**
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
@@ -34,7 +29,12 @@ public class RestaurantOrgAdapter extends FirebaseRecyclerAdapter<
     public RestaurantOrgAdapter(Context mCtx, @NonNull FirebaseRecyclerOptions<Restaurant> options) {
         super(options);
         this.mCtx = mCtx;
+
     }
+
+
+
+
 
     @Override
     protected void onBindViewHolder(@NonNull restaurantsViewholder holder, int position, @NonNull Restaurant model) {
@@ -42,7 +42,7 @@ public class RestaurantOrgAdapter extends FirebaseRecyclerAdapter<
         // "restaurant.class")to appropriate view in Card
         // view (here "recylerview_restaurant.xml")
         holder.restaurantName.setText(model.getName());
-
+        Log.d("menu", model.getMenu().getAppetizer().toString());
         // Add address from model class (here
         // "restaurant.class")to appropriate view in Card
         // view (here "person.xml")
@@ -57,11 +57,10 @@ public class RestaurantOrgAdapter extends FirebaseRecyclerAdapter<
         holder.ratingBar.setRating(model.getRating());
         holder.restaurantName.setOnClickListener(v -> {
             Log.d("PIZZZZAAAAA", "YOU CLICKED MY NAME");
-            Intent intent = new Intent(mCtx, ViewRestaurant.class);
+            Intent intent = new Intent(mCtx, RestaurantPage.class);
             Restaurant restaurant = new Restaurant(model.getName(),model.getLocation(),model.getMenu(),model.getRating(),model.getPhoneNumber(),model.getWebsite(),model.getDescription());
             intent.putExtra("Restaurant", restaurant);
             mCtx.startActivity(intent);
-
 
         });
         holder.PhoneNumber.setOnClickListener(v -> {
@@ -72,10 +71,12 @@ public class RestaurantOrgAdapter extends FirebaseRecyclerAdapter<
     @NonNull
     @Override
     public restaurantsViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_restaurant, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_restraunt, parent, false);
         return new RestaurantOrgAdapter.restaurantsViewholder(view);
 
     }
+
+
 
     class restaurantsViewholder extends RecyclerView.ViewHolder {
         TextView restaurantName, address, WebsiteLink,PhoneNumber;
@@ -97,4 +98,5 @@ public class RestaurantOrgAdapter extends FirebaseRecyclerAdapter<
             Log.d("PIZZZZAAAAA", "YOU CLICKED ME");
         }
     }
+
 }

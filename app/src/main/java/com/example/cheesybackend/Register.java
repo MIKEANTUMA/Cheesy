@@ -38,6 +38,11 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        try {
+            this.getSupportActionBar().hide();
+        }
+        catch (NullPointerException e) {}
+
 
         editFirstName = findViewById(R.id.editTextFirstName);
         editLastName = findViewById(R.id.editTextLastName);

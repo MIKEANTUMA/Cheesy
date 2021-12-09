@@ -99,7 +99,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="20dp">
-
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            android:name="com.google.android.gms.maps.MapFragment"
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+           />
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingBtn"
             android:layout_width="wrap_content"

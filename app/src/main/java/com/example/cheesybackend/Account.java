@@ -46,11 +46,15 @@ public class Account extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
+        try {
+            this.getSupportActionBar().hide();
+        }
+        catch (NullPointerException e) {}
+
         mAuth = FirebaseAuth.getInstance();
         findViewById(R.id.SearchTab).setOnClickListener(this::switchTab);
         findViewById(R.id.AccountTab).setOnClickListener(this::switchTab);
         findViewById(R.id.OrderTab).setOnClickListener(this::switchTab);
-        findViewById(R.id.PaymentBtn).setOnClickListener(this::switchTab);
         findViewById(R.id.AddressBtn).setOnClickListener(this::switchTab);
         findViewById(R.id.personalInfoBtn).setOnClickListener(this::switchTab);
         findViewById(R.id.LocateBtn).setOnClickListener(new View.OnClickListener() {
@@ -90,16 +94,13 @@ public class Account extends AppCompatActivity  {
     private void switchTab(View view) {
         switch (view.getId()) {
             case R.id.SearchTab:
-                startActivity(new Intent(getApplicationContext(), SearchRestaurant.class));
+                startActivity(new Intent(getApplicationContext(), showRestaurants.class));
                 break;
             case R.id.OrderTab:
                 startActivity(new Intent(getApplicationContext(), Orders.class));
                 break;
             case R.id.AccountTab:
                 startActivity(new Intent(getApplicationContext(), Account.class));
-                break;
-            case R.id.PaymentBtn:
-                startActivity(new Intent(getApplicationContext(), Payment.class));
                 break;
             case R.id.personalInfoBtn:
                 startActivity(new Intent(getApplicationContext(), EditInfo.class));

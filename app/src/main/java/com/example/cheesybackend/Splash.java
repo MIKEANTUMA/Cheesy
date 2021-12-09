@@ -24,6 +24,10 @@ public class Splash extends AppCompatActivity {
         GrabRestaurantData s = new GrabRestaurantData();
         s.execute(1);
 
+        try {
+            this.getSupportActionBar().hide();
+        }
+        catch (NullPointerException e) {}
 
 
     }

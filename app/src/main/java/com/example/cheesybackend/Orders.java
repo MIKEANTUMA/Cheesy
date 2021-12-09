@@ -20,7 +20,7 @@ public class Orders extends AppCompatActivity {
     private void switchTab(View view) {
         switch (view.getId()){
             case R.id.SearchTab:
-                startActivity(new Intent(getApplicationContext(), SearchRestaurant.class));
+                startActivity(new Intent(getApplicationContext(), showRestaurants.class));
                 break;
             case R.id.OrderTab:
                 startActivity(new Intent(getApplicationContext(), Orders.class));
