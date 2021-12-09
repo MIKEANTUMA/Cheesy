@@ -1,12 +1,16 @@
 package com.example.cheesybackend;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.BlendMode;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,15 +40,15 @@ import java.util.Optional;
 
 public class Checkout extends AppCompatActivity {
 
-   RelativeLayout relativeLayout;
-   RelativeLayout.LayoutParams layoutParams;
 
 
+    RelativeLayout relativeLayout;
+    RelativeLayout.LayoutParams layoutParams;
     LinearLayout.LayoutParams etParas;
+    LinearLayout ll;
     JSONObject jObj;
     int itemAmount;
     ArrayList<TextView> views;
-    LinearLayout ll;
     TextView name;
     TextView phoneNumber;
     TextView website;
@@ -55,8 +60,8 @@ public class Checkout extends AppCompatActivity {
     TextView tv_totalItem;
     TextView tv_total;
     Button pay;
-    private static final int LOAD_PAYMENT_DATA_REQUEST_CODE = 991;
 
+    private static final int LOAD_PAYMENT_DATA_REQUEST_CODE = 991;
     private PaymentsClient paymentsClient;
     private static final long SHIPPING_COST_CENTS = 90 * PaymentsUtil.CENTS_IN_A_UNIT.longValue();
 
@@ -65,12 +70,14 @@ public class Checkout extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
+
         ll=findViewById(R.id.myMainLayout);
         name = findViewById(R.id.tv_name);
         phoneNumber = findViewById(R.id.tv_phoneNumber);
         website = findViewById(R.id.tv_website);
         dateTime = findViewById(R.id.tv_dateTime);
         views = new ArrayList();
+
         Intent intent = getIntent();
         String jsonString = intent.getStringExtra("receipt");
 
@@ -82,18 +89,19 @@ public class Checkout extends AppCompatActivity {
 
         paymentsClient = Wallet.getPaymentsClient(this,walletOptions);
 
-
-
         itemAmount = intent.getIntExtra("itemAmount", 0);
+
         try {
             jObj = new JSONObject(jsonString);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        etParas=new LinearLayout.LayoutParams(
+
+        etParas = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
+
         layoutParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT
@@ -106,7 +114,6 @@ public class Checkout extends AppCompatActivity {
         }
     }
 
-
     //Dynamically creates the receipt
     public void populateReceipt() throws JSONException {
         name.setText( jObj.getString("name"));
@@ -114,54 +121,77 @@ public class Checkout extends AppCompatActivity {
         website.setText( jObj.getString("website"));
         dateTime.setText(jObj.getString("dateTime"));
 
-        etParas.setMargins(0, 25,0,0);
 
         for(int i = 0; i<itemAmount;i++){
-            Log.d("KEY",jObj.getString(String.valueOf(i)));
 
             //initializes relative layout
             relativeLayout = new RelativeLayout(this);
             relativeLayout.setLayoutParams(layoutParams);
+            layoutParams.setMargins(0,15,0,5);
 
-
-
+            //initializes of textView for items and price
             tv_itemName= new TextView(this);
             tv_itemPrice = new TextView(this);
             tv_itemName.setTextSize(20);
             tv_itemPrice.setTextSize(20);
 
+            //setting params for itemName and itemPrice
+            //Width = Match & Height = Wrap
+            tv_itemName.setLayoutParams(layoutParams);
+            tv_itemPrice.setLayoutParams(layoutParams);
+
+            //setting the text of itemName & itemPrice
             tv_itemName.setText(jObj.getString("item"+String.valueOf(i)));
-            tv_itemName.setId(R.id.hybrid);
             tv_itemPrice.setText(String.format("%40s", jObj.getString(String.valueOf(i))));
+
+            //setting id for itemName for layout alignment
+            tv_itemName.setId(R.id.hybrid);
 
 
             //layout param to align textViews
             layoutParams.addRule(RelativeLayout.RIGHT_OF, tv_itemName.getId());
+
+            //adding view to arrayList
             views.add(tv_itemName);
             views.add(tv_itemPrice);
+
+            //adding textView to relativeLayout
             relativeLayout.addView(tv_itemName);
             relativeLayout.addView(tv_itemPrice, layoutParams);
+
+            //adding relativeLayout to ll
             ll.addView(relativeLayout);
         }
+        //initializes tax, tip, total, totalItems
         tv_tax = new TextView(this);
         tv_tip = new TextView(this);
         tv_total = new TextView(this);
         tv_totalItem = new TextView(this);
-        tv_total = new TextView(this);
+//        tv_total = new TextView(this);
 
+        //setting margin for etParas
+        etParas.setMargins(0,100,0,10);
+
+
+        //setting textSize
         tv_totalItem.setTextSize(20);
         tv_tax.setTextSize(20);
         tv_tip.setTextSize(20);
         tv_total.setTextSize(20);
 
-        tv_totalItem.setText("Total Items:   "+itemAmount);
+        tv_totalItem.setText("Total Items:\t" + itemAmount);
         tv_tax.setText("Tax: " + String.format("%.2f", jObj.get("tax")));
         tv_tip.setText("Tip: " + String.format("%.2f", jObj.get("tip")));
         tv_total.setText("Total: " + String.format("%.2f", jObj.get("totalPrice")));
 
-        tv_tax.setGravity(Gravity.RIGHT);
-        tv_tip.setGravity(Gravity.RIGHT);
-        tv_total.setGravity(Gravity.RIGHT);
+
+        //setting params to set margin
+        tv_totalItem.setLayoutParams(etParas);
+
+        //setting gravity to align to the left of screen
+        tv_tax.setGravity(Gravity.END);
+        tv_tip.setGravity(Gravity.END);
+        tv_total.setGravity(Gravity.END);
 
         ll.addView(tv_totalItem);
         ll.addView(tv_tax);
@@ -179,9 +209,7 @@ public class Checkout extends AppCompatActivity {
         task.addOnCompleteListener(this, new OnCompleteListener<Boolean>() {
             @Override
             public void onComplete(@NonNull Task<Boolean> task) {
-                Log.d("key", "show button");
                 showGooglePlayButton(task.isComplete());
-                Log.d("KEY", "ready to pay");
             }
         });
         task.addOnFailureListener(this, new OnFailureListener() {
@@ -192,17 +220,56 @@ public class Checkout extends AppCompatActivity {
         });
     }
 
-
-
     private void showGooglePlayButton(boolean userIsReadyToPay){
-        Log.d("key", "in show button");
         if(userIsReadyToPay){
-            Log.d("key", "user is ready");
-            pay = new Button(this);
-            pay.setLayoutParams(etParas);
 
+            //initializing google pay button
+            pay = new Button(this);
+
+            //initializing FrameLayout
+            FrameLayout frameLayout = new FrameLayout(this);
+
+            //FrameLayout params 2x Match_Parent
+            FrameLayout.LayoutParams flParams= new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT
+            );
+
+            //setting the FrameLayout parameters
+            frameLayout.setLayoutParams(flParams);
+
+
+            //Creating textView to put behind button
+            TextView back = new TextView(this);
+
+
+            //sets the TextView to black
+            back.setBackgroundColor(Color.BLACK);
+
+            //sets the pay background
             pay.setBackground(getDrawable(R.drawable.buy_with_googlepay_button_content));
-            ll.addView(pay);
+
+            //second frameLayout to wrap content
+            FrameLayout.LayoutParams wrapLayout = new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT
+            );
+
+            //sets text size and margins & gravity
+            back.setTextSize(40);
+            wrapLayout.setMargins(10, 20,10,10);
+            wrapLayout.gravity = Gravity.BOTTOM;
+
+
+            //sets back & pay textView layout params
+            back.setLayoutParams(wrapLayout);
+            pay.setLayoutParams(wrapLayout);
+
+            //adds back & pay to the frameLayout
+            frameLayout.addView(back);
+            frameLayout.addView(pay);
+            ll.addView(frameLayout);
+
             pay.setOnClickListener(view -> {
                 try {
                     loadPaymentData();
@@ -228,7 +295,7 @@ public class Checkout extends AppCompatActivity {
 
             PaymentDataRequest request =
                     PaymentDataRequest.fromJson(paymentDataRequestJson.get().toString());
-            Log.d("REQUEST",request.toJson());
+
 
             if (request != null) {
                 AutoResolveHelper.resolveTask(
@@ -241,8 +308,6 @@ public class Checkout extends AppCompatActivity {
         }
 
     }
-
-
 
     private void handlePaymentSuccess(PaymentData paymentData) {
 
@@ -278,9 +343,6 @@ public class Checkout extends AppCompatActivity {
         Log.e("loadPaymentData failed", String.format("Error code: %d", statusCode));
     }
 
-
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -309,35 +371,4 @@ public class Checkout extends AppCompatActivity {
                 //googlePayButton.setClickable(true);
         }
     }
-
-
-
-
-
-
-
-
-
-
 }
-
-//
-//    private static JSONObject baseConfigurationJson() throws JSONException {
-//        return new JSONObject()
-//                .put("apiVersion", 2)
-//                .put("apiVersionMinor", 0)
-//                .put("allowedPaymentMethods", new JSONArray().put(getCardPaymentMethod()));
-//    }
-
-//                try {
-//                    paymentRequestJson
-//                            .put("totalPrice", jObj.get("totalPrice"))
-//                            .put("totalPriceStatus", "FINAL")
-//                            .put("currencyCode", "USD");
-//                    paymentRequestJson
-//                            .put("merchantInfo", new JSONObject()
-//                                    .put("merchantId", "01234567890123456789")
-//                                    .put("merchantName",jObj.getString("name")));
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }

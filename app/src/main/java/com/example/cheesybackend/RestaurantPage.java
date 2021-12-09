@@ -1,7 +1,9 @@
 package com.example.cheesybackend;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RatingBar;
@@ -9,6 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class RestaurantPage extends AppCompatActivity implements View.OnClickListener {
 
@@ -22,6 +26,7 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
     TextView phoneNumber;
     Restaurant restaurant;
     Button btnreturn;
+    FloatingActionButton floatingActionButtonBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,15 +43,21 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
         entree.setOnClickListener(this);
         appetizer.setOnClickListener(this);
         drink.setOnClickListener(this);
-        btnreturn=findViewById(R.id.btn_return);
-        btnreturn.setOnClickListener(this);
+        floatingActionButtonBack=findViewById(R.id.floatingBtn);
+        floatingActionButtonBack.setOnClickListener(this);
         restaurant = getIntent().getParcelableExtra("Restaurant");
         name.setText(restaurant.getName());
+        name.setGravity(Gravity.CENTER);
         ratingbar.setRating(restaurant.getRating());
         description.setText(restaurant.getDescription());
         website.setText("website: "+restaurant.getWebsite());
         phoneNumber.setText("PhoneNumber: "+restaurant.getPhoneNumber());
 
+        //hides the action bar
+        try {
+            this.getSupportActionBar().hide();
+        }
+        catch (NullPointerException e) {}
     }
 
     @Override
@@ -69,7 +80,7 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
                 intent2.putExtra("Restaurant", restaurant);
                 startActivity(intent2);
                 break;
-            case R.id.btn_return:
+            case R.id.floatingBtn:
                 Intent intent3 = new Intent(this, showRestaurants.class);
                 intent3.putExtra("Restaurant", restaurant);
                 startActivity(intent3);

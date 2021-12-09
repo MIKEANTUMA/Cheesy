@@ -13,7 +13,9 @@
         android:theme="@style/Theme.CheesyBackend">
         <activity
             android:name=".Checkout"
-            android:exported="false" />
+            android:exported="false"
+            android:label="check out"
+            android:parentActivityName=".showRestaurants"/>
 
         <meta-data
             android:name="com.google.android.gms.wallet.api.enabled"
@@ -30,7 +32,8 @@
             android:exported="false" />
         <activity
             android:name=".RestaurantPage"
-            android:exported="false" />
+            android:exported="false"
+            />
         <activity
             android:name=".Payment"
             android:exported="true" />
