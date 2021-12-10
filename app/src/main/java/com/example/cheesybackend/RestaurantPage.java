@@ -93,14 +93,7 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
         floatingActionButtonBack=findViewById(R.id.floatingBtn);
         floatingActionButtonBack.setOnClickListener(this);
         restaurant = getIntent().getParcelableExtra("Restaurant");
-        Geocoder geocoder=new Geocoder(this);
 
-        try {
-            address = geocoder.getFromLocationName(restaurant.getLocation(),1).get(0);
-            Log.d("Restaurant Address", String.valueOf(address.getLatitude()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         // initialize GoogleMaps
         initGMaps();
         // create GoogleApiClient
@@ -264,19 +257,11 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
         String title2 = restaurant.getName();
         // Define marker options
         MarkerOptions markerOptions2;
-        if (address != null) {
-            markerOptions2 = new MarkerOptions()
-                    .position(new LatLng(address.getLatitude(), address.getLongitude()))
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
-                    .title(title2);
-        }
-        else{
-            markerOptions2 = new MarkerOptions()
-                    .position(new LatLng(40.8089442, -73.9522898))
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
-                    .title(title2);
+        markerOptions2 = new MarkerOptions()
+                .position(new LatLng(restaurant.getLatitude(), restaurant.getLongitude()))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                .title(title2);
 
-        }
         if ( map!=null ) {
             // Remove the anterior marker
             if ( locationMarker != null )

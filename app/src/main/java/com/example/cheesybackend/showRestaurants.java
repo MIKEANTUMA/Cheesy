@@ -1,6 +1,8 @@
 package com.example.cheesybackend;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,9 +13,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class showRestaurants extends AppCompatActivity {
@@ -27,6 +36,9 @@ public class showRestaurants extends AppCompatActivity {
     ImageButton buttonSearch;
     FirebaseRecyclerOptions<Restaurant> options;
     String s ="";
+    DatabaseReference rest;
+    GoogleApiClient googleApiClient;
+    Location myLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +51,7 @@ public class showRestaurants extends AppCompatActivity {
         }
         catch (NullPointerException e) {}
 
+        createGoogleApi();
 
         mbase = FirebaseDatabase.getInstance().getReference().child("restaurants");
         recyclerView = findViewById(R.id.recyclerview_tasks);
@@ -49,6 +62,8 @@ public class showRestaurants extends AppCompatActivity {
         Intent intent = (Intent) getIntent().getSerializableExtra("adapter");
         // Connecting Adapter class with the Recycler view*/
         recyclerView.setAdapter(adapter);
+        rest = FirebaseDatabase.getInstance().getReference().child("restaurants").child("restaurant01");
+
 
         //
         findViewById(R.id.SearchTab).setOnClickListener(this::switchTab);
@@ -77,7 +92,23 @@ public class showRestaurants extends AppCompatActivity {
                 adapter.updateOptions(options);
             }
         });
+        findLocation();
     }
+
+    private void createGoogleApi() {
+
+        if ( googleApiClient == null ) {
+            googleApiClient = new GoogleApiClient.Builder( this )
+                    .addApi( LocationServices.API )
+                    .build();
+        }
+    }
+    @SuppressLint("MissingPermission")
+    private void findLocation() {
+                myLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+
+    }
+
 
     private void switchTab(View view) {
         switch (view.getId()){
@@ -96,6 +127,7 @@ public class showRestaurants extends AppCompatActivity {
     {
         super.onStart();
         adapter.startListening();
+        googleApiClient.connect();
 
         try {
             Log.d("RESTARUANT", adapter.getItem(0).getName());
@@ -111,12 +143,10 @@ public class showRestaurants extends AppCompatActivity {
     {
         super.onStop();
         adapter.stopListening();
+        googleApiClient.disconnect();
 
 
     }
-
-
-
 
 
 }
