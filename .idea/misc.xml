@@ -54,6 +54,8 @@
         <entry key="..\:/Users/wayto/AndroidStudioProjects/CheesyBackend/app/src/main/res/drawable/cheesylogo.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/wayto/AndroidStudioProjects/CheesyBackend/app/src/main/res/drawable/et_style.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/wayto/AndroidStudioProjects/CheesyBackend/app/src/main/res/drawable/et_style2.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/wayto/AndroidStudioProjects/CheesyBackend/app/src/main/res/drawable/fingerprint_background.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/wayto/AndroidStudioProjects/CheesyBackend/app/src/main/res/drawable/fingerprint_foreground.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/wayto/AndroidStudioProjects/CheesyBackend/app/src/main/res/drawable/googlepay_button_content.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/wayto/AndroidStudioProjects/CheesyBackend/app/src/main/res/drawable/googlepay_button_overlay.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/wayto/AndroidStudioProjects/CheesyBackend/app/src/main/res/drawable/ic_launcher_background.xml" value="0.19583333333333333" />
@@ -66,6 +68,7 @@
         <entry key="..\:/Users/wayto/AndroidStudioProjects/CheesyBackend/app/src/main/res/layout/activity_checkout.xml" value="0.1" />
         <entry key="..\:/Users/wayto/AndroidStudioProjects/CheesyBackend/app/src/main/res/layout/activity_drink_page.xml" value="0.1796875" />
         <entry key="..\:/Users/wayto/AndroidStudioProjects/CheesyBackend/app/src/main/res/layout/activity_entree_page.xml" value="0.14666666666666667" />
+        <entry key="..\:/Users/wayto/AndroidStudioProjects/CheesyBackend/app/src/main/res/layout/activity_login.xml" value="0.12771739130434784" />
         <entry key="..\:/Users/wayto/AndroidStudioProjects/CheesyBackend/app/src/main/res/layout/activity_main.xml" value="0.10666666666666667" />
         <entry key="..\:/Users/wayto/AndroidStudioProjects/CheesyBackend/app/src/main/res/layout/activity_orders.xml" value="0.1796875" />
         <entry key="..\:/Users/wayto/AndroidStudioProjects/CheesyBackend/app/src/main/res/layout/activity_restaurant_page.xml" value="0.16666666666666666" />
