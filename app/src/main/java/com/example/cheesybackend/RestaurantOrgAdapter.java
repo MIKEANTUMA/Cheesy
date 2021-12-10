@@ -12,8 +12,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQuery;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RestaurantOrgAdapter extends FirebaseRecyclerAdapter<Restaurant, RestaurantOrgAdapter.restaurantsViewholder> {
 
@@ -38,9 +43,19 @@ public class RestaurantOrgAdapter extends FirebaseRecyclerAdapter<Restaurant, Re
 
     @Override
     protected void onBindViewHolder(@NonNull restaurantsViewholder holder, int position, @NonNull Restaurant model) {
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("geofire");
+
+        GeoFire geoFire = new GeoFire(ref);
+        geoFire.setLocation("mikes most famous pizza", new GeoLocation(74.34, 40.46));
+        // creates a new query around [37.7832, -122.4056] with a radius of 5 kilometers
+        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(37.7832, -122.4056), 5);
         // Add restaurantName from model class (here
         // "restaurant.class")to appropriate view in Card
         // view (here "recylerview_restaurant.xml")
+
+
+
         holder.restaurantName.setText(model.getName());
         Log.d("menu", model.getMenu().getAppetizer().toString());
         // Add address from model class (here

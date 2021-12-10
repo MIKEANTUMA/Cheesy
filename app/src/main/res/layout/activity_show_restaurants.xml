@@ -17,7 +17,7 @@
 
    <EditText
        android:id="@+id/et_searchbar"
-       android:layout_width="300dp"
+       android:layout_width="200dp"
        android:layout_height="50dp"
        android:background="@drawable/et_style"
        android:hint="Search by Name"
@@ -38,6 +38,17 @@
        app:layout_constraintRight_toRightOf="@id/et_searchbar"
        tools:ignore="MissingConstraints"
        android:layout_marginTop="15dp"/>
+
+     <CheckBox
+         android:id="@+id/cb_nearby"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         app:layout_constraintLeft_toRightOf="@id/img_btn_search"
+         android:text="near by"
+         android:textColor="@color/cheese_yellow"
+         android:textSize="20dp"
+         tools:ignore="MissingConstraints" />
+
  </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

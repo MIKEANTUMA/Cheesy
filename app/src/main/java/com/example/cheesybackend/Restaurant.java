@@ -1,17 +1,10 @@
 package com.example.cheesybackend;
 
-import static java.lang.System.out;
-
-import android.location.Address;
-import android.media.Rating;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.RequiresApi;
-import androidx.recyclerview.widget.RecyclerView;
-
-import java.io.Serializable;
 
 public class Restaurant  implements Parcelable {
 
@@ -25,11 +18,17 @@ public class Restaurant  implements Parcelable {
     private String description;
     private float latitude;
     private float longitude;
-
+    private String geohash;
 
     public Restaurant(){}
 
+    public String getGeohash() {
+        return geohash;
+    }
 
+    public void setGeohash(String geohash) {
+        this.geohash = geohash;
+    }
 
     public Restaurant(Restaurant restaurant) {
         this.name = restaurant.getName();
