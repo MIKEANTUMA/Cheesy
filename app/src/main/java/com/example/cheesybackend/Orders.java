@@ -15,15 +15,15 @@ public class Orders extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_orders);
+        //hides action bar
+        try {
+            this.getSupportActionBar().hide();
+        }catch (NullPointerException e){}
+
         findViewById(R.id.SearchTab).setOnClickListener(this::switchTab);
         findViewById(R.id.AccountTab).setOnClickListener(this::switchTab);
         findViewById(R.id.OrderTab).setOnClickListener(this::switchTab);
 
-        //hides the action bar
-        try {
-            this.getActionBar().hide();
-        }
-        catch (NullPointerException e) {}
     }
 
     private void switchTab(View view) {
