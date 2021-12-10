@@ -5,39 +5,66 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class Splash extends AppCompatActivity implements View.OnClickListener {
+public class Splash extends AppCompatActivity {
 
-    private Button login;
-    private Button register;
+    private ProgressBar load;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        load = findViewById(R.id.progressbar);
 
-        login = findViewById(R.id.login);
-        login.setOnClickListener(this);
-        register = findViewById(R.id.register);
-        register.setOnClickListener(this);
+        GrabRestaurantData s = new GrabRestaurantData();
+        s.execute(1);
 
+        try {
+            this.getSupportActionBar().hide();
+        }
+        catch (NullPointerException e) {}
 
 
     }
 
+    class GrabRestaurantData extends AsyncTask<Integer, Integer, Integer> {
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.login:
-                startActivity(new Intent(this,Login.class));
-                break;
-            case R.id.register:
-                startActivity(new Intent(this, Register.class));
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            load.setProgress(0);
+        }
+
+
+        //reset to 5000 before final submission
+        @Override
+        protected Integer doInBackground(Integer... start) {
+            int a=0;
+            try {
+                Thread.sleep(3000);
+            }
+            catch (InterruptedException e){
+                e.printStackTrace();
+            }
+            return a;
+        }
+
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            load.setProgress(100);
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+                startActivity(new Intent(Splash.this, Login.class));
+
         }
     }
 }

@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.cheesybackend">
 
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,15 +11,71 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CheesyBackend">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="API KEY GOES HERE"/>
+        <activity
+            android:name=".Checkout"
+            android:exported="false"
+            android:label="check out"
+            android:parentActivityName=".showRestaurants"
+            android:screenOrientation="portrait"/>
+
+        <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />
+
+        <activity
+            android:name=".drinkPage"
+            android:exported="true"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".appetizerPage"
+            android:exported="true"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".entreePage"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RestaurantPage"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AccountPasswordReset"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity android:name=".showRestaurants"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".EditAddress"
+            android:exported="true"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".EditInfo"
+            android:exported="true"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Account"
+            android:exported="true"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Orders"
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Register"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Login"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Splash"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,5 +83,8 @@
             </intent-filter>
         </activity>
     </application>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
 </manifest>

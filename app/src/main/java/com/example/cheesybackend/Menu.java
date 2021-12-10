@@ -1,149 +1,89 @@
 package com.example.cheesybackend;
 
-import java.util.List;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Menu {
+import java.util.ArrayList;
 
-    private List<Entree> entree;
+public class Menu implements Parcelable {
 
-    private List<Drink> drinks;
+    private ArrayList<Entree> entree;
 
-    private List<Appetizer> appetizer;
+    private ArrayList<Drink> drinks;
 
-    public List<Entree> getEntree() {
+    private ArrayList<Appetizer> appetizer;
+
+
+    protected Menu(Parcel in) {
+        entree = in.createTypedArrayList(Entree.CREATOR);
+        drinks = in.createTypedArrayList(Drink.CREATOR);
+        appetizer = in.createTypedArrayList(Appetizer.CREATOR);
+    }
+
+    public static final Creator<Menu> CREATOR = new Creator<Menu>() {
+        @Override
+        public Menu createFromParcel(Parcel in) {
+            return new Menu(in);
+        }
+
+        @Override
+        public Menu[] newArray(int size) {
+            return new Menu[size];
+        }
+    };
+
+    public ArrayList<Entree> getEntree() {
+
         return entree;
     }
 
-    public void setEntree(List<Entree> entree) {
+    public void setEntree(ArrayList<Entree> entree) {
         this.entree = entree;
     }
 
-    public List<Drink> getDrinks() {
+    public ArrayList<Drink> getDrinks() {
         return drinks;
     }
 
-    public void setDrinks(List<Drink> drinks) {
+    public void setDrinks(ArrayList<Drink> drinks) {
         this.drinks = drinks;
     }
 
-    public List<Appetizer> getAppetizer() {
+    public ArrayList<Appetizer> getAppetizer() {
         return appetizer;
     }
 
-    public void setAppetizer(List<Appetizer> appetizer) {
+    public void setAppetizer(ArrayList<Appetizer> appetizer) {
         this.appetizer = appetizer;
     }
 
     public Menu(){}
 
-    public Menu(List<Entree> entree, List<Drink> drinks, List<Appetizer> appetizer) {
+    public Menu(ArrayList<Entree> entree, ArrayList<Drink> drinks, ArrayList<Appetizer> appetizer) {
         this.entree = entree;
         this.drinks = drinks;
         this.appetizer = appetizer;
     }
 
-    public static class Entree extends Menu{
-        private String name;
-        private String description;
-        private double price;
-
-        public Entree(){}
-
-        public Entree(String name, String description, double price) {
-            this.name = name;
-            this.description = description;
-            this.price = price;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public double getPrice() {
-            return price;
-        }
-
-        public void setPrice(double price) {
-            this.price = price;
-        }
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public static class Drink extends Menu{
-        private String name;
-
-        private double price;
-
-        public Drink(){}
-
-        public Drink(String name, double price) {
-            this.name = name;
-
-            this.price = price;
-        }
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-
-        public double getPrice() {
-            return price;
-        }
-
-        public void setPrice(double price) {
-            this.price = price;
-        }
-    }
-
-    public static class Appetizer extends Menu{
-        private String name;
-        private String description;
-        private double price;
-
-        public Appetizer(){}
-
-        public Appetizer(String name, String description, double price) {
-            this.name = name;
-            this.description = description;
-            this.price = price;
-        }
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public double getPrice() {
-            return price;
-        }
-
-        public void setPrice(double price) {
-            this.price = price;
-        }
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(entree);
+        dest.writeTypedList(drinks);
+        dest.writeTypedList(appetizer);
     }
 }
+
+
+
+
+
+
+
+
+
+

@@ -2,12 +2,12 @@ package com.example.cheesybackend;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.MenuItemCompat;
 
-import android.location.Address;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -34,11 +34,15 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
     private String password;
     private DatabaseReference mDatabase;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        try {
+            this.getSupportActionBar().hide();
+        }
+        catch (NullPointerException e) {}
+
 
         editFirstName = findViewById(R.id.editTextFirstName);
         editLastName = findViewById(R.id.editTextLastName);
@@ -52,8 +56,9 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         progress = findViewById(R.id.progressCircle);
         btn.setOnClickListener(this);
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        //addRestaurant();
+
+
+
 
 
     }
@@ -62,44 +67,10 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.create_account_btn:
-
                 registerUser();
         }
     }
 
-
-//    public void addRestaurant(){
-//        String name = "Pizza Place";
-//        String address = "175 earl place north east meadow NY 11554";
-//        int rate = 5;
-//        String website = "http://google.com";
-//
-//        List<Menu.Entree> entrees = new ArrayList<Menu.Entree>();
-//                entrees.add(new Menu.Entree("plain pie", "cheese pizza serves 8",15.99));
-//                entrees.add(new Menu.Entree("Chicken Roll", "Bread roll stuffed with chicken and red sauce",10.99));
-//
-//
-//        List<Menu.Appetizer> appetizers = new ArrayList<Menu.Appetizer>();
-//                appetizers.add(new Menu.Appetizer("chicken fingers","5 fried chicken fingers", 8.99));
-//                appetizers.add(new Menu.Appetizer("buffalo wings","10 buffalo wings", 8.99));
-//
-//        List<Menu.Drink> drinks = new ArrayList<Menu.Drink>();
-//                drinks.add(new Menu.Drink("Coke",2.99));
-//                drinks.add(new Menu.Drink("water", 1.50));
-//
-//
-//        Menu menu = new Menu(entrees,drinks,appetizers);
-//
-//        String phoneNumber = "516-728-1827";
-//
-//        Restaurant pizzaPalce = new Restaurant(name,address,menu,rate,phoneNumber,website);
-//
-//
-//        mDatabase.child("restaurants").child("restaurant01").setValue(pizzaPalce);
-//
-//
-//
-//    }
 
     public void registerUser(){
         email = editEmail.getText().toString().trim();
@@ -158,10 +129,12 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
 
                             FirebaseUser userr = mAuth.getCurrentUser();
                             FirebaseDatabase.getInstance().getReference("user").child(userr.getUid()).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()){
                                         Toast.makeText(Register.this, "User added", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(Register.this,Splash.class));
                                     }
                                 }
                             });

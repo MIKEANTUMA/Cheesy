@@ -1,28 +1,84 @@
 package com.example.cheesybackend;
 
+import static java.lang.System.out;
+
 import android.location.Address;
 import android.media.Rating;
+import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Restaurant {
+import androidx.annotation.RequiresApi;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.io.Serializable;
+
+public class Restaurant  implements Parcelable {
 
 
     private String name;
     private String location;
     private Menu menu;
-    private int rating;
+    private float rating;
     private String phoneNumber;
     private String website;
+    private String description;
 
-    public Restaurant() { }
 
-    public Restaurant(String name, String location, Menu menu, int rating, String phoneNumber, String website) {
+    public Restaurant(){}
+
+
+
+    public Restaurant(Restaurant restaurant) {
+        this.name = restaurant.getName();
+        this.location = restaurant.getLocation();
+        this.menu = restaurant.getMenu();
+        this.rating = restaurant.getRating();
+        this.phoneNumber = restaurant.getPhoneNumber();
+        this.website = restaurant.getWebsite();
+        this.description = restaurant.getDescription();
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description){
+        this.description = description;
+    }
+
+    public Restaurant(String name, String location, Menu menu, float rating, String phoneNumber, String website, String description) {
         this.name = name;
         this.location = location;
         this.menu = menu;
         this.rating = rating;
         this.phoneNumber = phoneNumber;
         this.website = website;
+        this.description = description;
     }
+
+
+    protected Restaurant(Parcel in) {
+        name = in.readString();
+        location = in.readString();
+        rating = in.readFloat();
+        menu = in.readParcelable(Menu.class.getClassLoader());
+        phoneNumber = in.readString();
+        website = in.readString();
+        description = in.readString();
+    }
+
+    public static final Creator<Restaurant> CREATOR = new Creator<Restaurant>() {
+        @Override
+        public Restaurant createFromParcel(Parcel in) {
+            return new Restaurant(in);
+        }
+
+        @Override
+        public Restaurant[] newArray(int size) {
+            return new Restaurant[size];
+        }
+    };
 
     public String getName() {
         return name;
@@ -48,11 +104,11 @@ public class Restaurant {
         this.menu = menu;
     }
 
-    public int getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 
@@ -73,8 +129,22 @@ public class Restaurant {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
-
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(location);
+        dest.writeFloat(rating);
+        dest.writeParcelable(menu, flags);
+        dest.writeString(phoneNumber);
+        dest.writeString(website);
+        dest.writeString(description);
+    }
 
 
 }

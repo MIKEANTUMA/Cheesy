@@ -1,54 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context=".Login"
     android:orientation="vertical"
-    tools:context=".Login">
-
-
-
-    <ImageView
-        android:src="@drawable/background"
-        android:scaleType="centerCrop"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-
-    <EditText
-        android:id="@+id/email"
-        android:layout_width="300dp"
-        android:layout_height="40dp"
-        android:text="Email"
-        android:gravity="center"
-        android:layout_marginTop="150dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/et_style"/>
+    android:background="@drawable/pizzabackground"
+    android:padding="20dp">
 
     <TextView
-        android:id="@+id/password"
-        android:layout_width="300dp"
-        android:layout_height="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_marginTop="150dp"/>
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/et_style"
+        android:inputType="textEmailAddress"
+        android:layout_gravity="center"/>
+    <TextView
+        android:id="@+id/viewpassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textStyle="bold"
+        android:textSize="20sp"
         android:text="Password"
-        android:gravity="center"
-        android:layout_marginTop="250dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/et_style"/>
+        android:visibility="gone" />
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/et_style"
+        android:inputType="textPassword"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/login"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="login"
-        android:layout_marginTop="350dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:layout_marginTop="40dp"
+        android:text="login"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

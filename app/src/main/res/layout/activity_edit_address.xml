@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/pizzabackground"
+    tools:context=".EditAddress">
+    <EditText
+        android:id="@+id/changeAddress"
+        android:hint="Address"
+        android:textAlignment="center"
+        android:textSize="21sp"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        app:layout_constraintVertical_bias="0.32"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tabs"
+        android:background="@drawable/et_style"/>
+    <TextView
+        android:id="@+id/Addresstxt"
+        android:text="Address"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:textAlignment="center"
+        android:textSize="21sp"
+        app:layout_constraintTop_toBottomOf="@id/changeAddress"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <EditText
+        android:id="@+id/changeZipcode"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/et_style"
+        android:hint="Zipcode"
+        android:textAlignment="center"
+        android:textSize="21sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/changeAddress" />
+
+    <TextView
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:text="Zipcode"
+        android:textAlignment="center"
+        android:textSize="21sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/changeZipcode" />
+
+    <Button
+        android:id="@+id/infoChangeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/et_style"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changeZipcode"
+        app:layout_constraintBottom_toTopOf="@id/tabs"
+        android:text="Save Changes"/>
+
+    <LinearLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="bottom">
+    <ImageButton
+        android:id="@+id/SearchTab"
+        android:layout_width="match_parent"
+        android:layout_weight="4"
+        android:layout_height="60dp"
+        android:contentDescription="@string/title_search"
+        android:src="@drawable/search_icon"
+        android:background="@color/btn_red"
+        />
+    <ImageButton
+        android:id="@+id/OrderTab"
+        android:layout_width="match_parent"
+        android:layout_weight="4"
+        android:layout_height="60dp"
+        android:contentDescription="@string/title_order"
+        android:src="@drawable/order_icon"
+        android:background="@color/btn_red"
+        />
+    <ImageButton
+        android:id="@+id/AccountTab"
+        android:layout_width="match_parent"
+        android:layout_weight="4"
+        android:layout_height="60dp"
+        android:contentDescription="@string/title_account"
+        android:src="@drawable/account_icon"
+        android:background="@color/green"
+        />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

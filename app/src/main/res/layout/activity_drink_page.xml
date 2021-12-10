@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".entreePage"
+    android:background="@color/cheese_yellow"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/primary_dark"
+        >
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="PIZZA PLACE"
+            android:textColor="@color/white"
+            android:textSize="50dp" />
+
+        <Button
+            android:id="@+id/btn_entree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:text="Entree"
+            android:layout_marginEnd="20dp"
+            android:textSize="15sp"
+            android:layout_toStartOf="@id/btn_appetizer"
+            android:layout_below="@id/tv_name" />
+
+        <Button
+            android:id="@+id/btn_appetizer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:text="Appetizer"
+            android:layout_marginEnd="20dp"
+            android:backgroundTint="@color/white"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/tv_name" />
+        <Button
+            android:id="@+id/btn_drink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:text="Drink"
+            android:backgroundTint="@color/white"
+            android:layout_toEndOf="@id/btn_appetizer"
+            android:layout_below="@id/tv_name" />
+    </RelativeLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_gravity="center"
+        android:padding="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:id="@+id/recyclerview_items"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="bottom">
+        <ImageButton
+            android:id="@+id/returnbtn"
+            android:layout_width="match_parent"
+            android:layout_weight="4"
+            android:layout_height="60dp"
+            android:contentDescription="@string/title_search"
+            android:src="@drawable/search_icon"
+            android:background="@color/btn_red"
+            />
+        <ImageButton
+            android:id="@+id/cartBtn"
+            android:layout_width="match_parent"
+            android:layout_weight="4"
+            android:layout_height="60dp"
+            android:src="@drawable/shoppingcart"
+            android:background="@color/btn_red"
+            />
+        <ImageButton
+            android:id="@+id/checkoutBtn"
+            android:layout_width="match_parent"
+            android:layout_weight="4"
+            android:layout_height="60dp"
+            android:src="@drawable/cashiermachine"
+            android:background="@color/btn_red"
+            />
+    </LinearLayout>
+
+
+</LinearLayout>
