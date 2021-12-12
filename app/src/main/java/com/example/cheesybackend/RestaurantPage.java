@@ -250,6 +250,7 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
     // Create a Location Marker
     private void markerLocation(LatLng latLng) {
         Log.i(TAG, "markerLocation("+latLng+")");
+        Log.i(TAG, "markerLocation("+new LatLng(restaurant.getLatitude(), restaurant.getLongitude())+")");
         String title = "You";
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng)
