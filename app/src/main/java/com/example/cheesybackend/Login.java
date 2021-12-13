@@ -216,7 +216,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         matcher = pattern.matcher(password);
 
         return matcher.matches();
-
     }
 
     @Override

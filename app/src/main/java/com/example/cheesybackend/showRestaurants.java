@@ -10,30 +10,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.geofire.GeoFire;
-import com.firebase.geofire.GeoLocation;
-import com.firebase.geofire.GeoQuery;
-import com.firebase.geofire.GeoQueryEventListener;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 
 public class showRestaurants extends AppCompatActivity {
@@ -50,6 +37,9 @@ public class showRestaurants extends AppCompatActivity {
     DatabaseReference rest;
     GoogleApiClient googleApiClient;
     Location myLocation;
+    public Cart single_instance = null;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +92,10 @@ public class showRestaurants extends AppCompatActivity {
                 adapter.updateOptions(options);
             }
         });
+
+        //resets cart if user exits to showRestaurant activity
+        Cart.setSingle_instance(single_instance);
+
     }
 
     private void createGoogleApi() {

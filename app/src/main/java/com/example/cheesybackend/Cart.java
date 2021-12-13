@@ -153,6 +153,7 @@ public class Cart {
         }
         this.CalculateTotal();
         this.createReceipt(mCtx,restaurant);
+        Log.d("TAG", "checkOut: Item was added to check out ");
     }
 
     //creates a receipt as a json item
@@ -166,12 +167,14 @@ public class Cart {
         Date currentTime = Calendar.getInstance().getTime();
         jsonObject.put("dateTime", String.valueOf(currentTime));
 
+        Log.d("TAG", "createReceipt:  reciept was creaetedddddddd");
+
         this.taskList.forEach((menuItem)->{
             if(menuItem instanceof Drink)
             {
                 Drink d = (Drink) menuItem;
                 try {
-                    jsonObject.put("item"+String.valueOf(counter), d.getName());
+                    jsonObject.put("item" + String.valueOf(counter), d.getName());
                     jsonObject.put(String.valueOf(counter), d.getPrice());
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -181,7 +184,7 @@ public class Cart {
             {
                 Entree e = (Entree) menuItem;
                 try {
-                    jsonObject.put("item"+String.valueOf(counter), e.getName());
+                    jsonObject.put("item" + String.valueOf(counter), e.getName());
                     jsonObject.put(String.valueOf(counter), e.getPrice());
                 } catch (JSONException e1) {
                     e1.printStackTrace();

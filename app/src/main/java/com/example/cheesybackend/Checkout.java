@@ -55,6 +55,7 @@ import java.util.Optional;
 
 public class Checkout extends AppCompatActivity {
 
+    public Cart single_instance = null;
 
     private FirebaseAuth mAuth;
     private DatabaseReference currentUser;
@@ -187,7 +188,6 @@ public class Checkout extends AppCompatActivity {
         tv_tip = new TextView(this);
         tv_total = new TextView(this);
         tv_totalItem = new TextView(this);
-//        tv_total = new TextView(this);
 
         //setting margin for etParas
         etParas.setMargins(0,100,0,10);
@@ -420,5 +420,12 @@ public class Checkout extends AppCompatActivity {
                 // Re-enables the Google Pay payment button.
                 //googlePayButton.setClickable(true);
         }
+    }
+
+    //brings the user back to showRestaurant activity
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(this, showRestaurants.class));
     }
 }
