@@ -58,7 +58,9 @@ public class RestaurantOrgAdapter extends FirebaseRecyclerAdapter<Restaurant, Re
         holder.restaurantName.setOnClickListener(v -> {
             Log.d("PIZZZZAAAAA", "YOU CLICKED MY NAME");
             Intent intent = new Intent(mCtx, RestaurantPage.class);
-            Restaurant restaurant = new Restaurant(model.getName(),model.getLocation(),model.getMenu(),model.getRating(),model.getPhoneNumber(),model.getWebsite(),model.getDescription());
+            Restaurant restaurant = new Restaurant(model.getName(),model.getLocation(),model.getMenu(),model.getRating(),
+                    model.getPhoneNumber(),model.getWebsite(),model.getDescription(),
+                    model.getLatitude(), model.getLongitude());
             intent.putExtra("Restaurant", restaurant);
             mCtx.startActivity(intent);
 

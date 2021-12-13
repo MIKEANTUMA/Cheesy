@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
@@ -31,16 +32,32 @@ import com.google.android.gms.wallet.PaymentDataRequest;
 import com.google.android.gms.wallet.PaymentsClient;
 import com.google.android.gms.wallet.Wallet;
 import com.google.android.gms.wallet.WalletConstants;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Optional;
 
 public class Checkout extends AppCompatActivity {
 
 
+    private FirebaseAuth mAuth;
+    private DatabaseReference currentUser;
 
     RelativeLayout relativeLayout;
     RelativeLayout.LayoutParams layoutParams;
@@ -60,6 +77,7 @@ public class Checkout extends AppCompatActivity {
     TextView tv_totalItem;
     TextView tv_total;
     Button pay;
+    private ArrayList<Items> it;
 
     private static final int LOAD_PAYMENT_DATA_REQUEST_CODE = 991;
     private PaymentsClient paymentsClient;
@@ -112,6 +130,7 @@ public class Checkout extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        mAuth = FirebaseAuth.getInstance();
     }
 
     //Dynamically creates the receipt
@@ -121,7 +140,7 @@ public class Checkout extends AppCompatActivity {
         website.setText( jObj.getString("website"));
         dateTime.setText(jObj.getString("dateTime"));
 
-
+        it = new ArrayList<>();
         for(int i = 0; i<itemAmount;i++){
 
             //initializes relative layout
@@ -143,6 +162,7 @@ public class Checkout extends AppCompatActivity {
             //setting the text of itemName & itemPrice
             tv_itemName.setText(jObj.getString("item"+String.valueOf(i)));
             tv_itemPrice.setText(String.format("%40s", jObj.getString(String.valueOf(i))));
+            it.add(new Items(tv_itemName.getText().toString(), tv_itemPrice.getText().toString().trim()));
 
             //setting id for itemName for layout alignment
             tv_itemName.setId(R.id.hybrid);
@@ -332,6 +352,37 @@ public class Checkout extends AppCompatActivity {
             // Logging token string.
             Log.d("Google Pay token: ", token);
 
+            FirebaseUser user = mAuth.getCurrentUser();
+            currentUser = FirebaseDatabase.getInstance().getReference().child("user").child(user.getUid());
+            Date currentTime = Calendar.getInstance().getTime();
+            jObj.getString("phoneNumber");
+            jObj.getDouble("tax");
+            jObj.getDouble("tip");
+
+            jObj.getString("website");
+
+            UserOrder ord = new UserOrder(jObj.getInt("totalItems"),String.valueOf(currentTime),
+                    jObj.getString("name"), jObj.getDouble("totalPrice"), it,
+                    jObj.getString("website"), jObj.getString("phoneNumber"),
+                    jObj.getDouble("tax"), jObj.getDouble("tip"));
+
+
+            currentUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User g = dataSnapshot.getValue(User.class);
+
+                    currentUser.child("Orders").child("Order"+ g.getTotalOrders()).setValue(ord);
+                    currentUser.child("totalOrders").setValue(g.getTotalOrders()+1);
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.d("Firebase Error", "Couldn't grab user");
+                }
+
+            });
 
         } catch (JSONException e) {
             throw new RuntimeException("The selected garment cannot be parsed from the list of elements");

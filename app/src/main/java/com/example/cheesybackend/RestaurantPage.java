@@ -60,7 +60,7 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
     private final int REQ_PERMISSION = 0;
     private Location lastLocation;
     private Address address;
-    private Marker geoFenceMarker;
+    private Marker restrauantMarker;
 
     private LocationRequest locationRequest;
     // Defined in mili seconds.
@@ -93,14 +93,7 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
         floatingActionButtonBack=findViewById(R.id.floatingBtn);
         floatingActionButtonBack.setOnClickListener(this);
         restaurant = getIntent().getParcelableExtra("Restaurant");
-        Geocoder geocoder=new Geocoder(this);
 
-        try {
-            address = geocoder.getFromLocationName(restaurant.getLocation(),1).get(0);
-            Log.d("Restaurant Address", String.valueOf(address.getLatitude()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         // initialize GoogleMaps
         initGMaps();
         // create GoogleApiClient
@@ -257,65 +250,57 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
     // Create a Location Marker
     private void markerLocation(LatLng latLng) {
         Log.i(TAG, "markerLocation("+latLng+")");
+        Log.i(TAG, "markerLocation("+new LatLng(restaurant.getLatitude(), restaurant.getLongitude())+")");
         String title = "You";
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng)
                 .title(title);
-        Log.i(TAG, "markerForGeofence(" + latLng + ")");
         String title2 = restaurant.getName();
         // Define marker options
         MarkerOptions markerOptions2;
-        if (address != null) {
-            markerOptions2 = new MarkerOptions()
-                    .position(new LatLng(address.getLatitude(), address.getLongitude()))
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
-                    .title(title2);
-        }
-        else{
-            markerOptions2 = new MarkerOptions()
-                    .position(new LatLng(40.8089442, -73.9522898))
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
-                    .title(title2);
+        markerOptions2 = new MarkerOptions()
+                .position(new LatLng(restaurant.getLatitude(), restaurant.getLongitude()))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                .title(title2);
 
-        }
         if ( map!=null ) {
             // Remove the anterior marker
             if ( locationMarker != null )
                 locationMarker.remove();
             locationMarker = map.addMarker(markerOptions);
             // Remove last geoFenceMarker
-            if (geoFenceMarker != null)
-                geoFenceMarker.remove();
+            if (restrauantMarker != null)
+                restrauantMarker.remove();
 
-            geoFenceMarker = map.addMarker(markerOptions2);
+            restrauantMarker = map.addMarker(markerOptions2);
             LatLngBounds australiaBounds;
 
-            if(locationMarker.getPosition().latitude < geoFenceMarker.getPosition().latitude){
-                if (locationMarker.getPosition().longitude < geoFenceMarker.getPosition().longitude){
+            if(locationMarker.getPosition().latitude < restrauantMarker.getPosition().latitude){
+                if (locationMarker.getPosition().longitude < restrauantMarker.getPosition().longitude){
                     australiaBounds = new LatLngBounds(
                             locationMarker.getPosition(), // SW bounds
-                            geoFenceMarker.getPosition()  // NE bounds
+                            restrauantMarker.getPosition()  // NE bounds
                     );
                 }
                 else
                 {
                     australiaBounds = new LatLngBounds(
-                            new LatLng(locationMarker.getPosition().latitude, geoFenceMarker.getPosition().longitude), // SW bounds
-                            new LatLng(geoFenceMarker.getPosition().latitude, locationMarker.getPosition().longitude)  // NE bounds
+                            new LatLng(locationMarker.getPosition().latitude, restrauantMarker.getPosition().longitude), // SW bounds
+                            new LatLng(restrauantMarker.getPosition().latitude, locationMarker.getPosition().longitude)  // NE bounds
                     );
                 }
             }
             else {
-                if (locationMarker.getPosition().longitude < geoFenceMarker.getPosition().longitude){
+                if (locationMarker.getPosition().longitude < restrauantMarker.getPosition().longitude){
                     australiaBounds = new LatLngBounds(
-                            new LatLng(geoFenceMarker.getPosition().latitude, locationMarker.getPosition().longitude), // SW bounds
-                            new LatLng(locationMarker.getPosition().latitude, geoFenceMarker.getPosition().longitude)  // NE bounds
+                            new LatLng(restrauantMarker.getPosition().latitude, locationMarker.getPosition().longitude), // SW bounds
+                            new LatLng(locationMarker.getPosition().latitude, restrauantMarker.getPosition().longitude)  // NE bounds
                     );
                 }
                 else
                 {
                     australiaBounds = new LatLngBounds(
-                            geoFenceMarker.getPosition(), //NE bounds
+                            restrauantMarker.getPosition(), //NE bounds
                             locationMarker.getPosition() // SW bounds
                     );
                 }
