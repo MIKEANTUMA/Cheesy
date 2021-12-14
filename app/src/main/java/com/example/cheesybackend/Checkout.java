@@ -354,26 +354,26 @@ public class Checkout extends AppCompatActivity {
 
             FirebaseUser user = mAuth.getCurrentUser();
             currentUser = FirebaseDatabase.getInstance().getReference().child("user").child(user.getUid());
-            Date currentTime = Calendar.getInstance().getTime();
             jObj.getString("phoneNumber");
             jObj.getDouble("tax");
             jObj.getDouble("tip");
 
             jObj.getString("website");
 
-            UserOrder ord = new UserOrder(jObj.getInt("totalItems"),String.valueOf(currentTime),
-                    jObj.getString("name"), jObj.getDouble("totalPrice"), it,
+            UserOrder ord = new UserOrder(jObj.getInt("totalItems"),jObj.getString("dateTime"),
+                    jObj.getString("name"), Math.round(jObj.getDouble("totalPrice")*100.0)/100.0, it,
                     jObj.getString("website"), jObj.getString("phoneNumber"),
-                    jObj.getDouble("tax"), jObj.getDouble("tip"));
+                    Math.round(jObj.getDouble("tax")*100.0)/100.0,Math.round(jObj.getDouble("tip")*100.0)/100.0);
 
 
             currentUser.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     User g = dataSnapshot.getValue(User.class);
+                    int b = g.getTotalOrders() + 1;
 
-                    currentUser.child("Orders").child("Order"+ g.getTotalOrders()).setValue(ord);
                     currentUser.child("totalOrders").setValue(g.getTotalOrders()+1);
+                    currentUser.child("Orders").child("Order"+ b).setValue(ord);
 
                 }
 
@@ -383,6 +383,7 @@ public class Checkout extends AppCompatActivity {
                 }
 
             });
+            startActivity(new Intent(Checkout.this, showRestaurants.class));
 
         } catch (JSONException e) {
             throw new RuntimeException("The selected garment cannot be parsed from the list of elements");
