@@ -183,14 +183,14 @@ public class showRestaurants extends AppCompatActivity  {
                 }
 
 
-                Query q2 = db.collection("restaurants").whereIn("geohash", geo);
+                Query q2 = db.collection("restaurants").whereEqualTo("geohash", "dr5xwsfp95");
 
                 FirestoreRecyclerOptions<Restaurant> options1 = new FirestoreRecyclerOptions.Builder<Restaurant>()
-                        .setQuery(q, Restaurant.class)
+                        .setQuery(q2, Restaurant.class)
                         .build();
 
 
-                adapter.r
+                recyclerView.removeAllViews();
                 adapter = new FirestoreRecyclerAdapter<Restaurant, restaurantsViewholder>(options1) {
                     @NonNull
                     @Override
@@ -233,7 +233,7 @@ public class showRestaurants extends AppCompatActivity  {
                     }
                 };
 
-                recyclerView.
+                recyclerView = findViewById(R.id.recyclerview_tasks);
                 recyclerView.setAdapter(adapter);
 
 
