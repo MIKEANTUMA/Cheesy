@@ -6,6 +6,8 @@ import android.os.Parcelable;
 
 import androidx.annotation.RequiresApi;
 
+import com.google.firebase.firestore.GeoPoint;
+
 public class Restaurant  implements Parcelable {
 
 
@@ -16,15 +18,23 @@ public class Restaurant  implements Parcelable {
     private String phoneNumber;
     private String website;
     private String description;
-    private float latitude;
-    private float longitude;
     private String geohash;
+    private GeoPoint geoPoint;
+
+    public GeoPoint getGeoPoint() {
+        return geoPoint;
+    }
+
+    public void setGeoPoint(GeoPoint geoPoint) {
+        this.geoPoint = geoPoint;
+    }
 
     public Restaurant(){}
 
     public String getGeohash() {
         return geohash;
     }
+
 
     public void setGeohash(String geohash) {
         this.geohash = geohash;
@@ -38,8 +48,7 @@ public class Restaurant  implements Parcelable {
         this.phoneNumber = restaurant.getPhoneNumber();
         this.website = restaurant.getWebsite();
         this.description = restaurant.getDescription();
-        this.latitude = restaurant.latitude;
-        this.longitude = restaurant.longitude;
+
     }
 
     public String getDescription() {
@@ -50,7 +59,7 @@ public class Restaurant  implements Parcelable {
         this.description = description;
     }
 
-    public Restaurant(String name, String location, Menu menu, float rating, String phoneNumber, String website, String description, float latitude, float longitude) {
+    public Restaurant(String name, String location, Menu menu, float rating, String phoneNumber, String website, String description) {
         this.name = name;
         this.location = location;
         this.menu = menu;
@@ -58,8 +67,7 @@ public class Restaurant  implements Parcelable {
         this.phoneNumber = phoneNumber;
         this.website = website;
         this.description = description;
-        this.latitude = latitude;
-        this.longitude = longitude;
+
     }
 
 
@@ -71,8 +79,7 @@ public class Restaurant  implements Parcelable {
         phoneNumber = in.readString();
         website = in.readString();
         description = in.readString();
-        latitude = in.readFloat();
-        longitude = in.readFloat();
+
     }
 
     public static final Creator<Restaurant> CREATOR = new Creator<Restaurant>() {
@@ -135,21 +142,7 @@ public class Restaurant  implements Parcelable {
         this.website = website;
     }
 
-    public float getLatitude() {
-        return latitude;
-    }
 
-    public void setLatitude(float latitude) {
-        this.latitude = latitude;
-    }
-
-    public float getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(float longitude) {
-        this.longitude = longitude;
-    }
 
     @Override
     public int describeContents() {
@@ -166,8 +159,7 @@ public class Restaurant  implements Parcelable {
         dest.writeString(phoneNumber);
         dest.writeString(website);
         dest.writeString(description);
-        dest.writeFloat(latitude);
-        dest.writeFloat(longitude);
+
     }
 
 
