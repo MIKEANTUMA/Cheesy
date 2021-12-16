@@ -11,9 +11,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -28,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.geofire.GeoFireUtils;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQueryBounds;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -36,11 +35,15 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,15 +65,15 @@ public class showRestaurants extends AppCompatActivity  {
     CheckBox nearBy;
     double longg;
     double lat;
-
+    Query q2;
     boolean isChecked = false;
     GeoLocation center;
     FirebaseFirestore db;
     FirestoreRecyclerAdapter adapter;
-    FirestoreRecyclerAdapter adapter1;
+    FirestoreRecyclerOptions<Restaurant> options;
     final double radiusInM = 50 * 1000;
 
-    FirestoreRecyclerOptions<Restaurant> options1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,53 +108,11 @@ public class showRestaurants extends AppCompatActivity  {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference rest = db.collection("restaurants");
         Query q = rest.orderBy("name");
-        FirestoreRecyclerOptions<Restaurant> options = new FirestoreRecyclerOptions.Builder<Restaurant>()
-                .setQuery(q, Restaurant.class)
-                .build();
+        options = new FirestoreRecyclerOptions.Builder<Restaurant>().setQuery(rest, Restaurant.class).build();
 
 
 
-        adapter = new FirestoreRecyclerAdapter<Restaurant, restaurantsViewholder>(options) {
-            @NonNull
-            @Override
-            public restaurantsViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_restraunt, parent, false);
-                return new restaurantsViewholder(view);
-            }
-
-
-            @Override
-            protected void onBindViewHolder(@NonNull restaurantsViewholder holder, int position, @NonNull Restaurant model) {
-
-
-                holder.restaurantName.setText(model.getName());
-                Log.d("menu", model.getMenu().getAppetizer().toString());
-                // Add address from model class (here
-                // "restaurant.class")to appropriate view in Card
-                // view (here "person.xml")
-                holder.address.setText(model.getLocation());
-
-                // Add WebsiteLink from model class (here
-                // "restaurant.class")to appropriate view in Card
-                // view (here "recylerview_restaurant.xml")
-                holder.WebsiteLink.setText(model.getWebsite());
-
-                holder.PhoneNumber.setText(model.getPhoneNumber());
-                holder.ratingBar.setRating(model.getRating());
-                holder.restaurantName.setOnClickListener(v -> {
-                    Log.d("PIZZZZAAAAA", "YOU CLICKED MY NAME");
-                    Intent intent = new Intent(showRestaurants.this, RestaurantPage.class);
-                    Restaurant restaurant = new Restaurant(model.getName(),model.getLocation(),model.getMenu(),model.getRating(),
-                            model.getPhoneNumber(),model.getWebsite(),model.getDescription());
-                    intent.putExtra("Restaurant", restaurant);
-                    showRestaurants.this.startActivity(intent);
-
-                });
-                holder.PhoneNumber.setOnClickListener(v -> {
-                    Log.d("PIZZZZAAAAA", "YOU CLICKED MY PHONE NUMBER");
-                });
-            }
-        };
+        adapter = new RestaurantOrgAdapter(this,options);
 
         recyclerView.setAdapter(adapter);
 
@@ -168,75 +129,71 @@ public class showRestaurants extends AppCompatActivity  {
 
             }
             if(isChecked){
+                ArrayList<String> names = new ArrayList<>();
                 getLastLocation();
                 final double radiusInM = 50 * 1000;
-                center = new GeoLocation(40.720610,-73.539570);
+                center = new GeoLocation(51.5074, 0.1278);
 
                 List<GeoQueryBounds> bounds = GeoFireUtils.getGeoHashQueryBounds(center, radiusInM);
 
                 Log.d("CENTER", center.toString());
-                ArrayList<String> geo = new ArrayList<>();
+
+                final List<Task<QuerySnapshot>> tasks = new ArrayList<>();
+
+
                 for (GeoQueryBounds b : bounds) {
+                    q2 = db.collection("restaurants")
+                            .orderBy("geohash")
+                            .startAt(b.startHash)
+                            .endAt(b.endHash);
+                    tasks.add(q2.get());
 
-                    geo.add(b.startHash +b.endHash);
-                    Log.d("GEOHASH CODE", b.startHash.toString() + b.endHash.toString());
                 }
+                // Collect all the query results together into a single list
+                Tasks.whenAllComplete(tasks)
+                        .addOnCompleteListener(new OnCompleteListener<List<Task<?>>>() {
+                            @Override
+                            public void onComplete(@NonNull Task<List<Task<?>>> t) {
+                                List<DocumentSnapshot> matchingDocs = new ArrayList<>();
+
+                                for (Task<QuerySnapshot> task : tasks) {
+                                    QuerySnapshot snap = task.getResult();
+                                    for (DocumentSnapshot doc : snap.getDocuments()) {
 
 
-                Query q2 = db.collection("restaurants").whereEqualTo("geohash", "dr5xwsfp95");
+                                        GeoPoint geoPoint = doc.get("geoPoint", GeoPoint.class);
 
-                FirestoreRecyclerOptions<Restaurant> options1 = new FirestoreRecyclerOptions.Builder<Restaurant>()
-                        .setQuery(q2, Restaurant.class)
-                        .build();
+                                        // We have to filter out a few false positives due to GeoHash
+                                        // accuracy, but most will match
+                                        GeoLocation docLocation = new GeoLocation(geoPoint.getLatitude(), geoPoint.getLongitude());
+                                        double distanceInM = GeoFireUtils.getDistanceBetween(docLocation, center);
+                                        if (distanceInM <= radiusInM) {
+                                            matchingDocs.add(doc);
+                                            Log.d("matchig docs", doc.getId());
+                                            names.add(doc.getId());
 
+                                        }
+                                    }
+                                }
 
-                recyclerView.removeAllViews();
-                adapter = new FirestoreRecyclerAdapter<Restaurant, restaurantsViewholder>(options1) {
-                    @NonNull
-                    @Override
-                    public restaurantsViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_restraunt, parent, false);
-                        return new restaurantsViewholder(view);
-                    }
+                                // matchingDocs contains the results
+                                // ...
+                                CollectionReference rest = db.collection("restaurants");
+                                Query q3 =  rest.whereIn("name", names);
 
+                                FirestoreRecyclerOptions<Restaurant> options1 = new FirestoreRecyclerOptions.Builder<Restaurant>().setQuery(q3, Restaurant.class).build();
 
-                    @Override
-                    protected void onBindViewHolder(@NonNull restaurantsViewholder holder, int position, @NonNull Restaurant model) {
+                                try {
+                                    options1 = new FirestoreRecyclerOptions.Builder<Restaurant>()
+                                            .setQuery(q3, Restaurant.class)
+                                            .build();
+                                    adapter.updateOptions(options1);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
 
-
-                        holder.restaurantName.setText(model.getName());
-                        Log.d("menu", model.getMenu().getAppetizer().toString());
-                        // Add address from model class (here
-                        // "restaurant.class")to appropriate view in Card
-                        // view (here "person.xml")
-                        holder.address.setText(model.getLocation());
-
-                        // Add WebsiteLink from model class (here
-                        // "restaurant.class")to appropriate view in Card
-                        // view (here "recylerview_restaurant.xml")
-                        holder.WebsiteLink.setText(model.getWebsite());
-
-                        holder.PhoneNumber.setText(model.getPhoneNumber());
-                        holder.ratingBar.setRating(model.getRating());
-                        holder.restaurantName.setOnClickListener(v -> {
-                            Log.d("PIZZZZAAAAA", "YOU CLICKED MY NAME");
-                            Intent intent = new Intent(showRestaurants.this, RestaurantPage.class);
-                            Restaurant restaurant = new Restaurant(model.getName(),model.getLocation(),model.getMenu(),model.getRating(),
-                                    model.getPhoneNumber(),model.getWebsite(),model.getDescription());
-                            intent.putExtra("Restaurant", restaurant);
-                            showRestaurants.this.startActivity(intent);
-
+                            }
                         });
-                        holder.PhoneNumber.setOnClickListener(v -> {
-                            Log.d("PIZZZZAAAAA", "YOU CLICKED MY PHONE NUMBER");
-                        });
-                    }
-                };
-
-                recyclerView = findViewById(R.id.recyclerview_tasks);
-                recyclerView.setAdapter(adapter);
-
-
 
             }
         });
