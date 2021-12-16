@@ -184,10 +184,14 @@ public class showRestaurants extends AppCompatActivity  {
                                 FirestoreRecyclerOptions<Restaurant> options1 = new FirestoreRecyclerOptions.Builder<Restaurant>().setQuery(q3, Restaurant.class).build();
 
                                 try {
+
+                                    Log.d("adapter", String.valueOf(adapter.getItemCount()));
                                     options1 = new FirestoreRecyclerOptions.Builder<Restaurant>()
                                             .setQuery(q3, Restaurant.class)
                                             .build();
                                     adapter.updateOptions(options1);
+
+
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
