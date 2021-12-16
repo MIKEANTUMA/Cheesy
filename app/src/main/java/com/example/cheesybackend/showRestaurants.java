@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,7 +41,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -175,26 +178,39 @@ public class showRestaurants extends AppCompatActivity  {
                                         }
                                     }
                                 }
+                                for (int i = 0; i < names.size(); i++)
+                                    Log.d("NAMES", names.get(i));
 
                                 // matchingDocs contains the results
                                 // ...
                                 CollectionReference rest = db.collection("restaurants");
                                 Query q3 =  rest.whereIn("name", names);
 
+
                                 FirestoreRecyclerOptions<Restaurant> options1 = new FirestoreRecyclerOptions.Builder<Restaurant>().setQuery(q3, Restaurant.class).build();
 
-                                try {
+                                q3.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        try {
 
-                                    Log.d("adapter", String.valueOf(adapter.getItemCount()));
-                                    options1 = new FirestoreRecyclerOptions.Builder<Restaurant>()
-                                            .setQuery(q3, Restaurant.class)
-                                            .build();
-                                    adapter.updateOptions(options1);
+                                            Log.d("adapter", String.valueOf(adapter.getItemCount()));
+                                            Log.d("M",String.valueOf(q3.get().getResult().size()));
+                                            options = new FirestoreRecyclerOptions.Builder<Restaurant>()
+                                                    .setQuery(q3, Restaurant.class)
+                                                    .build();
+                                            Log.d("Name", options.getSnapshots().get(0).getName());
+                                            adapter.updateOptions(options);
 
 
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+
+                                    }
+                                });
+
 
                             }
                         });
