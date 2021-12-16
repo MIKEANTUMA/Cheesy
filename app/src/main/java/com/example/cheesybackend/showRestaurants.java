@@ -2,42 +2,79 @@ package com.example.cheesybackend;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.firebase.geofire.GeoFireUtils;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQueryBounds;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class showRestaurants extends AppCompatActivity {
+public class showRestaurants extends AppCompatActivity  {
 
     private RecyclerView recyclerView;
-    RestaurantOrgAdapter adapter; // Create Object of the Adapter class
+   // RestaurantOrgAdapter adapter; // Create Object of the Adapter class
+   // RestaurantOrgAdapter adapter1;
     DatabaseReference mbase; // Create object of the
     // Firebase Realtime Database
     EditText search;
     ImageButton buttonSearch;
-    FirebaseRecyclerOptions<Restaurant> options;
-    String s ="";
-    DatabaseReference rest;
-    GoogleApiClient googleApiClient;
-    Location myLocation;
-    public Cart single_instance = null;
 
+    String s ="";
+    FusedLocationProviderClient mFusedLocationClient;
+    int PERMISSION_ID = 44;
+    CheckBox nearBy;
+    double longg;
+    double lat;
+    Query q2;
+    boolean isChecked = false;
+    GeoLocation center;
+    FirebaseFirestore db;
+    FirestoreRecyclerAdapter adapter;
+    FirestoreRecyclerOptions<Restaurant> options;
+    final double radiusInM = 50 * 1000;
 
 
     @Override
@@ -51,66 +88,145 @@ public class showRestaurants extends AppCompatActivity {
         }
         catch (NullPointerException e) {}
 
-        createGoogleApi();
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         mbase = FirebaseDatabase.getInstance().getReference().child("restaurants");
+        db = FirebaseFirestore.getInstance();
         recyclerView = findViewById(R.id.recyclerview_tasks);
         // It is a class provide by the FirebaseUI to make a
         // query in the database to fetch appropriate data
-        options = new FirebaseRecyclerOptions.Builder<Restaurant>().setQuery(mbase, Restaurant.class).build();
-        adapter = new RestaurantOrgAdapter(this,options);
+
         Intent intent = (Intent) getIntent().getSerializableExtra("adapter");
         // Connecting Adapter class with the Recycler view*/
-        recyclerView.setAdapter(adapter);
-        rest = FirebaseDatabase.getInstance().getReference().child("restaurants").child("restaurant01");
 
 
         //
         findViewById(R.id.SearchTab).setOnClickListener(this::switchTab);
         findViewById(R.id.AccountTab).setOnClickListener(this::switchTab);
         findViewById(R.id.OrderTab).setOnClickListener(this::switchTab);
+        nearBy = (CheckBox) findViewById(R.id.cb_nearby);
+        nearBy.setOnCheckedChangeListener(this::Check);
+        getLastLocation();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference rest = db.collection("restaurants");
+        Query q = rest.orderBy("name");
+        options = new FirestoreRecyclerOptions.Builder<Restaurant>().setQuery(rest, Restaurant.class).build();
+
+
+
+        adapter = new RestaurantOrgAdapter(this,options);
+
+        recyclerView.setAdapter(adapter);
+
+
+
+
+
+
+
+
         buttonSearch.setOnClickListener(v -> {
             if (search.getText().toString().isEmpty()){
-                options = new FirebaseRecyclerOptions.Builder<Restaurant>().setQuery(mbase, Restaurant.class).build();
-                adapter.updateOptions(options);
+                Toast.makeText(this, "Please enter a valid search", Toast.LENGTH_SHORT).show();
 
             }
-            else {
-                String s = search.getText().toString();
-                Log.d("S", s);
-                Query query = FirebaseDatabase
-                        .getInstance()
-                        .getReference()
-                        .child("restaurants")
-                        .orderByChild("latitude")
-                        .startAt(s);
+            if(isChecked){
+                ArrayList<String> names = new ArrayList<>();
+                getLastLocation();
+                final double radiusInM = 50 * 1000;
+                center = new GeoLocation(51.5074, 0.1278);
 
-                options = new FirebaseRecyclerOptions.Builder<Restaurant>()
-                        .setQuery(query, Restaurant.class)
-                        .build();
-                adapter.updateOptions(options);
+                List<GeoQueryBounds> bounds = GeoFireUtils.getGeoHashQueryBounds(center, radiusInM);
+
+                Log.d("CENTER", center.toString());
+
+                final List<Task<QuerySnapshot>> tasks = new ArrayList<>();
+
+
+                for (GeoQueryBounds b : bounds) {
+                    q2 = db.collection("restaurants")
+                            .orderBy("geohash")
+                            .startAt(b.startHash)
+                            .endAt(b.endHash);
+                    tasks.add(q2.get());
+
+                }
+                // Collect all the query results together into a single list
+                Tasks.whenAllComplete(tasks)
+                        .addOnCompleteListener(new OnCompleteListener<List<Task<?>>>() {
+                            @Override
+                            public void onComplete(@NonNull Task<List<Task<?>>> t) {
+                                List<DocumentSnapshot> matchingDocs = new ArrayList<>();
+
+                                for (Task<QuerySnapshot> task : tasks) {
+                                    QuerySnapshot snap = task.getResult();
+                                    for (DocumentSnapshot doc : snap.getDocuments()) {
+
+
+                                        GeoPoint geoPoint = doc.get("geoPoint", GeoPoint.class);
+
+                                        // We have to filter out a few false positives due to GeoHash
+                                        // accuracy, but most will match
+                                        GeoLocation docLocation = new GeoLocation(geoPoint.getLatitude(), geoPoint.getLongitude());
+                                        double distanceInM = GeoFireUtils.getDistanceBetween(docLocation, center);
+                                        if (distanceInM <= radiusInM) {
+                                            matchingDocs.add(doc);
+                                            Log.d("matchig docs", doc.getId());
+                                            names.add(doc.getId());
+
+                                        }
+                                    }
+                                }
+                                for (int i = 0; i < names.size(); i++)
+                                    Log.d("NAMES", names.get(i));
+
+                                // matchingDocs contains the results
+                                // ...
+                                CollectionReference rest = db.collection("restaurants");
+                                Query q3 =  rest.whereIn("name", names);
+
+
+                                FirestoreRecyclerOptions<Restaurant> options1 = new FirestoreRecyclerOptions.Builder<Restaurant>().setQuery(q3, Restaurant.class).build();
+
+                                q3.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        try {
+
+                                            Log.d("adapter", String.valueOf(adapter.getItemCount()));
+                                            Log.d("M",String.valueOf(q3.get().getResult().size()));
+                                            options = new FirestoreRecyclerOptions.Builder<Restaurant>()
+                                                    .setQuery(q3, Restaurant.class)
+                                                    .build();
+                                            Log.d("Name", options.getSnapshots().get(0).getName());
+                                            adapter.updateOptions(options);
+
+
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+
+                                    }
+                                });
+
+
+                            }
+                        });
+
             }
         });
-
-        //resets cart if user exits to showRestaurant activity
-        Cart.setSingle_instance(single_instance);
-
     }
 
-    private void createGoogleApi() {
-
-        if ( googleApiClient == null ) {
-            googleApiClient = new GoogleApiClient.Builder( this )
-                    .addApi( LocationServices.API )
-                    .build();
+    private void Check(CompoundButton compoundButton, boolean b) {
+        if(nearBy.isChecked()){
+            isChecked = true;
+            Log.d("check","is checked");
+            getLastLocation();
         }
     }
-    @SuppressLint("MissingPermission")
-    private void findLocation() {
-        if (checkPermission())
-                myLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
 
-    }
 
 
     private void switchTab(View view) {
@@ -130,10 +246,9 @@ public class showRestaurants extends AppCompatActivity {
     {
         super.onStart();
         adapter.startListening();
-        googleApiClient.connect();
-
+        getLastLocation();
         try {
-            Log.d("RESTARUANT", adapter.getItem(0).getName());
+            //Log.d("RESTARUANT", adapter.getItem(0).getName());
         }catch(Exception e){
             Log.d("KEY", e.getMessage());
         }
@@ -146,17 +261,124 @@ public class showRestaurants extends AppCompatActivity {
     {
         super.onStop();
         adapter.stopListening();
-        googleApiClient.disconnect();
 
 
     }
-    // Check for permission to access Location
-    private boolean checkPermission() {
-        Log.d("TAG", "checkPermission()");
-        // Ask for permission if it wasn't granted yet
-        return (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED );
+
+
+
+    @SuppressLint("MissingPermission")
+    private void getLastLocation() {
+        // check if permissions are given
+        if (checkPermissions()) {
+
+            // check if location is enabled
+            if (isLocationEnabled()) {
+
+                // getting last
+                // location from
+                // FusedLocationClient
+                // object
+                mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        Location location = task.getResult();
+                        if (location == null) {
+                            requestNewLocationData();
+                        } else {
+                            longg = location.getLongitude();
+                            lat = location.getLatitude();
+
+                        }
+                    }
+                });
+            } else {
+                Toast.makeText(this, "Please turn on" + " your location...", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+            }
+        } else {
+            // if permissions aren't available,
+            // request for permissions
+            requestPermissions();
+        }
     }
+
+    @SuppressLint("MissingPermission")
+    private void requestNewLocationData() {
+
+        // Initializing LocationRequest
+        // object with appropriate methods
+        LocationRequest mLocationRequest = new LocationRequest();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(5);
+        mLocationRequest.setFastestInterval(0);
+        mLocationRequest.setNumUpdates(1);
+
+        // setting LocationRequest
+        // on FusedLocationClient
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+    }
+
+    private LocationCallback mLocationCallback = new LocationCallback() {
+
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            Location mLastLocation = locationResult.getLastLocation();
+            longg = mLastLocation.getLongitude();
+            lat = mLastLocation.getLatitude();
+
+            //latitudeTextView.setText("Latitude: " + mLastLocation.getLatitude() + "");
+            //longitTextView.setText("Longitude: " + mLastLocation.getLongitude() + "");
+        }
+    };
+
+    // method to check for permissions
+    private boolean checkPermissions() {
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+
+        // If we want background location
+        // on Android 10.0 and higher,
+        // use:
+        // ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
+    }
+
+    // method to request for permissions
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ID);
+    }
+
+    // method to check
+    // if location is enabled
+    private boolean isLocationEnabled() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    }
+
+    // If everything is alright then
+    @Override
+    public void
+    onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PERMISSION_ID) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLastLocation();
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
 
 
 

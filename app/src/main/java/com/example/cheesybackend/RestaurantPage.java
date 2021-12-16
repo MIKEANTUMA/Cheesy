@@ -3,9 +3,7 @@ package com.example.cheesybackend;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,8 +36,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.io.IOException;
 
 public class RestaurantPage extends AppCompatActivity implements View.OnClickListener,GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -259,7 +255,7 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
         // Define marker options
         MarkerOptions markerOptions2;
         markerOptions2 = new MarkerOptions()
-                .position(new LatLng(restaurant.getLatitude(), restaurant.getLongitude()))
+                .position(new LatLng(restaurant.getGeoPoint().getLatitude(), restaurant.getGeoPoint().getLongitude()))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
                 .title(title2);
 

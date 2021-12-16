@@ -12,10 +12,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-public class RestaurantOrgAdapter extends FirebaseRecyclerAdapter<Restaurant, RestaurantOrgAdapter.restaurantsViewholder> {
+
+public class RestaurantOrgAdapter extends FirestoreRecyclerAdapter<Restaurant, RestaurantOrgAdapter.restaurantsViewholder> {
 
     private Context mCtx;
 
@@ -26,13 +28,11 @@ public class RestaurantOrgAdapter extends FirebaseRecyclerAdapter<Restaurant, Re
      *
      * @param options
      */
-    public RestaurantOrgAdapter(Context mCtx, @NonNull FirebaseRecyclerOptions<Restaurant> options) {
+    public RestaurantOrgAdapter(Context mCtx, @NonNull FirestoreRecyclerOptions<Restaurant> options) {
         super(options);
         this.mCtx = mCtx;
 
     }
-
-
 
 
 
@@ -58,9 +58,7 @@ public class RestaurantOrgAdapter extends FirebaseRecyclerAdapter<Restaurant, Re
         holder.restaurantName.setOnClickListener(v -> {
             Log.d("PIZZZZAAAAA", "YOU CLICKED MY NAME");
             Intent intent = new Intent(mCtx, RestaurantPage.class);
-            Restaurant restaurant = new Restaurant(model.getName(),model.getLocation(),model.getMenu(),model.getRating(),
-                    model.getPhoneNumber(),model.getWebsite(),model.getDescription(),
-                    model.getLatitude(), model.getLongitude());
+            Restaurant restaurant = new Restaurant(model.getName(),model.getLocation(),model.getMenu(),model.getRating(),model.getPhoneNumber(),model.getWebsite(),model.getDescription());
             intent.putExtra("Restaurant", restaurant);
             mCtx.startActivity(intent);
 
@@ -102,3 +100,5 @@ public class RestaurantOrgAdapter extends FirebaseRecyclerAdapter<Restaurant, Re
     }
 
 }
+
+
