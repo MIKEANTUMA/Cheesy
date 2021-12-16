@@ -45,7 +45,8 @@ public class EditAddress extends AppCompatActivity {
         findViewById(R.id.OrderTab).setOnClickListener(this::switchTab);
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
-        currentUser = FirebaseDatabase.getInstance().getReference().child("user").child(user.getUid());
+        currentUser = FirebaseDatabase.getInstance().getReference().
+                child("user").child(user.getUid());
         currentUser.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
