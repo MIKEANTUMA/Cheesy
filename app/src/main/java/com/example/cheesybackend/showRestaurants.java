@@ -75,7 +75,7 @@ public class showRestaurants extends AppCompatActivity  {
     FirestoreRecyclerAdapter adapter;
     FirestoreRecyclerOptions<Restaurant> options;
     final double radiusInM = 50 * 1000;
-
+    public Cart single_instance = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +99,7 @@ public class showRestaurants extends AppCompatActivity  {
         Intent intent = (Intent) getIntent().getSerializableExtra("adapter");
         // Connecting Adapter class with the Recycler view*/
 
+        Cart.setSingle_instance(single_instance);
 
         //
         findViewById(R.id.SearchTab).setOnClickListener(this::switchTab);
@@ -368,14 +369,15 @@ public class showRestaurants extends AppCompatActivity  {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getLastLocation();
             }
+
         }
     }
 
-
-
-
-
-
+    @Override
+    public void onBackPressed() {
+        //Does nothing so you can't go back to splash screen
+        //without restarting app
+    }
 
 
 

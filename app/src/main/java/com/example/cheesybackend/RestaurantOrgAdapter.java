@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.maps.model.LatLng;
 
 
 public class RestaurantOrgAdapter extends FirestoreRecyclerAdapter<Restaurant, RestaurantOrgAdapter.restaurantsViewholder> {
@@ -59,6 +60,9 @@ public class RestaurantOrgAdapter extends FirestoreRecyclerAdapter<Restaurant, R
             Log.d("PIZZZZAAAAA", "YOU CLICKED MY NAME");
             Intent intent = new Intent(mCtx, RestaurantPage.class);
             Restaurant restaurant = new Restaurant(model.getName(),model.getLocation(),model.getMenu(),model.getRating(),model.getPhoneNumber(),model.getWebsite(),model.getDescription());
+            intent.putExtra("lat", model.getGeoPoint().getLatitude());
+            intent.putExtra("lng", model.getGeoPoint().getLongitude());
+            intent.putExtra("latlng",new LatLng(model.getGeoPoint().getLatitude(), model.getGeoPoint().getLongitude()));
             intent.putExtra("Restaurant", restaurant);
             mCtx.startActivity(intent);
 

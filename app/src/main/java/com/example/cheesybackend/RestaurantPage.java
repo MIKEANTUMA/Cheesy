@@ -57,13 +57,13 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
     private Location lastLocation;
     private Address address;
     private Marker restrauantMarker;
+    private LatLng restLatLng;
 
     private LocationRequest locationRequest;
     // Defined in mili seconds.
     private final int UPDATE_INTERVAL =  3 * 60  * 1000; // 3 minutes
     private final int FASTEST_INTERVAL = 30 * 1000;  // 30 secs
     private GoogleApiClient googleApiClient;
-
 
     private static final String TAG = RestaurantPage.class.getSimpleName();
 
@@ -88,6 +88,10 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
         drink.setOnClickListener(this);
         floatingActionButtonBack=findViewById(R.id.floatingBtn);
         floatingActionButtonBack.setOnClickListener(this);
+        double la = getIntent().getDoubleExtra("lat", 0);
+        double ln = getIntent().getDoubleExtra("lng", 0);
+//        restLatLng = getIntent().getExtras();
+        restLatLng = new LatLng(la,ln);
         restaurant = getIntent().getParcelableExtra("Restaurant");
 
         // initialize GoogleMaps
@@ -100,6 +104,7 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
         description.setText(restaurant.getDescription());
         website.setText("website: "+restaurant.getWebsite());
         phoneNumber.setText("PhoneNumber: "+restaurant.getPhoneNumber());
+
 
         //hides the action bar
         try {
@@ -246,7 +251,7 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
     // Create a Location Marker
     private void markerLocation(LatLng latLng) {
         Log.i(TAG, "markerLocation("+latLng+")");
-        Log.i(TAG, "markerLocation("+new LatLng(restaurant.getLatitude(), restaurant.getLongitude())+")");
+//        Log.i(TAG, "markerLocation("+new LatLng(restaurant.getGeoPoint().getLatitude(), restaurant.getGeoPoint().getLongitude())+")");
         String title = "You";
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng)
@@ -255,7 +260,7 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
         // Define marker options
         MarkerOptions markerOptions2;
         markerOptions2 = new MarkerOptions()
-                .position(new LatLng(restaurant.getGeoPoint().getLatitude(), restaurant.getGeoPoint().getLongitude()))
+                .position(restLatLng)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
                 .title(title2);
 
