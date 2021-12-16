@@ -107,6 +107,7 @@ class Items{
     private String  price;
 
 
+    public Items(){}
     public Items(String name, String price){
         this.itemName = name;
         this.price = price;

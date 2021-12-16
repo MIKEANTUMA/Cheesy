@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_margin="3dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:elevation="10dp"
+    card_view:cardCornerRadius="20dp"
+    android:layout_marginBottom="3dp"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="2"
+        android:rowCount="3"
+        android:useDefaultMargins="true">
+
+        <!-- Updated the restaurant name to wrap
+             or be short if too long. -->
+        <TextView
+            android:id="@+id/txtRestName"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:text="Restaurant Name"
+            android:textSize="24sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            />
+        <TextView
+            android:id="@+id/txtPhoneNumber"
+            android:layout_column="1"
+            android:text="516-728-1827"
+            android:textSize="18sp" />
+
+
+
+
+
+        <TextView
+            android:id="@+id/txtTime"
+            android:layout_width="116dp"
+            android:layout_column="0"
+            android:layout_gravity="fill_horizontal"
+            android:ellipsize="end"
+            android:text="Sun Dec 12 13:26:15 EST 2021"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/txtPrice"
+            android:layout_column="0"
+            android:layout_gravity="fill_horizontal"
+            android:text="$21.639312"
+            android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/txtItemCount"
+            android:layout_column="1"
+            android:text="Total Items: 2"
+            android:textSize="18sp" />
+
+    </GridLayout>
+</androidx.cardview.widget.CardView>

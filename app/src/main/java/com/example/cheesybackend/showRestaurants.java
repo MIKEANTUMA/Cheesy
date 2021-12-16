@@ -27,7 +27,6 @@ public class showRestaurants extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     RestaurantOrgAdapter adapter; // Create Object of the Adapter class
-    RestaurantOrgAdapter adapter1;
     DatabaseReference mbase; // Create object of the
     // Firebase Realtime Database
     EditText search;
