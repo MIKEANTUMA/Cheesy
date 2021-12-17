@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.geofire.GeoFireUtils;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQueryBounds;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -111,111 +112,105 @@ public class showRestaurants extends AppCompatActivity  {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference rest = db.collection("restaurants");
-        Query q = rest.orderBy("name");
+
         options = new FirestoreRecyclerOptions.Builder<Restaurant>().setQuery(rest, Restaurant.class).build();
-
-
 
         adapter = new RestaurantOrgAdapter(this,options);
 
         recyclerView.setAdapter(adapter);
 
 
-
-
-
-
-
-
         buttonSearch.setOnClickListener(v -> {
-            if (search.getText().toString().isEmpty()){
+            if (search.getText().toString().isEmpty() && !isChecked){
+                options = new FirestoreRecyclerOptions.Builder<Restaurant>().setQuery(rest, Restaurant.class).build();
+                adapter.notifyDataSetChanged();
+                adapter.updateOptions(options);
                 Toast.makeText(this, "Please enter a valid search", Toast.LENGTH_SHORT).show();
 
             }
-            if(isChecked){
-                ArrayList<String> names = new ArrayList<>();
-                getLastLocation();
-                final double radiusInM = 50 * 1000;
-                center = new GeoLocation(51.5074, 0.1278);
+            else if(isChecked){
+                if(checkPermissions()) {
+                    ArrayList<String> names = new ArrayList<>();
+                    getLastLocation();
+                    final double radiusInM = 50 * 1000;
+                    center = new GeoLocation(lat, longg);
 
-                List<GeoQueryBounds> bounds = GeoFireUtils.getGeoHashQueryBounds(center, radiusInM);
+                    List<GeoQueryBounds> bounds = GeoFireUtils.getGeoHashQueryBounds(center, radiusInM);
 
-                Log.d("CENTER", center.toString());
+                    Log.d("CENTER", center.toString());
 
-                final List<Task<QuerySnapshot>> tasks = new ArrayList<>();
-
-
-                for (GeoQueryBounds b : bounds) {
-                    q2 = db.collection("restaurants")
-                            .orderBy("geohash")
-                            .startAt(b.startHash)
-                            .endAt(b.endHash);
-                    tasks.add(q2.get());
-
-                }
-                // Collect all the query results together into a single list
-                Tasks.whenAllComplete(tasks)
-                        .addOnCompleteListener(new OnCompleteListener<List<Task<?>>>() {
-                            @Override
-                            public void onComplete(@NonNull Task<List<Task<?>>> t) {
-                                List<DocumentSnapshot> matchingDocs = new ArrayList<>();
-
-                                for (Task<QuerySnapshot> task : tasks) {
-                                    QuerySnapshot snap = task.getResult();
-                                    for (DocumentSnapshot doc : snap.getDocuments()) {
+                    final List<Task<QuerySnapshot>> tasks = new ArrayList<>();
 
 
-                                        GeoPoint geoPoint = doc.get("geoPoint", GeoPoint.class);
+                    for (GeoQueryBounds b : bounds) {
+                        q2 = db.collection("restaurants")
+                                .orderBy("geohash")
+                                .startAt(b.startHash)
+                                .endAt(b.endHash);
+                        tasks.add(q2.get());
 
-                                        // We have to filter out a few false positives due to GeoHash
-                                        // accuracy, but most will match
-                                        GeoLocation docLocation = new GeoLocation(geoPoint.getLatitude(), geoPoint.getLongitude());
-                                        double distanceInM = GeoFireUtils.getDistanceBetween(docLocation, center);
-                                        if (distanceInM <= radiusInM) {
-                                            matchingDocs.add(doc);
-                                            Log.d("matchig docs", doc.getId());
-                                            names.add(doc.getId());
+                    }
+                    // Collect all the query results together into a single list
+                    Tasks.whenAllComplete(tasks)
+                            .addOnCompleteListener(new OnCompleteListener<List<Task<?>>>() {
+                                @Override
+                                public void onComplete(@NonNull Task<List<Task<?>>> t) {
+                                    List<DocumentSnapshot> matchingDocs = new ArrayList<>();
 
+                                    for (Task<QuerySnapshot> task : tasks) {
+                                        QuerySnapshot snap = task.getResult();
+                                        for (DocumentSnapshot doc : snap.getDocuments()) {
+
+
+                                            GeoPoint geoPoint = doc.get("geoPoint", GeoPoint.class);
+
+                                            // We have to filter out a few false positives due to GeoHash
+                                            // accuracy, but most will match
+                                            GeoLocation docLocation = new GeoLocation(geoPoint.getLatitude(), geoPoint.getLongitude());
+                                            double distanceInM = GeoFireUtils.getDistanceBetween(docLocation, center);
+                                            if (distanceInM <= radiusInM) {
+                                                matchingDocs.add(doc);
+                                                Log.d("matchig docs", doc.getId());
+                                                names.add(doc.getId());
+
+                                            }
                                         }
+                                    }
+                                    for (int i = 0; i < names.size(); i++)
+                                        Log.d("NAMES", names.get(i));
+
+                                    // matchingDocs contains the results
+                                    // ...
+                                    CollectionReference rest = db.collection("restaurants");
+                                    Query q3 = rest.whereIn("name", names);
+
+
+                                    FirestoreRecyclerOptions<Restaurant> options1 = new FirestoreRecyclerOptions.Builder<Restaurant>().setQuery(q3, Restaurant.class).build();
+                                    options = new FirestoreRecyclerOptions.Builder<Restaurant>()
+                                            .setQuery(q3, Restaurant.class)
+                                            .build();
+                                    // Log.d("Name", options.getSnapshots().get(0).getName());
+                                    adapter.notifyDataSetChanged();
+                                    try {
+                                        adapter.updateOptions(options);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
                                     }
                                 }
-                                for (int i = 0; i < names.size(); i++)
-                                    Log.d("NAMES", names.get(i));
+                            });
+                }
+                else{
+                    Toast.makeText(showRestaurants.this,"Turn location on in Account Activity",Toast.LENGTH_LONG);
+                }
 
-                                // matchingDocs contains the results
-                                // ...
-                                CollectionReference rest = db.collection("restaurants");
-                                Query q3 =  rest.whereIn("name", names);
-
-
-                                FirestoreRecyclerOptions<Restaurant> options1 = new FirestoreRecyclerOptions.Builder<Restaurant>().setQuery(q3, Restaurant.class).build();
-
-                                q3.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        try {
-
-                                            Log.d("adapter", String.valueOf(adapter.getItemCount()));
-                                            Log.d("M",String.valueOf(q3.get().getResult().size()));
-                                            options = new FirestoreRecyclerOptions.Builder<Restaurant>()
-                                                    .setQuery(q3, Restaurant.class)
-                                                    .build();
-                                            Log.d("Name", options.getSnapshots().get(0).getName());
-                                            adapter.updateOptions(options);
-
-
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-
-
-                                    }
-                                });
-
-
-                            }
-                        });
-
+            }
+            else{
+                Query q = rest.whereEqualTo("name",search.getText().toString());
+                options = new FirestoreRecyclerOptions.Builder<Restaurant>()
+                        .setQuery(q, Restaurant.class)
+                        .build();
+                adapter.notifyDataSetChanged();
+                adapter.updateOptions(options);
             }
         });
     }
@@ -225,6 +220,9 @@ public class showRestaurants extends AppCompatActivity  {
             isChecked = true;
             Log.d("check","is checked");
             getLastLocation();
+        }
+        else {
+            isChecked = false;
         }
     }
 
@@ -377,6 +375,18 @@ public class showRestaurants extends AppCompatActivity  {
     public void onBackPressed() {
         //Does nothing so you can't go back to splash screen
         //without restarting app
+    }
+
+    @Override
+     public void onResume() {
+         super.onResume();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference rest = db.collection("restaurants");
+        options = new FirestoreRecyclerOptions.Builder<Restaurant>().setQuery(rest, Restaurant.class).build();
+        adapter.notifyDataSetChanged();
+        adapter.updateOptions(options);
+
+
     }
 
 
