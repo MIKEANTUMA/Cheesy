@@ -3,9 +3,18 @@ package com.example.cheesybackend;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.firebase.geofire.GeoFireUtils;
+import com.firebase.geofire.GeoLocation;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
 
@@ -27,27 +36,27 @@ public class Splash extends AppCompatActivity {
         } catch (NullPointerException e) {
         }
 
-        ArrayList<String> pizzaNames = new ArrayList<>();
-        pizzaNames.add("america's Incredible Pizza Company");
-        pizzaNames.add("arni's Restaurant");
-        pizzaNames.add("domino's Pizza");
-        pizzaNames.add("grotto Pizza");
-        pizzaNames.add("happy's Pizza");
-        pizzaNames.add("hunt Brothers Pizza");
-        pizzaNames.add("little Caesars");
-        pizzaNames.add("marco's Pizza");
+//        ArrayList<String> pizzaNames = new ArrayList<>();
+//        pizzaNames.add("america's Incredible Pizza Company");
+//        pizzaNames.add("arni's Restaurant");
+//        pizzaNames.add("domino's Pizza");
+//        pizzaNames.add("grotto Pizza");
+//        pizzaNames.add("happy's Pizza");
+//        pizzaNames.add("hunt Brothers Pizza");
+//        pizzaNames.add("little Caesars");
+//        pizzaNames.add("marco's Pizza");
 
 
 //        for (int i = 0; i < 8; i++) {
 //
 //            Restaurant restaurant = new Restaurant();
-//            restaurant.setName(pizzaNames.get(i));
-//            restaurant.setLocation("175 earl place north east meadow");
+//            restaurant.setName(" II Bacetto");
+//            restaurant.setLocation("3982 Jerusalem Ave, Seaford");
 //            restaurant.setRating((float) (Math.random() * (5 - 1 + 1) + 1));
 //            restaurant.setPhoneNumber("5167281827");
 //            restaurant.setWebsite("google.com");
 //            restaurant.setDescription("The pizza shop is a place where many people like to go to have dinner with their families. Aside from the delicious food, the waiters or waitresses in the pizza restaurant can significantly add to or subtract from the experience.");
-//            GeoPoint geoPoint = new GeoPoint(51.5074, 0.1278);
+//            GeoPoint geoPoint = new GeoPoint(40.694070217136904, -73.48617198087341);
 //            restaurant.setGeoPoint(geoPoint);
 //
 //            String hash = GeoFireUtils.getGeoHashForLocation(new GeoLocation(restaurant.getGeoPoint().getLatitude(), restaurant.getGeoPoint().getLongitude()));

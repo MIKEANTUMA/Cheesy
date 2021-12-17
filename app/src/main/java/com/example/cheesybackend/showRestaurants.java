@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.geofire.GeoFireUtils;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQueryBounds;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -111,20 +112,12 @@ public class showRestaurants extends AppCompatActivity  {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference rest = db.collection("restaurants");
-        Query q = rest.orderBy("name");
+
         options = new FirestoreRecyclerOptions.Builder<Restaurant>().setQuery(rest, Restaurant.class).build();
-
-
 
         adapter = new RestaurantOrgAdapter(this,options);
 
         recyclerView.setAdapter(adapter);
-
-
-
-
-
-
 
 
         buttonSearch.setOnClickListener(v -> {
@@ -136,7 +129,7 @@ public class showRestaurants extends AppCompatActivity  {
                 ArrayList<String> names = new ArrayList<>();
                 getLastLocation();
                 final double radiusInM = 50 * 1000;
-                center = new GeoLocation(51.5074, 0.1278);
+                center = new GeoLocation(lat, longg);
 
                 List<GeoQueryBounds> bounds = GeoFireUtils.getGeoHashQueryBounds(center, radiusInM);
 
@@ -189,33 +182,28 @@ public class showRestaurants extends AppCompatActivity  {
 
 
                                 FirestoreRecyclerOptions<Restaurant> options1 = new FirestoreRecyclerOptions.Builder<Restaurant>().setQuery(q3, Restaurant.class).build();
-
-                                q3.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        try {
-
-                                            Log.d("adapter", String.valueOf(adapter.getItemCount()));
-                                            Log.d("M",String.valueOf(q3.get().getResult().size()));
-                                            options = new FirestoreRecyclerOptions.Builder<Restaurant>()
-                                                    .setQuery(q3, Restaurant.class)
-                                                    .build();
-                                            Log.d("Name", options.getSnapshots().get(0).getName());
-                                            adapter.updateOptions(options);
-
-
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-
-
-                                    }
-                                });
-
-
+                                options = new FirestoreRecyclerOptions.Builder<Restaurant>()
+                                        .setQuery(q3, Restaurant.class)
+                                        .build();
+                               // Log.d("Name", options.getSnapshots().get(0).getName());
+                                adapter.notifyDataSetChanged();
+                                try {
+                                    adapter.updateOptions(options);
+                                }
+                                catch (Exception e){
+                                    e.printStackTrace();
+                                }
                             }
                         });
 
+            }
+            else{
+                Query q = rest.whereEqualTo("name",search.getText().toString());
+                options = new FirestoreRecyclerOptions.Builder<Restaurant>()
+                        .setQuery(q, Restaurant.class)
+                        .build();
+                adapter.notifyDataSetChanged();
+                adapter.updateOptions(options);
             }
         });
     }

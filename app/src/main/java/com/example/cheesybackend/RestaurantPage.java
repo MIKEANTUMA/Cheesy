@@ -251,7 +251,7 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
     // Create a Location Marker
     private void markerLocation(LatLng latLng) {
         Log.i(TAG, "markerLocation("+latLng+")");
-//        Log.i(TAG, "markerLocation("+new LatLng(restaurant.getGeoPoint().getLatitude(), restaurant.getGeoPoint().getLongitude())+")");
+        Log.i(TAG, "markerLocation("+restLatLng+")");
         String title = "You";
         MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng)
@@ -306,7 +306,32 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
                     );
                 }
             }
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(australiaBounds.getCenter(),9.7555f);
+            double latDist = locationMarker.getPosition().latitude - restrauantMarker.getPosition().latitude;
+            if (latDist < 0.0)
+                latDist = -1 * latDist;
+
+            double lngDist = locationMarker.getPosition().longitude - restrauantMarker.getPosition().longitude;
+            if (lngDist < 0.0)
+                lngDist = -1 * latDist;
+            double it;
+            if(lngDist > latDist)
+                it = lngDist;
+            else
+                it = latDist;
+            float zoom = 6f;
+            if (it < 0.015){
+                zoom = 14f;
+            }
+
+            else if (it < 0.1){
+                zoom = 12f;
+            }
+
+            else if (it < 1){
+                zoom = 10f;
+            }
+
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(australiaBounds.getCenter(),zoom);
             map.animateCamera(cameraUpdate);
 
             // Constrain the camera target to the Adelaide bounds.
