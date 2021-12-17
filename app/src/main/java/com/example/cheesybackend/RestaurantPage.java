@@ -1,6 +1,7 @@
 package com.example.cheesybackend;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -204,6 +205,7 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
         googleApiClient.disconnect();
     }
     // Get last known location
+    @SuppressLint("MissingPermission")
     private void getLastKnownLocation() {
         Log.d(TAG, "getLastKnownLocation()");
         if ( checkPermission() ) {
@@ -223,6 +225,7 @@ public class RestaurantPage extends AppCompatActivity implements View.OnClickLis
     }
 
 
+    @SuppressLint("MissingPermission")
     private void startLocationUpdates(){
         Log.i(TAG, "startLocationUpdates()");
         locationRequest = LocationRequest.create()

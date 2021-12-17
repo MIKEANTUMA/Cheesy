@@ -23,7 +23,7 @@
         android:theme="@style/Theme.CheesyBackend">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="API KEY GOES HERE"/>
+            android:value="${MAPS_API_KEY}"/>
         <activity
             android:name=".Checkout"
             android:exported="false"

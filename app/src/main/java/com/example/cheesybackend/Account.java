@@ -57,37 +57,25 @@ public class Account extends AppCompatActivity  {
         findViewById(R.id.OrderTab).setOnClickListener(this::switchTab);
         findViewById(R.id.AddressBtn).setOnClickListener(this::switchTab);
         findViewById(R.id.personalInfoBtn).setOnClickListener(this::switchTab);
-        findViewById(R.id.LocateBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (hasLocationPermission())
-                    findLocation();
-            }
+        findViewById(R.id.LocateBtn).setOnClickListener(view -> {
+            if (hasLocationPermission())
+                findLocation();
         });
-        findViewById(R.id.AboutBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        findViewById(R.id.AboutBtn).setOnClickListener(view -> {
 
-                AlertDialog.Builder alert = new AlertDialog.Builder(Account.this);
-                alert.setMessage("This app is our semester project for BCS 421. "
-                        + "It's a pizza ordering app, something similar to doordash or Grubhub, "
-                        + "but more focused on pizza places. You can create a user account, "
-                        + "search restaurants, click on them and view their menu, make an order, "
-                        + "and the order receipts");
-                alert.setPositiveButton("Continue", (v, a) -> {
+            AlertDialog.Builder alert = new AlertDialog.Builder(Account.this);
+            alert.setMessage("This app is our semester project for BCS 421. "
+                    + "It's a pizza ordering app, something similar to doordash or Grubhub, "
+                    + "but more focused on pizza places. You can create a user account, "
+                    + "search restaurants, click on them and view their menu, make an order, "
+                    + "and the order receipts.");
+            alert.create().show();
 
-                });
-                alert.create().show();
-
-            }
         });
-        findViewById(R.id.SignOutBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mAuth.signOut();
-                startActivity(new Intent(getApplicationContext(), Login.class));
+        findViewById(R.id.SignOutBtn).setOnClickListener(view -> {
+            mAuth.signOut();
+            startActivity(new Intent(getApplicationContext(), Login.class));
 
-            }
         });
     }
 
