@@ -57,8 +57,8 @@ import java.util.List;
 public class showRestaurants extends AppCompatActivity  {
 
     private RecyclerView recyclerView;
-   // RestaurantOrgAdapter adapter; // Create Object of the Adapter class
-   // RestaurantOrgAdapter adapter1;
+    // RestaurantOrgAdapter adapter; // Create Object of the Adapter class
+    // RestaurantOrgAdapter adapter1;
     DatabaseReference mbase; // Create object of the
     // Firebase Realtime Database
     EditText search;
@@ -147,7 +147,7 @@ public class showRestaurants extends AppCompatActivity  {
 
         }
         else {
-            if (isChecked) {
+            if (isChecked && !names.isEmpty()) {
                 q3 = rest.whereEqualTo("name", search.getText().toString()).whereIn("name", names);
                 Query q4 = rest.whereEqualTo("location", search.getText().toString()).whereIn("name", names);
                 Query q5 = rest.whereEqualTo("phoneNumber", search.getText().toString()).whereIn("name", names);
@@ -277,19 +277,26 @@ public class showRestaurants extends AppCompatActivity  {
 
                                 // matchingDocs contains the results
                                 // ...
-                                CollectionReference rest = db.collection("restaurants");
-                                 q3 = rest.whereIn("name", names);
+                                if(!names.isEmpty()){
+
+                                    CollectionReference rest = db.collection("restaurants");
+                                    q3 = rest.whereIn("name", names);
 
 
-                                options = new FirestoreRecyclerOptions.Builder<Restaurant>()
-                                        .setQuery(q3, Restaurant.class)
-                                        .build();
-                                // Log.d("Name", options.getSnapshots().get(0).getName());
-                                adapter.notifyDataSetChanged();
-                                try {
-                                    adapter.updateOptions(options);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
+                                    options = new FirestoreRecyclerOptions.Builder<Restaurant>()
+                                            .setQuery(q3, Restaurant.class)
+                                            .build();
+                                    // Log.d("Name", options.getSnapshots().get(0).getName());
+                                    adapter.notifyDataSetChanged();
+                                    try {
+                                        adapter.updateOptions(options);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                else{
+                                    Log.d("GEOFENCE", "no restaurants near you");
+                                    Toast.makeText(showRestaurants.this, "no restaurants near you", Toast.LENGTH_LONG).show();
                                 }
                             }
                         });
@@ -459,8 +466,8 @@ public class showRestaurants extends AppCompatActivity  {
     }
 
     @Override
-     public void onResume() {
-         super.onResume();
+    public void onResume() {
+        super.onResume();
 //        FirebaseFirestore db = FirebaseFirestore.getInstance();
 //        CollectionReference rest = db.collection("restaurants");
 //        options = new FirestoreRecyclerOptions.Builder<Restaurant>().setQuery(rest, Restaurant.class).build();
